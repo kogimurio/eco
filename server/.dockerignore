@@ -1,0 +1,23 @@
+node_modules
+npm-debug.log
+
+
+
+# Let me know if you’d like:
+# A sample Dockerfile for the server
+# A sample Dockerfile for the React client
+# A complete docker-compose.yml to run both together
+
+# Docker project steps:
+# 1. mkdir mainapp
+# 2. cd mainapp
+# 3. mkdir server && mkdir client
+# 4. cd server
+# 5. npm init -y
+# 6. npm install express cors dotenv mongoose
+# 7. docker build -t mainapp . or docker-compose up --build
+# 8. docker run -p 3000:3000 mainapp
+# 9. cd ..
+# 10. cd client
+
+ 
