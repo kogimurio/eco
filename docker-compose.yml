@@ -10,8 +10,17 @@ services:
     build: ./server
     container_name: docker-node-app
     ports:
-      - "3000:3000"
+      - "5000:5000"
     depends_on:
       - mongodb
     environment:
       - MONGO_URL=mongodb://mongodb:27017/mydatabase
+  
+  client:
+    build: ./client
+    container_name: docker-react-app
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+

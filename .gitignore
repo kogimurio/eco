@@ -39,4 +39,4 @@ yarn-error.log*
 /client/yarn-debug.log*
 
 # REST Client
-apitest.html
+apitest.http
