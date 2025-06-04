@@ -1,7 +1,11 @@
-require('dotenv').config();
+require('dotenv').config({ path: '.env.development' });
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const MONGO_URL = process.env.MONGO_URL;
+if (!MONGO_URL) {
+    console.error("MongoDB connection string is not defined in .env file");
+}
 
 const productRoutes = require('./routes/productRoutes');
 
@@ -13,7 +17,7 @@ app.use('/api/products', productRoutes);
 const PORT = 5000;
 
 mongoose
-    .connect(process.env.MONGO_URL, {
+    .connect(MONGO_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
