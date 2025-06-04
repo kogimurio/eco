@@ -1,20 +1,28 @@
 import { faChevronDown, faGift } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Carousel from "../CarouselComponents/Carousel";
 
 
 const Home = () => {
     return (
-        <div className="bg-gray-500 min-h-screen">
+        <div className="bg-gray-800 min-h-screen">
             <div className="h-17 bg-orange-600 py-4">
                 <div className="flex items-center justify-between w-[90%] mx-auto">
                     
                     {/* Desktop Nav (Hidden on Mobile) */}
                     <div className="hidden md:flex items-center justify-between space-x-2">
-                        <div className="group bg-gray-800 px-5 py-3 font-semibold rounded text-white flex items-center space-x-2">
-                            <span className="transition-transform mr-2 duration-300 group-hover:scale-x-[-1]">
+                        <div className="relative group bg-gray-700 px-5 py-3 font-semibold rounded text-white flex items-center space-x-2">
+                            <button className="transition-transform mr-2 duration-300 group-hover:scale-x-[-1]">
                                 &#9776;
-                            </span>
-                             Shop By Categories
+                            </button>
+                            SHOP BY CATEGORIES
+                            <ul className="absolute z-10 rounded-md shadow-lg mt-60 w-48 bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none hidden group-hover:block">
+                                <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer">Women's Fashion</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer">Fashion Jewellery</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer">Clearance</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer">Men's Fashion</li>
+                                <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer">Kid's Fashion</li>
+                            </ul>
                         </div>
                         <ul className="flex space-x-4">
                             <li className="text-white hover:text-gray-400 font-bold mx-4">
@@ -51,8 +59,8 @@ const Home = () => {
                     </div>
 
                     {/* Shop Adds Here - Always Visible, Full Width on Mobile */}
-                    <div className="group bg-gray-800 px-5 py-3 rounded text-white w-full md:w-auto text-center overflow-hidden relative">
-                        <div className="inline-block whitespace-nowrap animate-marquee">
+                    <div className="group bg-gray-700 px-5 py-3 rounded text-white mr-5 w-full md:w-auto text-center overflow-hidden relative">
+                        <div className="inline-block whitespace-nowrap w-40 animate-marquee">
                             <FontAwesomeIcon icon={faGift} />
                             - Free Shipping on orders $99
                         </div>
@@ -60,8 +68,43 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="flex w-[90%] mx-auto">
-                <h1>Home for ecoWebApp</h1>
+            <div className="grid w-[90%] mx-auto mt-4 grid-cols-1 md:grid-cols-[1fr_3fr_1fr] gap-4">
+                <div>
+                    
+                </div>
+                <div>
+                    <Carousel />
+                </div>
+                <div className="grid w-[80%] grid-cols-1 mt-2 mx-auto">
+                    <div className="relative w-full">
+                        <img
+                            src="/top-banner-01.jpg"
+                            alt='banner-bag'
+                            className="rounded w-full object-contain p-0"
+                        />
+                        <div className="absolute left-3 top-2">
+                            <h3 className="text-lg text-white">New Sale</h3>
+                            <p className="text-lg text-white font-bold">Backpack</p>
+                            <button
+                                className="bg-gray-600 text-white px-4 py-2 text-sm rounded-xl hover:bg-orage-700 transition"
+                            >Shop Now</button> 
+                        </div>
+                    </div>
+                    <div className="relative w-full">
+                        <img
+                            src="/top-banner-02.jpg"
+                            alt='banner-bag'
+                            className="rounded w-full object-contain p-0"
+                        />
+                        <div className="absolute left-12 top-1">
+                            <h3 className="text-lg text-white">New Arrivals</h3>
+                            <p className="text-lg text-white font-bold">Styles Shoes</p>
+                            <button
+                                className="bg-orange-600 text-white px-4 py-2 font-bold rounded-xl hover:bg-orage-700 transition"
+                            >save 20%</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
