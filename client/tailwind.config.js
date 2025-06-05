@@ -14,6 +14,10 @@ module.exports = {
           '100%': { transform: 'translateX(-100%)' },
         },
       },
+      spacing: {
+        '0.25': '1px',
+        '0.75': '3px',
+      },
     },
   },
   plugins: [],

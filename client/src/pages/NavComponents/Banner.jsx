@@ -5,7 +5,7 @@ import { faPhone, faTag, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 const Banner = () => {
     return (
         <div className="bg-gray-950 w-full hidden md:flex">
-            <div className="flex flex-col md:flex-row justify-between py-5 w-[80%] mx-auto">
+            <div className="flex flex-col md:flex-row justify-between py-5 w-[90%] mx-auto">
                 <p className="text-sm text-white">
                     <FontAwesomeIcon icon={faTag} /> get upto 25% cashback on first order
                 </p>

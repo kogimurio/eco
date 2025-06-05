@@ -20,7 +20,7 @@ const Layout = () => {
                 {/* Banner */}
                 <Banner />
 
-                <div className="w-[90%] mx-auto p-4 relative">
+                <div className="w-[90%] mx-auto py-4 relative">
 
                     {/* MOBILE: First row */}
                     <div className="flex justify-between items-center md:hidden">
@@ -89,7 +89,7 @@ const Layout = () => {
 
                         {/* Desktop Menu */}
                         <ul className="flex space-x-4 items-center">
-                            <button className="text-white hover:text-red-500" title="Wish list">
+                            <button className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list">
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
                             <button className="text-white hover:text-blue-500" title="Cart">
