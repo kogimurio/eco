@@ -6,4 +6,10 @@
   animation-play-state: paused;
 }
 
+@layer utilities {
+  .animate-slide-down {
+    @apply transition-all duration-500 opacity-0 translate-y-[-10px] group-hover:opacity-100 group-hover:translate-y-0;
+  }
+}
+
 

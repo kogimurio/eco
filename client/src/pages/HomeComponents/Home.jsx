@@ -3,6 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Carousel from "../CarouselComponents/Carousel";
 import { useState } from "react";
 import Offer from "./Offer";
+import Adds from './Adds';
+import Categories from './Categories';
+import SubBanner from './SubBanner';
+import FeaturedProduct from './FeaturedProduct';
+import BestSellers from "./BestSellers";
+import BottomBanner from "./BottomBanner"
 
 
 const Home = () => {
@@ -89,50 +95,14 @@ const Home = () => {
                 <div>
                     <Carousel />
                 </div>
-                <div className="grid w-[80%] grid-cols-1 mt-2 mx-auto">
-                    <div className="relative w-full">
-                        <img
-                            src="/top-banner-01.jpg"
-                            alt='banner-bag'
-                            className="rounded w-full object-contain p-0"
-                        />
-                        <div className="absolute left-3 top-6">
-                            <h3 className="text-lg text-white">New Sale</h3>
-                            <p className="text-lg text-white font-bold">Backpack</p>
-                            <div className="relative flex items-center justify-center group">
-                                <button className="absolute left-0.5 top-4 origin-left w-20 group-hover:w-[110px] -translate-y-1/2 bg-gray-600 text-white pl-2 py-1 pr-2 text-sm rounded-xl hover:bg-orange-700 transition-all duration-300 ease-in-out">
-                                    Shop Now
-                                </button> 
-                                    <FontAwesomeIcon
-                                        icon={faChevronRight}
-                                        className="absolute -right-4 top-4 w-3 group-hover:-right-6 -translate-y-1/2 text-white bg-orange-600 group-hover:bg-gray-600 rounded-full p-1 transition-all duration-300 ease-in-out"
-                                    />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="relative w-full">
-                        <img
-                            src="/top-banner-02.jpg"
-                            alt='banner-bag'
-                            className="rounded w-full object-contain p-0"
-                        />
-                        <div className="absolute left-12 top-1">
-                            <h3 className="text-lg text-white">New Arrivals</h3>
-                            <p className="text-lg text-white font-bold">Styles Shoes</p>
-                            <div className="relative flex items-center justify-center group">
-                                <button className="absolute left-0.5 top-4 origin-left w-20 group-hover:w-[115px] -translate-y-1/2 bg-gray-600 text-white pl-2 py-1 pr-2 text-sm rounded-xl hover:bg-orange-700 transition-all duration-300 ease-in-out">
-                                    Save 20%
-                                </button> 
-                                    <FontAwesomeIcon
-                                        icon={faChevronRight}
-                                        className="absolute right-2 top-4 w-3 group-hover:-right-1 -translate-y-1/2 text-white bg-orange-600 group-hover:bg-gray-600 rounded-full p-1 transition-all duration-300 ease-in-out"
-                                    />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Adds />
             </div>
             <Offer />
+            <Categories />
+            <SubBanner />
+            <FeaturedProduct />
+            <BestSellers />
+            <BottomBanner />
         </div>
     )
 }
