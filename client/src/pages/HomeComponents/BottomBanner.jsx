@@ -12,12 +12,12 @@ const BottomBanner = () => {
                         className="rounded object-contain p-0 w-full"
                     />
 
-                    <div className="absolute left-10 top-16 md:left-96 md:top-10">
-                        <h3 className="text-lg text-white">Big Discounts</h3>
-                        <p className="text-lg text-white font-bold">The Pretty Lifestyle - 2020</p>
+                    <div className="absolute left-52 top-2 sm:left-52 sm:top-2 md:left-52 md:top-1 lg:left-80 lg:top-4 xl:left-[400px] xl:top-16">
+                        <h3 className="text-stone-200 text-brandLabe leading-10 tracking-wide">Big Discounts</h3>
+                        <p className="text-body text-white font-semibold">Pretty Lifestyle</p>
 
                         <div className="group relative flex items-center mt-2 w-fit">
-                            <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-sm rounded-xl hover:bg-orange-700 transition-all">
+                            <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-button rounded-xl hover:bg-orange-700 transition-all">
                                 Shop Now
                             </button>
                             <FontAwesomeIcon
@@ -34,12 +34,12 @@ const BottomBanner = () => {
                         className="rounded object-contain p-0 w-full"
                     />
 
-                    <div className="absolute left-10 top-16 md:left-96 md:top-10">
-                        <h3 className="text-lg text-white">Save 35% - 45% OFF</h3>
-                        <p className="text-lg text-white font-bold">Women's Bag Collection</p>
+                    <div className="absolute left-52 top-2 sm:left-52 sm:top-2 md:left-52 md:top-1 lg:left-80 lg:top-4 xl:left-[400px] xl:top-16">
+                        <h3 className="text-stone-200 text-brandLabe leading-10 tracking-wide truncate">Save 45% OFF</h3>
+                        <p className="text-body text-white font-semibold truncate">Women's Bag</p>
 
                         <div className="group relative flex items-center mt-2 w-fit">
-                            <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-sm rounded-xl hover:bg-orange-700 transition-all">
+                            <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-button rounded-xl hover:bg-orange-700 transition-all">
                                 Shop Now
                             </button>
                             <FontAwesomeIcon

@@ -11,7 +11,7 @@ const SubBanner = () => {
                         alt='banner-bag'
                         className="rounded object-contain p-0"
                     />
-                    <div className="absolute left-12 top-20 md:left-2 md:top-2">
+                    <div className="absolute left-6 top-10 sm:left-6 sm:top-10 md:left-2 md:top-1 lg:left-6 lg:top-10 xl:left-6 xl:top-12">
                         <h3 className="text-lg text-white">New Sale</h3>
                         <p className="text-lg text-white font-bold">Backpack</p>
                         <div className="group relative flex items-center mt-2 w-fit">
@@ -31,11 +31,11 @@ const SubBanner = () => {
                         alt='banner-bag'
                         className="rounded object-contain p-0"
                     />
-                    <div className="absolute left-12 top-20 md:left-2 md:top-2">
-                        <h3 className="text-lg text-white">New Sale</h3>
-                        <p className="text-lg text-white font-bold">Backpack</p>
+                    <div className="absolute left-6 top-10 sm:left-6 sm:top-10 md:left-2 md:top-1 lg:left-6 lg:top-10 xl:left-6 xl:top-12">
+                        <h3 className="text-stone-200 text-brandLabe leading-10 tracking-wide truncate">New Sale</h3>
+                        <p className="text-body text-white font-semibold truncate">Backpack</p>
                         <div className="group relative flex items-center mt-2 w-fit">
-                            <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-sm rounded-xl hover:bg-orange-700 transition-all">
+                            <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-button rounded-xl hover:bg-orange-700 transition-all">
                                 Shop Now
                             </button>
                             <FontAwesomeIcon
@@ -51,7 +51,7 @@ const SubBanner = () => {
                         alt='banner-bag'
                         className="rounded object-contain p-0"
                     />
-                    <div className="absolute left-12 top-16 md:left-2 md:top-2">
+                    <div className="absolute left-6 top-10 sm:left-6 sm:top-10 md:left-2 md:top-1 lg:left-6 lg:top-10 xl:left-6 xl:top-12">
                         <h3 className="text-lg text-white">New Sale</h3>
                         <p className="text-lg text-white font-bold">Backpack</p>
                         <div className="group relative flex items-center mt-2 w-fit">

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState, useEffect } from 'react';
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import Pagination from "./Pagination";
 
 
 const BestSellers = () => {
@@ -58,12 +59,18 @@ const BestSellers = () => {
     // Dynamically adjust itemsPerPage based on screen width
     useEffect(()=> {
         const updatedItemsPerPage = () => {
-            if (window.innerWidth < 640) {
+            if (window.innerWidth < 393) {
                 setItemsPerPage(1); // Mobile
+            } else if (window.innerWidth > 394 && window.innerWidth < 640) {
+                setItemsPerPage(2); // Smaill tablets
             } else if (window.innerWidth < 768) {
                 setItemsPerPage(2); // Smaill tablets
+            } else if (window.innerWidth < 1024) {
+                setItemsPerPage(3); // Desktop and above
+            } else if (window.innerWidth < 1440) {
+                setItemsPerPage(4); // Large desktop
             } else {
-                setItemsPerPage(4); // Desktop and above
+                setItemsPerPage(5); // Extra large desktop
             }
         }
 
@@ -77,69 +84,69 @@ const BestSellers = () => {
     return (
         <div className="bg-gray-800 mt-8 py-4 overflow-x-hidden">
             <div className="flex justify-between items-center w-[90%] mx-auto my-4">
-                <h2 className="text-white text-lg font-semibold">Best Sellers</h2>
+                <h2 className="text-white text-sectionHeading font-semibold whitespace-nowrap">Best Sellers</h2>
 
                 {/* Line Breaker */}
                 <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto border-t border-gray-600 my-2"></div>
                 
                 {/* Pagination */}
-                <div className="flex gap-2">
-                    {Array.from({ length:totalPages }, (_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handlePageChange(index + 1)}
-                            className={`px-4 py-1 rounded-md text-white ${
-                                currentPage === index + 1 ? 'bg-orange-600' : 'bg-gray-800 hover:bg-gray-600'
-                            }`}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
+                <div className="flex items-center gap-2 mt-4 justify-center">
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-[90%] mx-auto cursor-pointer">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 w-[90%] mx-auto">
             {currentFeaturedProducts.map((product, index) => (
-                <div key={index} className="relative w-full group">
-                <div className="md:left-2 md:top-2 pl-2">
-                    <h3 className="text-stone-200 text-xs">{product.brand}</h3>
-                    <p className="text-white py-1">{product.title}</p>
-                </div>
+                <div key={index} className="relative w-full group cursor-pointer">
+                    <div className="md:left-2 md:top-2 pl-2">
+                        <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
+                        <p className="text-body text-white py-1">{product.title}</p>
+                    </div>
 
-                <img
-                    src={product.img}
-                    alt={product.title}
-                    className="w-full h-auto rounded object-contain"
-                />
+                    <img
+                        src={product.img}
+                        alt={product.title}
+                        className="w-full h-auto rounded object-contain"
+                    />
 
-                <div className="md:left-2 md:top-2">
-                    <p className="text-white py-1 pl-2">{product.price}</p>
-                </div>
+                    <div className="md:left-2 md:top-2">
+                        <p className="text-white py-1 pl-2 text-price">{product.price}</p>
+                    </div>
 
-                {/* Plus icon - always visible */}
-                <div className="absolute bg-gray-600 rounded-full bottom-2 right-2 p-2">
-                    <FontAwesomeIcon icon={faPlus} className="text-white" />
-                </div>
+                    {/* Plus icon - always visible */}
+                    <div className="absolute bottom-3 right-2 group/icon bg-gray-900 w-8 hover:w-36 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
+                        <FontAwesomeIcon
+                            icon={faPlus}
+                            className="text-white text-iconMedium"
+                        />
+                        <span className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
+                            Add to Cart
+                        </span>
+                    </div>
 
-                {/* Icons and animated line divider */}
-                <div className="absolute bottom-14 right-2 hidden group-hover:flex flex-col items-center gap-2 animate-slide-down">
-                    <button
-                    className="bg-gray-900 p-2 rounded-full text-white hover:text-red-500"
-                    title="Wish list"
-                    >
-                    <FontAwesomeIcon icon={faHeart} />
-                    </button>
+                    {/* Icons and animated line divider */}
+                    <div className="absolute bottom-14 right-2 hidden group-hover:flex flex-col items-center gap-2 animate-slide-down">
+                        <button
+                        className="bg-gray-900 p-2 rounded-full text-white hover:text-red-500"
+                        title="Wish list"
+                        >
+                        <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
+                        </button>
 
-                    {/* Line divider with animation */}
-                    <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 group-hover:scale-x-100"></div>
+                        {/* Line divider with animation */}
+                        <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 group-hover:scale-x-100"></div>
 
-                    <button
-                    className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
-                    title="View"
-                    >
-                    <FontAwesomeIcon icon={faEye} />
-                    </button>
-                </div>
+                        <button
+                        className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
+                        title="View"
+                        >
+                        <FontAwesomeIcon icon={faEye} className="text-iconMedium" />
+                        </button>
+                    </div>
                 </div>
             ))}
             </div>

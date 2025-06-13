@@ -8,7 +8,9 @@ import Categories from './Categories';
 import SubBanner from './SubBanner';
 import FeaturedProduct from './FeaturedProduct';
 import BestSellers from "./BestSellers";
-import BottomBanner from "./BottomBanner"
+import BottomBanner from "./BottomBanner";
+import NewProduct from './NewProduct';
+import Blog from './Blog';
 
 
 const Home = () => {
@@ -18,10 +20,10 @@ const Home = () => {
     return (
         <div className="bg-gray-800 min-h-screen">
             <div className="h-17 bg-orange-600 py-4">
-                <div className="flex items-center justify-between w-[90%] mx-auto">
+                <div className="flex items-center justify-center xl:justify-between w-[90%] mx-auto">
                     
-                    {/* Desktop Nav (Hidden on Mobile) */}
-                    <div className="hidden md:flex items-center justify-between space-x-2">
+                    {/* Desktop Nav (Hidden on Mobile & tablets) */}
+                    <div className="hidden lg:flex items-center justify-between space-x-2">
                         <div className="relative group bg-gray-700 px-5 py-3 font-semibold rounded text-white flex items-center space-x-2">
                             <button 
                                 onClick={() => setIsDropDownOpen(!isDropDownOpen)}
@@ -103,6 +105,8 @@ const Home = () => {
             <FeaturedProduct />
             <BestSellers />
             <BottomBanner />
+            <NewProduct />
+            <Blog />
         </div>
     )
 }

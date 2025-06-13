@@ -19,7 +19,7 @@ const Offer = () => {
             const width = window.innerWidth;
             if (width < 640) {
                 setItemsPerSlide(1); // mobile
-            } else if (width < 768) {
+            } else if (width < 1024) {
                 setItemsPerSlide(2); // tablet
             } else {
                 setItemsPerSlide(3); // desktop
@@ -58,21 +58,17 @@ const Offer = () => {
 
     return (
         <div className="w-[90%] mx-auto">
-            {/* <div className="flex justify-between items-center mb-4">
-                <button onClick={prevSlide} className="px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600">Prev</button>
-                <button onClick={nextSlide} className="px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-600">Next</button>
-            </div> */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 mt-4 gap-2">
                 {displaySlides.map((slide, index) => (
-                    <div key={index} className="bg-gray-800 flex align-center justify-center rounded-lg shadow hover:shadow-lg transition">
+                    <div key={index} className="bg-gray-800 flex align-center justify-center rounded-lg shadow hover:shadow-lg transition mx-4">
                         <img
                             src={slide.image}
                             alt={slide.title}
-                            className="h-32 object-contain rounded-md mr-10"
+                            className="h-32 object-contain rounded-md mr-4"
                         />
                         <div className="flex flex-col align-center justify-center">
-                            <p className="font-bold text-white">{slide.title}</p>
-                            <p className="text-orange-600">
+                            <p className="font-bold text-body text-white truncate">{slide.title}</p>
+                            <p className="text-orange-600 text-body truncate">
                                 {slide.offer}
                                 <FontAwesomeIcon icon={faChevronRight} className="text-white ml-1" />
                             </p>

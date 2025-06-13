@@ -1,4 +1,4 @@
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState, useEffect } from 'react';
@@ -57,8 +57,8 @@ const Categories = () => {
         const updatedItemsPerPage = () => {
             if (window.innerWidth < 640) {
                 setItemsPerPage(1); // Mobile
-            } else if (window.innerWidth < 768) {
-                setItemsPerPage(2); //Small tablets
+            } else if (window.innerWidth < 1440) {
+                setItemsPerPage(4); //Small tablets
             } else {
                 setItemsPerPage(5); // Desktop and above
             }
@@ -75,27 +75,32 @@ const Categories = () => {
     return (
         <div className="bg-gray-700 mt-8 py-4 overflow-x-hidden">
             <div className="flex justify-between items-center w-[90%] mx-auto">
-                <h2 className="text-white text-xl font-semibold">Shop Categories</h2>
+                <h2 className="text-white text-lg sm:text-xl md:text-2xl lg:3xl xl:sectionHeading font-semibold">Shop Categories</h2>
 
                 {/* Line Breaker */}
                 <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto border-t border-gray-800 my-2"></div>
                 
                 {/* Pagination */}
-                <div className="flex gap-2">
-                    {Array.from({ length:totalPages }, (_, i) => (
-                        <button
-                            key={i}
-                            onClick={() => handlePageChange(i + 1)}
-                            className={`px-4 py-1 rounded-md text-white ${
-                                currentPage === i + 1 ? 'bg-orange-600' : 'bg-gray-800 hover:bg-gray-600'
-                            }`}
-                        >
-                            {i + 1}
-                        </button>
-                    ))}
+                <div className="flex items-center gap-2 mt-2 justify-center">
+                    <button
+                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="bg-gray-800 hover:bg-gray-600 text-white px-3 py-1 rounded-md disabled:opacity-50"
+                        title="Previous"
+                    >
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </button>
+                    <button
+                        onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="bg-gray-800 hover:bg-gray-600 text-white px-3 py-1 rounded-md disabled:opacity-50"
+                        title="Next"
+                    >
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 w-[90%] mx-auto gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 w-[90%] mx-auto gap-4">
                 {currentCategories.map((currentCategory, index) => (
                     <div className="grid grid-cols-1 p-4">
                         <img
@@ -106,9 +111,9 @@ const Categories = () => {
                         {/* Text Overlay */}
                         <div className="flex items-center bg-gray-700 py-4">
                             <div className="relative max-w-md w-[80%] mx-auto text-center">
-                                <p className="md:text-[18px] font-semibold sm:text-3xl text-white">{currentCategory.title}</p>
-                                <p className="text-sm sm:text-base text-white mt-1 flex items-center justify-center gap-2">
-                                    {currentCategory.items} <FontAwesomeIcon icon={faChevronRight} className="text-white" />
+                                <p className="font-semibold text-productTitle text-white">{currentCategory.title}</p>
+                                <p className="text-sprice text-white mt-1 flex items-center justify-center gap-2">
+                                    {currentCategory.items} <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-white bg-gray-600 rounded-full p-2 text-iconMedium" />
                                 </p>
                             </div>
                         </div>

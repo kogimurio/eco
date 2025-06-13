@@ -1,0 +1,8 @@
+3️⃣ Font System for your components
+Use Case	Tailwind Class	Sample Code
+Hero / Banner Title	text-4xl font-bold	<h1 className="text-4xl font-bold">Big Sale 50%</h1>
+Section Headings	text-2xl font-semibold	<h2 className="text-2xl font-semibold">Featured Products</h2>
+Product Titles	text-lg font-medium	<p className="text-lg font-medium">Women's Jacket</p>
+Product Prices	text-xl font-bold text-orange-600	<p className="text-xl font-bold text-orange-600">$49.99</p>
+Buttons	text-sm font-semibold	<button className="text-sm font-semibold bg-orange-600 px-4 py-2 rounded">Add to Cart</button>
+Body Text	text-base font-normal	<p className="text-base">Lorem ipsum dolor sit amet.</p>

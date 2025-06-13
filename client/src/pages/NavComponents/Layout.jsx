@@ -32,7 +32,7 @@ const Layout = () => {
 
                             {/* Logo */}
                             <div className="text-white font-bold text-xl">
-                                <Link to="/">ecoWebApp</Link>
+                                <Link to="/">Fashionova</Link>
                             </div>
                         </div>
 
@@ -68,8 +68,8 @@ const Layout = () => {
                     {/* Desktop Layout */}
                     <div className="hidden md:flex justify-between items-center w-full">
                         {/* Logo */}
-                        <div className="text-white font-bold text-2xl">
-                            <Link to="/">ecoWebApp</Link>
+                        <div className="font-hero text-hero tracking-wider text-orange-600 hover:text-orange-400 transition-colors duration-300">
+                            <Link to="/">fashionova</Link>
                         </div>
 
                         {/* Search Bar */}

@@ -54,19 +54,19 @@ const Carousel = () => {
     };
 
     return (
-        <div className='w-full mx-auto p-2 bg-gray-800 rounded shadow'>
-            <div className='relative bg-gray-800 rounded group overflow-hidden'>
+        <div className='w-full h-full p-2 bg-gray-800 rounded shadow'>
+            <div className='relative rounded group'>
                 <img
                     src={image}
                     alt={`slide-${currentIndex}`}
-                    className="rounded h-[360px] w-full object-cover cursor-pointer"
+                    className="rounded w-full object-cover cursor-pointer"
                 />
                 {/* Text Overlay */}
-                <div className={`absolute inset-0 flex items-center bg-black bg-opacity-30 ${alignmentClasses[alignment]}`}>
+                <div className={`absolute inset-0 flex left-5 right-5 items-center  ${alignmentClasses[alignment]}`}>
                     <div className="relative max-w-md space-y-4">
-                        <h3 className="text-2xl sm:text-4xl font-bold text-white">{heading}</h3>
-                        <p className="text-white text-base sm:text-lg">{paragraph}</p>
-                        <button className="mt-2 px-5 py-2 text-white bg-orange-800 font-semibold rounded-lg hover:bg-gray-100 hover:text-gray-950 hover:w-40 transition">
+                        <h3 className="text-productTitle font-bold text-white">{heading}</h3>
+                        <p className="text-white text-body">{paragraph}</p>
+                        <button className="mt-2 px-5 py-2 text-white text-button bg-orange-800 font-semibold rounded-lg hover:bg-gray-100 hover:text-gray-950 hover:w-40 transition">
                             {buttonText}
                         </button>
                     </div>
@@ -74,13 +74,13 @@ const Carousel = () => {
 
                 <button
                     onClick={prevSlide}
-                    className='absolute hidden group-hover:flex left-9 top-1/2 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
+                    className='absolute lg:hidden group-hover:flex left-4 top-1/2 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
                 >
                     <FontAwesomeIcon icon={faChevronLeft} className="text-white text-lg" />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className='absolute hidden group-hover:flex right-16 top-1/2 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
+                    className='absolute lg:hidden group-hover:flex right-0.5 top-1/2 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
                     
                 >
                     <FontAwesomeIcon icon={faChevronRight} className="text-white text-lg" /> 
