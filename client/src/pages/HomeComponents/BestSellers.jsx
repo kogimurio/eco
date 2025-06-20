@@ -4,6 +4,8 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import Pagination from "./Pagination";
+import { faStar as solidStar, faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 
 const BestSellers = () => {
@@ -105,6 +107,13 @@ const BestSellers = () => {
                     <div className="md:left-2 md:top-2 pl-2">
                         <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
                         <p className="text-body text-white py-1">{product.title}</p>
+                    </div>
+                    <div className="flex text-yellow-400 pl-2 pb-2">
+                        <FontAwesomeIcon icon={solidStar} />
+                        <FontAwesomeIcon icon={solidStar} />
+                        <FontAwesomeIcon icon={solidStar} />
+                        <FontAwesomeIcon icon={faStarHalfStroke} />
+                        <FontAwesomeIcon icon={regularStar} />
                     </div>
 
                     <img

@@ -1,8 +1,8 @@
-import { faPlus, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faEye, faStarHalfStroke, faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState, useEffect } from 'react';
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart, faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import Pagination from "./Pagination";
 
 
@@ -132,6 +132,14 @@ const FeaturedProduct = () => {
                         <div className="md:left-2 md:top-2 pl-2">
                             <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
                             <p className="text-body text-white py-1">{product.title}</p>
+                        </div>
+
+                        <div className="flex text-yellow-400 pl-2 pb-2">
+                            <FontAwesomeIcon icon={solidStar} />
+                            <FontAwesomeIcon icon={solidStar} />
+                            <FontAwesomeIcon icon={solidStar} />
+                            <FontAwesomeIcon icon={faStarHalfStroke} />
+                            <FontAwesomeIcon icon={regularStar} />
                         </div>
 
                         <img

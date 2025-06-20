@@ -1,6 +1,8 @@
 import Subscrip from "./Subscrip";
 import Links from "./Links";
-
+import OffersCarousel from './OfferCarousel';
+import PaymentMethods from './PaymentMethods';
+import CopyRights from './Copyrights';
 
 const Footer = () => {
     return (
@@ -50,6 +52,9 @@ const Footer = () => {
             </div>
             <Subscrip />
             <Links />
+            <OffersCarousel />
+            <PaymentMethods />
+            <CopyRights />
         </>
     );
 }
