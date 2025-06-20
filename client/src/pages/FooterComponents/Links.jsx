@@ -42,7 +42,7 @@ export default function Links() {
                             Lumumba Drive <br />
                         </p>
                         <p className="text-stone-400 text-sm mb-1">
-                            kogimurio@gmail.com
+                            info@afriwebpro.dev
                         </p>
                         <p className="text-stone-400 text-sm mb-1">
                             +254 712 345 678 <br />

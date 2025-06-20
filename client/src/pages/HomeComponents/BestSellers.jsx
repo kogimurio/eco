@@ -70,9 +70,9 @@ const BestSellers = () => {
             } else if (window.innerWidth < 1024) {
                 setItemsPerPage(3); // Desktop and above
             } else if (window.innerWidth < 1440) {
-                setItemsPerPage(4); // Large desktop
+                setItemsPerPage(5); // Large desktop
             } else {
-                setItemsPerPage(5); // Extra large desktop
+                setItemsPerPage(6); // Extra large desktop
             }
         }
 
@@ -101,7 +101,7 @@ const BestSellers = () => {
                 </div>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 w-[90%] mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
             {currentFeaturedProducts.map((product, index) => (
                 <div key={index} className="relative w-full group cursor-pointer">
                     <div className="md:left-2 md:top-2 pl-2">
