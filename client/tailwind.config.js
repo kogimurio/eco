@@ -18,6 +18,9 @@ module.exports = {
         '0.25': '1px',
         '0.75': '3px',
       },
+    screens: {
+      'xs': '393px', 
+    },
       fontFamily: {
         hero: ['Poppins', 'sans-serif'],
         heading: ['Poppins', 'sans-serif'],

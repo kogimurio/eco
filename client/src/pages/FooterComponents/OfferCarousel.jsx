@@ -68,7 +68,7 @@ export default function OffersCarousel() {
         <div className="bg-gray-800 text-white w-full py-6">
             <div className="bg-gray-950 flex w-[90%] mx-auto gap-4 flex-wrap justify-center">
                 {displaySlides.map((slide, index) => (
-                    <div key={index} className=" rounded px-6 py-4 flex items-center gap-4 shadow-md w-full sm:w-[calc(50%-1rem)] md:w-[calc(33%-1rem)]">
+                    <div key={index} className="rounded px-6 py-4 flex items-center gap-4 shadow-md w-full sm:w-[calc(50%-1rem)] md:w-[calc(33%-1rem)]">
                         <FontAwesomeIcon icon={slide.icon} className="text-2xl text-orange-400" />
                         <div>
                             <h6 className="font-semibold text-white">{slide.title}</h6>

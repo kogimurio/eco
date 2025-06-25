@@ -4,6 +4,8 @@ import OffersCarousel from './OfferCarousel';
 import PaymentMethods from './PaymentMethods';
 import CopyRights from './Copyrights';
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons'
 
 const Footer = () => {
     const slides = [
@@ -88,10 +90,12 @@ const Footer = () => {
                         </div>
 
                         {/* Testimonial Quote */}
-                        <div className="flex items-center justify-center p-4">
-                            <p className="text-base italic text-center max-w-md">
-                                {slide.content}
-                            </p>
+                        <div className="relative flex items-center justify-center p-4">
+                            <FontAwesomeIcon icon={faQuoteLeft} className="absolute left-1 top-1 text-red-400 text-xl" />
+                                <p className="text-base italic text-center max-w-md">
+                                    {slide.content}
+                                </p>
+                            <FontAwesomeIcon icon={faQuoteRight} className="absolute right-1 bottom-1 text-red-400 text-xl" />
                         </div>
                     </div>
                     ))}

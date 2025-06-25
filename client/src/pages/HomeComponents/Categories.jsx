@@ -55,12 +55,20 @@ const Categories = () => {
     // Dynamically adjust itemsPerPage based on screen width
     useEffect(() => {
         const updatedItemsPerPage = () => {
-            if (window.innerWidth < 640) {
+            if (window.innerWidth < 393) {
                 setItemsPerPage(1); // Mobile
-            } else if (window.innerWidth < 1440) {
-                setItemsPerPage(4); //Small tablets
+            } else if (window.innerWidth < 640) {
+                setItemsPerPage(2); // Smaill tablets
+            } else if (window.innerWidth < 768) {
+                setItemsPerPage(2); // Smaill tablets
+            } else if (window.innerWidth < 1024) {
+                setItemsPerPage(3); // Desktop and above
+            } else if (window.innerWidth < 1280) {
+                setItemsPerPage(4); // Large desktop
+            } else if (window.innerWidth < 1536) {
+                setItemsPerPage(5); // Extra large desktop
             } else {
-                setItemsPerPage(5); // Desktop and above
+                setItemsPerPage(6); // Extra extra large destop
             }
         }
 
@@ -100,7 +108,7 @@ const Categories = () => {
                     </button>
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 w-[90%] mx-auto gap-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
                 {currentCategories.map((currentCategory, index) => (
                     <div className="grid grid-cols-1 p-4">
                         <img

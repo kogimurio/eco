@@ -4,6 +4,7 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { faHeart, faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import Pagination from "./Pagination";
+import { useNavigate } from "react-router-dom";
 
 
 const NewProduct = () => {
@@ -57,6 +58,7 @@ const NewProduct = () => {
             brand: 'Sagaform'
         }
     ];
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
 
@@ -73,16 +75,18 @@ const NewProduct = () => {
         const updatedItemsPerPage = () => {
             if (window.innerWidth < 393) {
                 setItemsPerPage(1); // Mobile
-            } else if (window.innerWidth > 394 && window.innerWidth < 640) {
+            } else if (window.innerWidth < 640) {
                 setItemsPerPage(2); // Smaill tablets
             } else if (window.innerWidth < 768) {
                 setItemsPerPage(2); // Smaill tablets
             } else if (window.innerWidth < 1024) {
                 setItemsPerPage(3); // Desktop and above
-            } else if (window.innerWidth < 1440) {
+            } else if (window.innerWidth < 1280) {
                 setItemsPerPage(4); // Large desktop
-            } else {
+            } else if (window.innerWidth < 1536) {
                 setItemsPerPage(5); // Extra large desktop
+            } else {
+                setItemsPerPage(6); // Extra extra large destop
             }
         }
 
@@ -92,6 +96,10 @@ const NewProduct = () => {
 
         return () => window.removeEventListener("resize", updatedItemsPerPage); // Cleanup
     }, []);
+
+    const productDetail = () => {
+        navigate('/productdetail');
+    }
 
     return (
         <div className="bg-gray-700 mt-8 py-4 overflow-x-hidden">
@@ -111,9 +119,9 @@ const NewProduct = () => {
                 </div>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 w-[90%] mx-auto">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
             {currentFeaturedProducts.map((product, index) => (
-                <div key={index} className="relative w-full group  cursor-pointer">
+                <div key={index} className="relative w-full group  cursor-pointer" onClick={productDetail}>
                     <div className="md:left-2 md:top-2 pl-2">
                         <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
                         <p className="text-white py-1 text-body">{product.title}</p>

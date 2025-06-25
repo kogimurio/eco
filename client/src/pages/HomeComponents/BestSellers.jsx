@@ -6,6 +6,7 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import Pagination from "./Pagination";
 import { faStar as solidStar, faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 
 const BestSellers = () => {
@@ -47,6 +48,7 @@ const BestSellers = () => {
             brand: 'OFS'
         }
     ];
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(4);
 
@@ -63,16 +65,18 @@ const BestSellers = () => {
         const updatedItemsPerPage = () => {
             if (window.innerWidth < 393) {
                 setItemsPerPage(1); // Mobile
-            } else if (window.innerWidth > 394 && window.innerWidth < 640) {
-                setItemsPerPage(2); // Smaill tablets
+            } else if (window.innerWidth < 640) {
+                setItemsPerPage(2); // Small tablets
             } else if (window.innerWidth < 768) {
-                setItemsPerPage(2); // Smaill tablets
+                setItemsPerPage(2); // Tablets
             } else if (window.innerWidth < 1024) {
-                setItemsPerPage(3); // Desktop and above
-            } else if (window.innerWidth < 1440) {
-                setItemsPerPage(5); // Large desktop
+                setItemsPerPage(3); // Small laptops
+            } else if (window.innerWidth < 1280) {
+                setItemsPerPage(4); // Laptops
+            } else if (window.innerWidth < 1536) {
+                setItemsPerPage(5); // Desktop
             } else {
-                setItemsPerPage(6); // Extra large desktop
+                setItemsPerPage(6); // Wide screens
             }
         }
 
@@ -82,6 +86,10 @@ const BestSellers = () => {
 
         return () => window.removeEventListener("resize", updatedItemsPerPage); // Cleanup
     }, []);
+
+    const productDetail = () => {
+        navigate('/productdetail');
+    }
 
     return (
         <div className="bg-gray-800 mt-8 py-4 overflow-x-hidden">
@@ -101,63 +109,67 @@ const BestSellers = () => {
                 </div>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
-            {currentFeaturedProducts.map((product, index) => (
-                <div key={index} className="relative w-full group cursor-pointer">
-                    <div className="md:left-2 md:top-2 pl-2">
-                        <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
-                        <p className="text-body text-white py-1">{product.title}</p>
-                    </div>
-                    <div className="flex text-yellow-400 pl-2 pb-2">
-                        <FontAwesomeIcon icon={solidStar} />
-                        <FontAwesomeIcon icon={solidStar} />
-                        <FontAwesomeIcon icon={solidStar} />
-                        <FontAwesomeIcon icon={faStarHalfStroke} />
-                        <FontAwesomeIcon icon={regularStar} />
-                    </div>
-
-                    <img
-                        src={product.img}
-                        alt={product.title}
-                        className="w-full h-auto rounded object-contain"
-                    />
-
-                    <div className="md:left-2 md:top-2">
-                        <p className="text-white py-1 pl-2 text-price">{product.price}</p>
-                    </div>
-
-                    {/* Plus icon - always visible */}
-                    <div className="absolute bottom-3 right-2 group/icon bg-gray-900 w-8 hover:w-36 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
-                        <FontAwesomeIcon
-                            icon={faPlus}
-                            className="text-white text-iconMedium"
-                        />
-                        <span className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
-                            Add to Cart
-                        </span>
-                    </div>
-
-                    {/* Icons and animated line divider */}
-                    <div className="absolute bottom-14 right-2 hidden group-hover:flex flex-col items-center gap-2 animate-slide-down">
-                        <button
-                        className="bg-gray-900 p-2 rounded-full text-white hover:text-red-500"
-                        title="Wish list"
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
+                {currentFeaturedProducts.map((product, index) => (
+                    <div 
+                        key={index} 
+                        className="relative w-full group cursor-pointer"
+                        onClick={productDetail}
                         >
-                        <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
-                        </button>
+                            <div className="md:left-2 md:top-2 pl-2">
+                                <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
+                                <p className="text-body text-white py-1">{product.title}</p>
+                            </div>
+                            <div className="flex text-yellow-400 pl-2 pb-2">
+                                <FontAwesomeIcon icon={solidStar} />
+                                <FontAwesomeIcon icon={solidStar} />
+                                <FontAwesomeIcon icon={solidStar} />
+                                <FontAwesomeIcon icon={faStarHalfStroke} />
+                                <FontAwesomeIcon icon={regularStar} />
+                            </div>
 
-                        {/* Line divider with animation */}
-                        <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 group-hover:scale-x-100"></div>
+                            <img
+                                src={product.img}
+                                alt={product.title}
+                                className="w-full h-auto rounded object-contain"
+                            />
 
-                        <button
-                        className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
-                        title="View"
-                        >
-                        <FontAwesomeIcon icon={faEye} className="text-iconMedium" />
-                        </button>
+                            <div className="md:left-2 md:top-2">
+                                <p className="text-white py-1 pl-2 text-price">{product.price}</p>
+                            </div>
+
+                            {/* Plus icon - always visible */}
+                            <div className="absolute bottom-3 right-2 group/icon bg-gray-900 w-8 hover:w-36 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
+                                <FontAwesomeIcon
+                                    icon={faPlus}
+                                    className="text-white text-iconMedium"
+                                />
+                                <span className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
+                                    Add to Cart
+                                </span>
+                            </div>
+
+                            {/* Icons and animated line divider */}
+                            <div className="absolute bottom-14 right-2 hidden group-hover:flex flex-col items-center gap-2 animate-slide-down">
+                                <button
+                                className="bg-gray-900 p-2 rounded-full text-white hover:text-red-500"
+                                title="Wish list"
+                                >
+                                <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
+                                </button>
+
+                                {/* Line divider with animation */}
+                                <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 group-hover:scale-x-100"></div>
+
+                                <button
+                                className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
+                                title="View"
+                                >
+                                <FontAwesomeIcon icon={faEye} className="text-iconMedium" />
+                                </button>
+                            </div>
                     </div>
-                </div>
-            ))}
+                ))}
             </div>
 
         </div>

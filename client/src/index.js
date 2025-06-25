@@ -5,6 +5,7 @@ import Layout from './pages/NavComponents/Layout';
 import NoPage from './pages/HomeComponents/NoPage';
 import Login from './pages/NavComponents/Login'
 import './App.css';
+import DetailProduct from './pages/ProductComponents/DetailProduct';
 
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
           <Route index element={<Home />}></Route>
           <Route path="*" element={<NoPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/productdetail" element={<DetailProduct />} />
         </Route>
       </Routes>
     </BrowserRouter>
