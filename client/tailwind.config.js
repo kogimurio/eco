@@ -8,6 +8,15 @@ module.exports = {
       animation: {
         marquee: 'marquee 10s linear infinite',
       },
+      colors: {
+        cream: {
+          100: '#FFFDD0',
+          200: '#FAF3DD',
+          300: '#F7E7CE',
+          400: '#FAF0E6',
+          500: '#FAEBD7',
+        },
+      },
       keyframes: {
         marquee: {
           '0%': { transform: 'translateX(100%)' },

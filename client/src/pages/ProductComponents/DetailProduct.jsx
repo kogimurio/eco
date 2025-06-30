@@ -1,5 +1,5 @@
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
-import { faStar as solidStar, faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
+import { faStar as solidStar, faStarHalfStroke, faTrash  } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import MinTaskBar from "../HomeComponents/MinTaskBar";
@@ -23,7 +23,7 @@ export default function DetailProduct() {
                         />
                     </div>
                     <div className="ml-4 lg:h-96">
-                        <p className="text-white">Asymmetric Top With Bow</p>
+                        <p className="text-white mt-2">Asymmetric Top With Bow</p>
                         <hr className="flex my-4 border border-gray-400"/>
                         <a href="*" className="text-xs text-stone-400">Trendyzone</a>
 
@@ -35,16 +35,28 @@ export default function DetailProduct() {
                             <FontAwesomeIcon icon={faStarHalfStroke} />
                             <FontAwesomeIcon icon={regularStar} />
 
-                            <div className="w-px h-4 bg-gray-300 ml-2"></div>
+                            <div className="w-px h-4 bg-stone-400 ml-2"></div>
                             <p className="text-stone-400 pl-2 text-xs">
                                 No reviews yet 
                             </p>
+                            <div className="w-px h-4 bg-stone-400 ml-2"></div>
                             <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
                                 <FaPen />
                                 <span>Write a Review</span>
                             </div>
+                            <div className="w-px h-4 bg-stone-400 ml-2"></div>
+                            <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
+                                <FaPen />
+                                <span>Edit</span>
+                            </div>
+                            <div className="w-px h-4 bg-stone-400 ml-2"></div>
+                            <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
+                                <FontAwesomeIcon icon={faTrash} className="text-red-500 hover:text-red-700 cursor-pointer" />
+                                <span>Delete</span>
+                            </div>
                         </div>
                         <hr className="flex my-4 border border-gray-400"/>
+                        {/* Product Details */}
                         <div className="flex items-center space-x-4">
                             <div>
                                 <p className="text-white text-sm">SKU: </p>
@@ -71,10 +83,12 @@ export default function DetailProduct() {
                             <div className="flex items-center gap-4">
                                 {/* Quantity Controls */}
                                 <div className="flex items-center gap-2">
-                                    <div className="border border-gray-400 rounded px-3 py-1 text-center w-16 text-white">1</div>
+                                    <div className="border border-gray-400 rounded px-3 py-1 text-center w-16 text-white">
+                                        1
+                                    </div>
                                     <div className="flex flex-col justify-center gap-1">
-                                    <FaChevronUp className="cursor-pointer text-white hover:text-blue-400" />
-                                    <FaChevronDown className="cursor-pointer text-white hover:text-blue-400" />
+                                        <FaChevronUp className="cursor-pointer text-white hover:text-blue-400" />
+                                        <FaChevronDown className="cursor-pointer text-white hover:text-blue-400" />
                                     </div>
                                 </div>
 
@@ -85,14 +99,15 @@ export default function DetailProduct() {
                             </div>
                         </div>
                         {/* Wishlist */}
-                        <div className="mt-4 text-stone-400 text-sm flex items-center gap-2">
+                        <div className="mt-4 text-stone-400 text-sm flex items-center gap-2 cursor-pointer">
                             <span>Add to Wishlist</span>
                             <button className="text-white hover:text-red-500 text-base">
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
                         </div>
-                        <div className="mt-4 overflow-x-auto flex gap-4">
-                            {[...Array(4)].map((_, i) => (
+                        {/* Product images */}
+                        <div className="mt-4 overflow-x-auto flex gap-2">
+                            {[...Array(8)].map((_, i) => (
                                 <img 
                                 key={i}
                                 src="04-__99752.jpg" 

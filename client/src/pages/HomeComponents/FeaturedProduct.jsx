@@ -98,7 +98,7 @@ const FeaturedProduct = () => {
     }, []);
 
     const productDetail = () => {
-        navigate('/productdetail');
+        window.location.href = "/productdetail";
     }
 
     return (
