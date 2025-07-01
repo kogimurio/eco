@@ -41,7 +41,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
-      <div className="bg-gray-800 h-16 flex items-center justify-between px-8 shadow">
+      <div className="fixed top-0 left-0 w-full h-16 bg-gray-800 flex items-center justify-between px-8 shadow z-50">
         <div className="text-xl font-bold text-orange-500">Fashionova Admin</div>
         <h1 className="text-lg font-semibold">Dashboard</h1>
         <button className="flex items-center gap-2 text-red-400 hover:text-red-600 transition">
@@ -51,9 +51,8 @@ const Dashboard = () => {
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-[220px_1fr]">
         {/* Sidebar */}
-        <aside className="bg-gray-800 p-6 h-full min-h-screen space-y-6">
+        <aside className="fixed top-16 left-0 w-[220px] h-[calc(100vh-4rem)] bg-gray-800 p-6 space-y-6 z-40">
           <div 
             onClick={handleDashboard}
             className="flex items-center gap-2 cursor-pointer hover:text-orange-400"
@@ -94,14 +93,13 @@ const Dashboard = () => {
         </aside>
 
         {/* Dashboard Content */}
-        <main className="grid grid-cols-1">
+        <main className="ml-[220px] pt-16 p-6 min-h-screen bg-gray-900">
                         <Outlet />
         </main>
         
         {/* Sections */}
        
       </div>
-    </div>
   );
 };
 
