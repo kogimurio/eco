@@ -24,6 +24,7 @@ const ViewOrder = lazy(() => import('./pages/AdminComponents/OrderView'));
 const Cart = lazy(() => import('./pages/OrderComponents/Cart'));
 const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
 const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'));
+const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="order_confirmation" element={<OrderConfirmation />} />
+            <Route path="wishlist" element={<WishList />} />
           </Route>
 
           {/* Admin dashboard routes without navbar/footer */}

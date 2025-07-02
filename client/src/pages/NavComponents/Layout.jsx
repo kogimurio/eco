@@ -15,8 +15,8 @@ const Layout = () => {
         setIsMenuOpen(prev => !prev);
     }
 
-    const handleLogin = () => {
-        navigate("/login")
+    const handleWishList = () => {
+        navigate("/wishlist")
     }
 
     const handleRegister = () => {
@@ -110,7 +110,10 @@ const Layout = () => {
 
                         {/* Desktop Menu */}
                         <ul className="flex space-x-4 items-center">
-                            <button className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list">
+                            <button 
+                                className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list"
+                                onClick={handleWishList}
+                            >
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
                             <button 
