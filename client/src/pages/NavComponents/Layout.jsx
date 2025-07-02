@@ -5,12 +5,30 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faShoppingCart, faUser, faSearch, faRightToBracket, faRightFromBracket, faGear } from "@fortawesome/free-solid-svg-icons";
 import Banner from "./Banner";
 import Footer from "../FooterComponents/Footer"
+import { useNavigate } from "react-router-dom";
 
 const Layout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsMenuOpen(prev => !prev);
+    }
+
+    const handleLogin = () => {
+        navigate("/login")
+    }
+
+    const handleRegister = () => {
+        navigate("/register")
+    }
+
+    const handleProfile = () => {
+        navigate("/profile")
+    }
+
+    const handleCart = () => {
+        navigate("/cart")
     }
 
 
@@ -41,7 +59,10 @@ const Layout = () => {
                             <button className="text-white hover:text-red-500" title="Wish list">
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
-                            <button className="text-white hover:text-blue-500" title="Cart">
+                            <button 
+                                className="text-white hover:text-blue-500" title="Cart"
+                                onClick={handleCart}
+                            >
                                 <FontAwesomeIcon icon={faShoppingCart} />
                             </button>
                             <button className="text-white hover:text-blue-500" title="Account">
@@ -92,7 +113,10 @@ const Layout = () => {
                             <button className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list">
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
-                            <button className="text-white hover:text-blue-500" title="Cart">
+                            <button 
+                                className="text-white hover:text-blue-500" title="Cart"
+                                onClick={handleCart}
+                            >
                                 <FontAwesomeIcon icon={faShoppingCart} />
                             </button>
                             {/* Dropdown Group */}
@@ -103,16 +127,16 @@ const Layout = () => {
                             <div className="absolute top-full right-0 w-48 bg-gray-700 rounded shadow-md hidden group-hover:block z-50">
                                 <ul className="py-2">
                                 <li className="text-white hover:text-gray-400 px-4 py-2">
-                                    <FontAwesomeIcon icon={faGear} className="mr-2"/>
-                                    <a href="/profile">Settings</a>
-                                </li>
-                                <li className="text-white hover:text-gray-400 px-4 py-2">
                                     <FontAwesomeIcon icon={faRightToBracket} className="mr-2"/>
                                     <a href="/login">Login</a>
                                 </li>
                                 <li className="text-white hover:text-gray-400 px-4 py-2">
                                     <FontAwesomeIcon icon={faRightFromBracket} className="mr-2"/>
                                     <a href="/logout">Logout</a>
+                                </li>
+                                <li className="text-white hover:text-gray-400 px-4 py-2">
+                                    <FontAwesomeIcon icon={faGear} className="mr-2"/>
+                                    <a href="/profile">Settings</a>
                                 </li>
                                 </ul>
                             </div>

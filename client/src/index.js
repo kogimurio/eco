@@ -8,6 +8,8 @@ import Layout from './pages/NavComponents/Layout';
 import Home from './pages/HomeComponents/Home';
 import NoPage from './pages/HomeComponents/NoPage';
 import Login from './pages/NavComponents/Login';
+import Register from './pages/NavComponents/Register';
+import Profile from './pages/NavComponents/Profile';
 import DetailProduct from './pages/ProductComponents/DetailProduct';
 
 // Lazy-loaded Admin Components
@@ -19,6 +21,9 @@ const Settings = lazy(() => import('./pages/AdminComponents/Settings'));
 const ProductList = lazy(() => import('./pages/AdminComponents/ProductList'));
 const Analytics = lazy(() => import('./pages/AdminComponents/Analytics'));
 const ViewOrder = lazy(() => import('./pages/AdminComponents/OrderView'));
+const Cart = lazy(() => import('./pages/OrderComponents/Cart'));
+const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
+const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'));
 
 export default function App() {
   return (
@@ -30,7 +35,12 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="*" element={<NoPage />} />
             <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="productdetail" element={<DetailProduct />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="order_confirmation" element={<OrderConfirmation />} />
           </Route>
 
           {/* Admin dashboard routes without navbar/footer */}
