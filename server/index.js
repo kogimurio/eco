@@ -1,12 +1,21 @@
-require('dotenv').config({ path: '.env.development' });
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const MONGO_URL = process.env.MONGO_URL;
+
+const MONGO_URL = 
+    process.env.USE_DB_SOURCE === 'docker'
+    ? process.env.MONGO_URL_DOCKER
+    : process.env.USE_DB_SOURCE === 'atlas'
+    ? process.env.MONGO_URL_ATLAS
+    : process.env.MONGO_URL_LOCAL;
+
 if (!MONGO_URL) {
     console.error("MongoDB connection string is not defined in .env file");
+    process.exit(1);
 }
 
+// Routes
 const productRoutes = require('./routes/productRoutes');
 
 const app = express();
