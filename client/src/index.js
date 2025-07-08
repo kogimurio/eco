@@ -3,6 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import './App.css';
 
+// Toast
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Static imports (smaller components)
 import Layout from './pages/NavComponents/Layout';
 import Home from './pages/HomeComponents/Home';
@@ -26,10 +30,13 @@ const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
 const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'));
 const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
 
+
+
 export default function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<div className="text-center text-white p-10">Loading...</div>}>
+      <ToastContainer position="top-center" autoClose={3000} theme="dark" />
         <Routes>
           {/* Public routes with navbar and footer */}
           <Route path="/" element={<Layout />}>

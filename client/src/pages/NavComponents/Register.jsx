@@ -1,25 +1,43 @@
 import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function Register() {
-  const [form, setForm] = useState({
-    name: '',
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.password !== form.confirmPassword) {
-      alert('Passwords do not match');
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
       return;
     }
-    // Handle registration logic
-    console.log(form);
+    try {
+      const response = await axios.post(`${BASE_URL}/users/register`, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password
+      });
+      toast.success('Registration successful!');
+      console.log(response.data);
+      navigate('/login');
+    } catch (error) {
+      console.log(error.response?.data || error.message);
+    }
   };
 
   return (
@@ -32,9 +50,19 @@ export default function Register() {
 
         <input
           type="text"
-          name="name"
-          placeholder="Full Name"
-          value={form.name}
+          name="firstName"
+          placeholder="First Name"
+          value={formData.firstName}
+          onChange={handleChange}
+          required
+          className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
+
+        <input
+          type="text"
+          name="lastName"
+          placeholder="Last Name"
+          value={formData.lastName}
           onChange={handleChange}
           required
           className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -44,7 +72,7 @@ export default function Register() {
           type="email"
           name="email"
           placeholder="Email"
-          value={form.email}
+          value={formData.email}
           onChange={handleChange}
           required
           className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -54,7 +82,7 @@ export default function Register() {
           type="password"
           name="password"
           placeholder="Password"
-          value={form.password}
+          value={formData.password}
           onChange={handleChange}
           required
           className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -64,7 +92,7 @@ export default function Register() {
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
-          value={form.confirmPassword}
+          value={formData.confirmPassword}
           onChange={handleChange}
           required
           className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
