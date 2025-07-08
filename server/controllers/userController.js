@@ -1,6 +1,9 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
+const user = require('../models/User');
 
-// Register users
+// Register Users
 exports.registerUser = async (req, res) => {
     const { firstName, lastName, email, password, role } = req.body;
 
@@ -34,4 +37,68 @@ exports.registerUser = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+// Login User
+exports.LoginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    // Basic validation
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    try {
+        // find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        // Check password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h'}
+        );
+
+        res.json({
+            message: 'Login successful',
+            token,
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        console.log('login error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+// Get logged in user profile
+exports.getUserProfile = async (req, res) => {
+    try {
+        // Find user by ID from the token
+        const user = await User.findById(req.user.userId).select('-password');
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json(user);
+    } catch (error) {
+        console.log('Profile fetch error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
 
