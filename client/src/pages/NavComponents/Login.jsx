@@ -23,6 +23,8 @@ export default function Login() {
       const response = await axios.post(`${BASE_URL}/users/login`, formData, {
         withCredentials: true
       });
+      // Store user data
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       toast.success('Login successful!');
       console.log(response.data);
       navigate('/')

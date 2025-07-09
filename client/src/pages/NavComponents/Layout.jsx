@@ -11,6 +11,8 @@ const Layout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
 
+    const user = JSON.parse(localStorage.getItem("user"));
+
     const toggleMenu = () => {
         setIsMenuOpen(prev => !prev);
     }
@@ -129,18 +131,23 @@ const Layout = () => {
                             </div>
                             <div className="absolute top-full right-0 w-48 bg-gray-700 rounded shadow-md hidden group-hover:block z-50">
                                 <ul className="py-2">
-                                <li className="text-white hover:text-gray-400 px-4 py-2">
-                                    <FontAwesomeIcon icon={faRightToBracket} className="mr-2"/>
-                                    <a href="/login">Login</a>
-                                </li>
-                                <li className="text-white hover:text-gray-400 px-4 py-2">
-                                    <FontAwesomeIcon icon={faRightFromBracket} className="mr-2"/>
-                                    <a href="/logout">Logout</a>
-                                </li>
-                                <li className="text-white hover:text-gray-400 px-4 py-2">
-                                    <FontAwesomeIcon icon={faGear} className="mr-2"/>
-                                    <a href="/profile">Settings</a>
-                                </li>
+                                    {user ? (
+                                        <>
+                                            <li className="text-white hover:text-gray-400 px-4 py-2">
+                                                <FontAwesomeIcon icon={faGear} className="mr-2"/>
+                                                <a href="/profile">Settings</a>
+                                            </li>
+                                            <li className="text-white hover:text-gray-400 px-4 py-2">
+                                                <FontAwesomeIcon icon={faRightFromBracket} className="mr-2"/>
+                                                <a href="/logout">Logout</a>
+                                            </li>
+                                        </>
+                                    ): (
+                                        <li className="text-white hover:text-gray-400 px-4 py-2">
+                                            <FontAwesomeIcon icon={faRightToBracket} className="mr-2"/>
+                                            <a href="/login">Login</a>
+                                        </li>
+                                    )}
                                 </ul>
                             </div>
                         </li>
