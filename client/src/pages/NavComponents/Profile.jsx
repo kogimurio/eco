@@ -26,6 +26,12 @@ export default function Profile() {
     }
     // Submit form to backend
     console.log(form);
+    // axios.get('/api/users/profile', {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`
+    //   }
+    // });
+
   };
 
   return (
