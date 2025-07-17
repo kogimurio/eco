@@ -3,7 +3,7 @@ const slugify = require('slugify')
 
 const categorySchema = new mongoose.Schema({
     name: { type: String, required: true },
-    slug: { type: String, unique: true, required: true },
+    slug: { type: String, unique: true },
 }, { timestamps: true });
 
 categorySchema.pre('save', function (next) {

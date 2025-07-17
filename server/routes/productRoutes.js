@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../middleware/Uploads')
 const {
     createProduct,
     getAllProducts,
@@ -9,7 +10,14 @@ const {
     // getProductByQuery
 } = require('../controllers/productController');
 
-router.post('/', createProduct);
+
+
+router.post(
+  '/',
+  upload.array('image', 5), // Max 5 images per product
+  createProduct
+);
+
 // router.get('/by-query', getProductByQuery);
 router.get('/', getAllProducts); 
 router.get('/:id', getProduct);
