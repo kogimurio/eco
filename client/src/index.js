@@ -23,13 +23,13 @@ const Order = lazy(() => import('./pages/AdminComponents/Order'));
 const Users = lazy(() => import('./pages/AdminComponents/Users'));
 const Settings = lazy(() => import('./pages/AdminComponents/Settings'));
 const ProductList = lazy(() => import('./pages/AdminComponents/ProductList'));
+const CreateProduct = lazy(() => import('./pages/AdminComponents/AddProduct'));
 const Analytics = lazy(() => import('./pages/AdminComponents/Analytics'));
 const ViewOrder = lazy(() => import('./pages/AdminComponents/OrderView'));
 const Cart = lazy(() => import('./pages/OrderComponents/Cart'));
 const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
 const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'));
 const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
-
 
 
 export default function App() {
@@ -52,7 +52,7 @@ export default function App() {
             <Route path="wishlist" element={<WishList />} />
           </Route>
 
-          {/* Admin dashboard routes without navbar/footer */}
+          {/* routes without navbar/footer */}
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<Overview />} />
             <Route path="order" element={<Order />} />
@@ -61,6 +61,7 @@ export default function App() {
             <Route path="products" element={<ProductList />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="order_view" element={<ViewOrder />} />
+            <Route path="add_product" element={<CreateProduct />} />
           </Route>
         </Routes>
       </Suspense>

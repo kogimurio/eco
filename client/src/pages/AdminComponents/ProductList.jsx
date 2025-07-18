@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductList() {
   const [search, setSearch] = useState('');
@@ -18,12 +19,19 @@ export default function ProductList() {
       sold: 80,
     },
   ];
+  const navigate = useNavigate();
+
+  const handleCreateProduct = () => {
+    navigate('/dashboard/add_product')
+  }
 
   return (
     <div className="p-6 space-y-6">
       {/* Top Bar: Add + Search + Filter */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-        <button className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg shadow">
+        <button 
+          onClick={handleCreateProduct}
+          className="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg shadow">
           + Add Product
         </button>
 

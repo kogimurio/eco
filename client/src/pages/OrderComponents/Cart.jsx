@@ -6,18 +6,11 @@ export default function Cart() {
   const cartItems = [
     {
       id: 1,
-      name: "Apple MacBook Pro M3",
-      price: 2500,
+      name: "Asymmetric Top With Bow",
+      price: 100.99,
       quantity: 1,
-      image: "https://via.placeholder.com/60x60",
-    },
-    {
-      id: 2,
-      name: "Sony WH-1000XM5 Headphones",
-      price: 350,
-      quantity: 2,
-      image: "https://via.placeholder.com/60x60",
-    },
+      image: "/05__85237.jpg",
+    }
   ];
 
   const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);

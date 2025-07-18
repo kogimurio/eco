@@ -40,7 +40,7 @@ module.exports = {
         sans: ['Poppins', 'sans-serif'], // this makes Poppins the default font
       },
       fontSize: {
-        hero: ['clamp(2.5rem, 5vw, 4rem)', { lineHeight: '1.1' }],     // 40px - 64px
+        hero: ['clamp(2rem, 4vw, 3rem)', { lineHeight: '1.1' }],     // 40px - 64px
         brand: ['clamp(2rem, 4vw, 3.5rem)', { lineHeight: '1.1' }],
         sectionHeading: ['clamp(1.75rem, 4vw, 1.75rem)', { lineHeight: '1.2' }],  // 28px - 48px
         productTitle: ['clamp(1rem, 2vw, 1.5rem)', { lineHeight: '1.3' }],  // 16px - 24px

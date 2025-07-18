@@ -6,6 +6,7 @@ import { faShoppingCart, faUser, faSearch, faRightToBracket, faRightFromBracket,
 import Banner from "./Banner";
 import Footer from "../FooterComponents/Footer"
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Layout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,6 +32,11 @@ const Layout = () => {
 
     const handleCart = () => {
         navigate("/cart")
+    }
+
+    const handleLogout = () => {
+        localStorage.clear()
+        toast.success('Logout successful!');
     }
 
 
@@ -91,7 +97,7 @@ const Layout = () => {
                     {/* Desktop Layout */}
                     <div className="hidden md:flex justify-between items-center w-full">
                         {/* Logo */}
-                        <div className="font-hero text-hero tracking-wider text-orange-600 hover:text-orange-400 transition-colors duration-300">
+                        <div className="font-hero text-hero text-orange-600 hover:text-orange-400 transition-colors duration-300">
                             <Link to="/">fashionova</Link>
                         </div>
 
@@ -137,9 +143,9 @@ const Layout = () => {
                                                 <FontAwesomeIcon icon={faGear} className="mr-2"/>
                                                 <a href="/profile">Settings</a>
                                             </li>
-                                            <li className="text-white hover:text-gray-400 px-4 py-2">
+                                            <li onClick={handleLogout} className="text-white hover:text-gray-400 px-4 py-2">
                                                 <FontAwesomeIcon icon={faRightFromBracket} className="mr-2"/>
-                                                <a href="/logout">Logout</a>
+                                                Logout
                                             </li>
                                         </>
                                     ): (

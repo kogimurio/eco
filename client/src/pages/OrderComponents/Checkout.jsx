@@ -44,7 +44,7 @@ export default function Checkout() {
           <h3 className="text-lg font-semibold">Order Summary</h3>
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span>$2,850.00</span>
+            <span>$100.99</span>
           </div>
           <div className="flex justify-between">
             <span>Shipping</span>
@@ -52,7 +52,7 @@ export default function Checkout() {
           </div>
           <div className="flex justify-between font-bold text-lg">
             <span>Total</span>
-            <span>$2,850.00</span>
+            <span>$100.99</span>
           </div>
 
           <button 
