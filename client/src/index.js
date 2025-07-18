@@ -24,6 +24,8 @@ const Users = lazy(() => import('./pages/AdminComponents/Users'));
 const Settings = lazy(() => import('./pages/AdminComponents/Settings'));
 const ProductList = lazy(() => import('./pages/AdminComponents/ProductList'));
 const CreateProduct = lazy(() => import('./pages/AdminComponents/AddProduct'));
+const CreateCategory = lazy(() => import('./pages/AdminComponents/AddCategory'));
+const UpdateProduct = lazy(() => import('./pages/AdminComponents/EditProduct'))
 const Analytics = lazy(() => import('./pages/AdminComponents/Analytics'));
 const ViewOrder = lazy(() => import('./pages/AdminComponents/OrderView'));
 const Cart = lazy(() => import('./pages/OrderComponents/Cart'));
@@ -62,6 +64,8 @@ export default function App() {
             <Route path="analytics" element={<Analytics />} />
             <Route path="order_view" element={<ViewOrder />} />
             <Route path="add_product" element={<CreateProduct />} />
+            <Route path="add_category" element={<CreateCategory />} />
+            <Route path="edit_product/:id" element={<UpdateProduct />} />
           </Route>
         </Routes>
       </Suspense>

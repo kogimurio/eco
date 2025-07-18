@@ -17,6 +17,7 @@ export default function CreateProduct() {
         stock: ''
     });
     const [images, setImages] = useState([]);
+    const [thumbnail, setThumbnail] = useState('');
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingCategories, setLoadingCategories] = useState(true)
@@ -43,6 +44,10 @@ export default function CreateProduct() {
         setFormData({...formData, [e.target.name]: e.target.value});
     }
 
+    const handleThambnailChange = (e) => {
+        setThumbnail(e.target.files[0]);
+    }
+
     const handleFileChange = (e) => {
         setImages(Array.from(e.target.files));
     }
@@ -58,6 +63,7 @@ export default function CreateProduct() {
         data.append('brand', formData.brand);
         data.append('category', formData.category);
         data.append('stock', formData.stock);
+        data.append('thumbnail', thumbnail);
         images.forEach(img => {
             data.append('image', img);
         });
@@ -166,12 +172,22 @@ export default function CreateProduct() {
                     required
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
+                <label>Thumbnail Image</label>
                 <input
                     type="file"
                     accept="image/"
+                    name="thumbnail"
+                    onChange={handleThambnailChange}
+                    required
+                    className="p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <label>Additional Images</label>
+                <input
+                    type="file"
+                    name="images"
+                    accept="image/"
                     multiple
                     onChange={handleFileChange}
-                    required
                     className="p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <button
