@@ -16,7 +16,11 @@ exports.createProduct = async (req, res, next) => {
       });
     }
 
-    const imagePaths = req.files.map(file => `/uploads/${file.filename}`);
+    const thumbnailPath = req.files?.thumbnail?.[0]?.path;
+    const imagePaths = req.files?.images?.map(file => file.path);
+
+    const thumbnail = imagePaths[0];
+    const otherImages = imagePaths.slice(1);
 
     const newProduct = new Product({
       name,
@@ -25,7 +29,8 @@ exports.createProduct = async (req, res, next) => {
       brand,
       category,
       stock,
-      image: imagePaths
+      thumbnail,
+      image: otherImages
     });
 
     await newProduct.save();
@@ -35,9 +40,9 @@ exports.createProduct = async (req, res, next) => {
       product: newProduct,
     });
 
-  } catch (err) {
-    console.error('❌ Error in createProduct:', err);
-    next(err); // Pass the error to global handler
+  } catch (error) {
+    console.error('❌ Error in createProduct:', error);
+    next(error); // Pass the error to global handler
   }
 };
 
@@ -73,9 +78,50 @@ exports.getProduct = async (req, res) => {
 // };
 
 // Update a product
-exports.updateProduct = async (req, res) => {
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(updatedProduct);
+exports.updateProduct = async (req, res, next) => {
+  try {
+    const productId = req.params.id;
+    const {
+      name,
+      price,
+      description,
+      brand,
+      category,
+      stock
+    } = req.body;
+
+    // Fetch product
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found'})
+    }
+
+    // Update product
+    if (name) product.name = name;
+    if (price) product.price = price;
+    if (description) product.description = description;
+    if (brand) product.brand = brand;
+    if (category) product.category = category;
+    if (stock) product.stock = stock;
+
+    if (req.files && req.files.length > 0) {
+      const imagePaths = req.files.map(file => file.path || file.secure_url || file.filename);
+
+      product.thumbnail = imagePaths[0];
+      product.image = imagePaths.slice(1);
+    }
+
+    await product.save();
+
+    return res.status(200).json({
+      message: 'Product updated',
+      product: product
+    });
+  } catch (error) {
+    console.error('❌ Error updating product:', error);
+    next(error);
+  }
+    
 };
 
 // Delete a product

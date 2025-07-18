@@ -41,17 +41,22 @@ const storage = multer.diskStorage({
 // };
 
 const fileFilter = (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png' && ext !== '.webp') {
-        return cb(new Error('Only images are allowed'), false);
+    const ext = path.extname(file.originalname).toLowerCase();
+    allowedExts = ['.jpg', '.jpeg', '.png', '.webp'];
+    if (!allowedExts.includes(ext)) {
+        return cb(new Error('Only jpg, png and webp images are allowed'), false);
     }
     cb(null, true)
 };
 
+// Multer upload
 const upload = multer({ 
     storage,
     fileFilter,
     limits: { fileSize: 2 * 1024 * 1024 } // 2MB
 });
 
-module.exports = upload;
+exports.uploadProductImages = upload.fields([
+    { name: 'thumbnail', maxcount: 1 },
+    { name: 'images', maxCount: 5 }
+]);

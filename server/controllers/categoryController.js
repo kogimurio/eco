@@ -1,26 +1,37 @@
 const Category = require('../models/Category');
 
-exports.createCategory = async (req, res)=> {
-    const { name } = req.body;
-
-
+exports.createCategory = async (req, res) => {
     try {
-        if (!name) {
-            return res.status(400).json({ message: 'Name field is required' });
-        }
+        const { name } = req.body;
 
-        // New category
-        const newCategory = new Category({
-            name
-        })
-        await newCategory.save();
+        if (!name) return res.status(400).json({ message: 'Category name is required'})
 
-        res.status(201).json({ 
-            message: 'New category created successful',
-            category: newCategory 
-        });
+            const existing = await Category.findOne({ name});
+            if (existing) res.status(400).json({ message: 'Category already exist' });
+
+            const newCategory = new Category({
+                name,
+            });
+            await newCategory.save();
+
+            return res.status(201).json({
+                message: 'Category created',
+                category: newCategory,
+            });
     } catch (error) {
-        console.error('Error in category creation:', error);
-        res.status(500).json({ message: 'Failed to create category'});
+        console.error('❌ Error in Category:', error)
+        return res.status(500).json({ message: 'Error in Category' })
+    }
+}
+
+exports.getCategories = async (req, res) => {
+    try {
+        const category = await Category.find();
+        return res.status(200).json({
+            category
+        })
+    } catch (error) {
+        console.error('❌ Error in Category:', err)
+        return res.status(500).json({ message: 'Error in Category' })
     }
 }
