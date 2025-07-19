@@ -16,7 +16,7 @@ exports.createProduct = async (req, res, next) => {
       });
     }
 
-    const thumbnailPath = req.files?.thumbnail?.[0]?.path;
+    const thumbnailPath = req.files?.thumbnail?.[0]?.path.replace(/\\/g, "/");
     const imagePaths = req.files?.images?.map(file => file.path);
 
     const thumbnail = imagePaths[0];
@@ -30,7 +30,7 @@ exports.createProduct = async (req, res, next) => {
       category,
       stock,
       thumbnail,
-      image: otherImages
+      images: otherImages
     });
 
     await newProduct.save();
@@ -49,14 +49,32 @@ exports.createProduct = async (req, res, next) => {
 
 // Get all products
 exports.getAllProducts = async (req, res) => {
+  try {
     const products = await Product.find();
-    res.json(products);
+    res.json({
+      products,
+      total: products.length
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error in fetching products:', error });
+  }
+    
 };
 
 // Get a product by Id through Path parameter
 exports.getProduct = async (req, res) => {
+  try {
     const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
     res.json(product);
+  } catch (error) {
+    console.error("Error:", error)
+    res.status(500).json({ message: 'Failed to load the product' });
+  }
+    
 };
 
 // Get a product by Id through Query string
