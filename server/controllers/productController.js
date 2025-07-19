@@ -108,6 +108,9 @@ exports.updateProduct = async (req, res, next) => {
       stock
     } = req.body;
 
+    console.log('Files:', req.files);
+    console.log('Body:', req.body);
+
     // Fetch product
     const product = await Product.findById(productId);
     if (!product) {
@@ -122,12 +125,18 @@ exports.updateProduct = async (req, res, next) => {
     if (category) product.category = category;
     if (stock) product.stock = stock;
 
-    if (req.files && req.files.length > 0) {
-      const imagePaths = req.files.map(file => file.path || file.secure_url || file.filename);
+    if (req.files) {
+      if (req.files.thumbnail && req.files.thumbnail.length > 0 ) {
+        const thumbnailPath = req.files.thumbnail[0].path || req.files.thumbnail[0].secure_url;
+        product.thumbnail = thumbnailPath;
+      }
 
-      product.thumbnail = imagePaths[0];
-      product.image = imagePaths.slice(1);
+      if (req.files.images && req.files.length > 0 ) {
+        const imagePaths = req.files.images.map(file => file.path || file.secure_url);
+        product.images = imagePaths;
+      }
     }
+
 
     await product.save();
 
