@@ -6,6 +6,8 @@ import LoadingSpinner from '../LoadingSpinner';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE
+
 
 export default function UpdateProduct() {
     const [formData, setFormData] = useState({
@@ -18,34 +20,40 @@ export default function UpdateProduct() {
     });
     const [images, setImages] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [currentProduct, setCurrentProduct] = useState([]);
+    const [thumnailPreview, setThumnailPreview] = useState(null);
+    const [imagePreview, setImagePreview] = useState([]);
+    const [thumbnailFile, setThumbnailFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [loadingCategories, setLoadingCategories] = useState(true)
     const fileInputRef = useRef();
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // Fetch product
+    // Fetch product by id
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const res = await axios.get(`${BASE_URL}/products/${id}`);
-                const product = res.data.product;
+                const product = res.data;
 
                 setFormData({
                     name: product.name,
                     price: product.price,
                     description: product.description,
-                    brans: product.brand,
+                    brand: product.brand,
                     category: product.category,
                     stock: product.stock,
                 });
+                const cleanThumbnail = (`${BASE_IMAGE_URL}/${product.thumbnail}`).replace(/\\/g, "/")
+                const cleanImages = (product.images || []).map(img => `${BASE_IMAGE_URL}/${img}`.replace(/\\/g, "/"))
+                setThumnailPreview(cleanThumbnail);
+                setImagePreview(cleanImages);
             } catch (error) {
                 toast.error('Failed to fetch product');
             }
         }
-        fetchProduct();
-    });
+        if (id) fetchProduct();
+    }, [id]);
 
     // Fetch Category
     useEffect(() => {
@@ -70,10 +78,17 @@ export default function UpdateProduct() {
     const handleFileChange = (e) => {
         setImages(Array.from(e.target.files));
     }
+
+    const handleThumbnailChange = (e) => {
+        const file = (e.target.files[0]);
+        setThumnailPreview(URL.createObjectURL(file));
+        setThumbnailFile(file);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(images.length === 0) return toast.error('Please select atleast one product image');
+        if(!thumbnailFile) return toast.error('Please select one product image');
 
         const data = new FormData();
         data.append('name', formData.name);
@@ -82,6 +97,7 @@ export default function UpdateProduct() {
         data.append('brand', formData.brand);
         data.append('category', formData.category);
         data.append('stock', formData.stock);
+        data.append('thumbnail', thumbnailFile);
         images.forEach(img => {
             data.append('image', img);
         });
@@ -190,9 +206,46 @@ export default function UpdateProduct() {
                     required
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
+                {thumnailPreview && (
+                    <div className="mt-4">
+                        <p className="text-sm text-gray-300">Thumbnail Image</p>
+                        <img
+                            src={thumnailPreview}
+                            alt="Thumbnail Image"
+                            className="w-full h-48"
+                        />
+                    </div>
+                )}
+                <label>Thumbnail Image</label>
                 <input
                     type="file"
                     accept="image/"
+                    name="thumnail"
+                    onChange={handleThumbnailChange}
+                    required
+                    className="p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                {imagePreview.length > 0 && (
+                    <div className="mt-4">
+                        <p className="text-sm text-gray-300">Product Images</p>
+                        <div className="grid grid-cols-3 gap-2">
+                            {imagePreview.map((img, key) => (
+                            <div key={key}>
+                                <img
+                                    src={img}
+                                    alt={`Product ${key}`}
+                                    className="w-full h-32 object-cover rounded"
+                                />
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+                )}
+                <label>Other Images</label>
+                <input
+                    type="file"
+                    accept="image/"
+                    name="images"
                     multiple
                     onChange={handleFileChange}
                     required

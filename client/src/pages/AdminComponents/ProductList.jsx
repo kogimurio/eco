@@ -1,25 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../LoadingSpinner';
+import axios from 'axios';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function ProductList({ productId }) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const products = [
-    {
-      id: 1,
-      name: 'Samsung Galaxy S25 Ultra',
-      stock: 500,
-      sold: 200,
-    },
-    {
-      id: 2,
-      name: 'Apple MacBook Pro M3',
-      stock: 120,
-      sold: 80,
-    },
-  ];
+  
   const navigate = useNavigate();
+
+  // Fetch products
+  useEffect(() => {
+      const fetchProduct = async () => {
+        try {
+          const res = await axios.get(`${BASE_URL}/products`)
+          setProducts(res.data.products)
+        } catch (error) {
+          console.error(error?.res?.data || error.message);
+        } finally {
+          setLoading(false)
+        }
+      };
+
+      fetchProduct()
+  }, [])
 
   const handleCreateProduct = () => {
     navigate('/dashboard/add_product')
@@ -73,33 +82,38 @@ export default function ProductList({ productId }) {
 
       {/* Product Cards */}
       <div className="space-y-4">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="bg-gray-800 rounded-xl p-6 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center"
-          >
-            <div className="text-white space-y-1">
-              <h3 className="text-lg font-semibold">{product.name}</h3>
-              <p className="text-sm text-gray-400">
-                <span className="font-medium text-gray-300">Stock:</span> {product.stock} pcs
-              </p>
-              <p className="text-sm text-gray-400">
-                <span className="font-medium text-gray-300">Total Sales:</span> {product.sold} pcs
-              </p>
-            </div>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          products.map((product) => (
+            <div
+              key={product._id}
+              className="bg-gray-800 rounded-xl p-6 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center"
+            >
+              <div className="text-white space-y-1">
+                <h3 className="text-lg font-semibold">{product.name}</h3>
+                <p className="text-sm text-gray-400">
+                  <span className="font-medium text-gray-300">Stock:</span> {product.stock} pcs
+                </p>
+                <p className="text-sm text-gray-400">
+                  <span className="font-medium text-gray-300">Total Sales:</span> {product.sold} pcs
+                </p>
+              </div>
 
-            <div className="flex gap-2 mt-4 md:mt-0">
-              <button 
-                onClick={handleEditProduct}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow text-sm">
-                Edit
-              </button>
-              <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow text-sm">
-                Delete
-              </button>
+              <div className="flex gap-2 mt-4 md:mt-0">
+                <button 
+                  onClick={handleEditProduct}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow text-sm">
+                  Edit
+                </button>
+                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow text-sm">
+                  Delete
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+        ))
+        )}
+        
       </div>
     </div>
   );

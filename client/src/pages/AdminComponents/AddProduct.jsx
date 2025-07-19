@@ -18,6 +18,7 @@ export default function CreateProduct() {
     });
     const [images, setImages] = useState([]);
     const [thumbnail, setThumbnail] = useState('');
+    const [thumbnailPreview, setThumbnailPreview] = useState('');
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingCategories, setLoadingCategories] = useState(true)
@@ -39,13 +40,30 @@ export default function CreateProduct() {
         fetchCategory();
     }, []);
 
+    // Revoke Thumbnail Preview
+    useEffect(() => {
+        return() => {
+            if (thumbnailPreview) {
+                URL.revokeObjectURL(thumbnailPreview);
+            }
+        }
+    }, [thumbnailPreview]);
+
 
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
     }
 
     const handleThambnailChange = (e) => {
-        setThumbnail(e.target.files[0]);
+        const file = (e.target.files[0]);
+        setThumbnail(file);
+
+        if (file) {
+            const previewURL = URL.createObjectURL(file);
+            setThumbnailPreview(previewURL);
+        } else {
+            setThumbnailPreview(null);
+        }
     }
 
     const handleFileChange = (e) => {
@@ -65,7 +83,7 @@ export default function CreateProduct() {
         data.append('stock', formData.stock);
         data.append('thumbnail', thumbnail);
         images.forEach(img => {
-            data.append('image', img);
+            data.append('images', img);
         });
         
 
@@ -172,23 +190,33 @@ export default function CreateProduct() {
                     required
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
-                <label>Thumbnail Image</label>
+                {thumbnailPreview && (
+                    <div className="mt-4">
+                        <p className="text-sm text-gray-300 mb-1">Thumbnail Preview</p>
+                        <img
+                            src={thumbnailPreview}
+                            alt="Thumbnail Preview"
+                            className="w-full h-48 object-contain rounded border border-gray-600"
+                        />
+                    </div>
+                )}
+                <label className="my-2">Thumbnail Image</label>
                 <input
                     type="file"
                     accept="image/"
                     name="thumbnail"
                     onChange={handleThambnailChange}
                     required
-                    className="p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="cursor-pointer p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
-                <label>Additional Images</label>
+                <label className="mt-2">Additional Images</label>
                 <input
                     type="file"
                     name="images"
                     accept="image/"
                     multiple
                     onChange={handleFileChange}
-                    className="p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="cursor-pointer p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <button
                     type="submit"
