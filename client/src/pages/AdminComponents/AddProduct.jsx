@@ -17,6 +17,7 @@ export default function CreateProduct() {
         stock: ''
     });
     const [images, setImages] = useState([]);
+    const [imagePreview, setImagePreview] = useState([]);
     const [thumbnail, setThumbnail] = useState('');
     const [thumbnailPreview, setThumbnailPreview] = useState('');
     const [categories, setCategories] = useState([]);
@@ -67,7 +68,16 @@ export default function CreateProduct() {
     }
 
     const handleFileChange = (e) => {
-        setImages(Array.from(e.target.files));
+        const files = (Array.from(e.target.files));
+        setImages(files);
+        
+
+        if (files) {
+            const previewImageUrl = files.map(file => URL.createObjectURL(file));
+            setImagePreview(previewImageUrl);
+        } else {
+            setImagePreview(null);
+        }
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -190,6 +200,7 @@ export default function CreateProduct() {
                     required
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
+                {/* Thumbnail preview */}
                 {thumbnailPreview && (
                     <div className="mt-4">
                         <p className="text-sm text-gray-300 mb-1">Thumbnail Preview</p>
@@ -209,6 +220,23 @@ export default function CreateProduct() {
                     required
                     className="cursor-pointer p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
+                {/* Images preview */}
+                {imagePreview.length > 0 && (
+                    <div className="mt-4">
+                        <p className="text-sm text-gray-300">Product images</p>
+                        <div className="grid grid-cols-3 gap-2">
+                            {imagePreview.map((img, key) => (
+                                <div key={key}>
+                                    <img
+                                        src={img}
+                                        alt='product images'
+                                        className="w-full h-32 object-cover rounded"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 <label className="mt-2">Additional Images</label>
                 <input
                     type="file"

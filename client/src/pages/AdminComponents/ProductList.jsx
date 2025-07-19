@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-export default function ProductList({ productId }) {
+export default function ProductList() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [products, setProducts] = useState([]);
@@ -17,6 +17,7 @@ export default function ProductList({ productId }) {
   // Fetch products
   useEffect(() => {
       const fetchProduct = async () => {
+        await new Promise(res => setTimeout(res, 2000));
         try {
           const res = await axios.get(`${BASE_URL}/products`)
           setProducts(res.data.products)
@@ -38,8 +39,23 @@ export default function ProductList({ productId }) {
     navigate('/dashboard/add_category')
   }
 
-  const handleEditProduct = () => {
-    navigate(`/dashboard/edit_product/${productId}`)
+  const handleEditProduct = (id) => {
+    navigate(`/dashboard/edit_product/${id}`)
+  }
+
+  const handleDeleteProduct = async (id) => {
+
+    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+
+    if (!confirmDelete) return;
+
+    try {
+        await axios.delete(`${BASE_URL}/products/${id}`)
+        alert("Product deleted!");
+        window.location.href = '/dashboard/products'
+    } catch (error) {
+      console.error("Failed to delete product")
+    }
   }
 
   return (
@@ -83,7 +99,7 @@ export default function ProductList({ productId }) {
       {/* Product Cards */}
       <div className="space-y-4">
         {loading ? (
-          <LoadingSpinner />
+          <LoadingSpinner size="60" />
         ) : (
           products.map((product) => (
             <div
@@ -102,11 +118,13 @@ export default function ProductList({ productId }) {
 
               <div className="flex gap-2 mt-4 md:mt-0">
                 <button 
-                  onClick={handleEditProduct}
+                  onClick={() => handleEditProduct(product._id)}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow text-sm">
                   Edit
                 </button>
-                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow text-sm">
+                <button 
+                  onClick={() => handleDeleteProduct(product._id)}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow text-sm">
                   Delete
                 </button>
               </div>

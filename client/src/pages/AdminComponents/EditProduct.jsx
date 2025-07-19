@@ -76,7 +76,15 @@ export default function UpdateProduct() {
     }
 
     const handleFileChange = (e) => {
-        setImages(Array.from(e.target.files));
+        const files = (Array.from(e.target.files));
+        setImages(files);
+
+        if (files) {
+            const preview = files.map(file => URL.createObjectURL(file));
+            setImagePreview(preview)
+        } else {
+            setImagePreview(null)
+        }
     }
 
     const handleThumbnailChange = (e) => {
@@ -99,7 +107,7 @@ export default function UpdateProduct() {
         data.append('stock', formData.stock);
         data.append('thumbnail', thumbnailFile);
         images.forEach(img => {
-            data.append('image', img);
+            data.append('images', img);
         });
         
 
@@ -211,7 +219,7 @@ export default function UpdateProduct() {
                         <p className="text-sm text-gray-300">Thumbnail Image</p>
                         <img
                             src={thumnailPreview}
-                            alt="Thumbnail Image"
+                            alt={thumnailPreview}
                             className="w-full h-48"
                         />
                     </div>
