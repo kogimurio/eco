@@ -2,8 +2,11 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -11,6 +14,8 @@ export default function Login() {
     password: ''
   });
   const navigate = useNavigate();
+  
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,11 +28,26 @@ export default function Login() {
       const response = await axios.post(`${BASE_URL}/users/login`, formData, {
         withCredentials: true
       });
-      // Store user data
+      // Store data to localStorage
       localStorage.setItem('user', JSON.stringify(response.data.user));
+      // localStorage.setItem('token', JSON.stringify(response.data.token));
+
       toast.success('Login successful!');
       console.log(response.data);
-      navigate('/')
+
+      const token = response.data.token;
+
+      if (token) {
+        const decode = jwtDecode(token);
+        const role = decode.role
+
+        if (role === 'admin') {
+          navigate('/dashboard')
+        } else {
+          navigate('/')
+        }
+      }
+      
     } catch (error) {
       console.log(error.response?.data || error.message);
       toast.error(error.response?.data?.error || 'Login failed');

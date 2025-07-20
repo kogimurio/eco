@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Outlet } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -38,13 +39,23 @@ const Dashboard = () => {
     navigate("/dashboard/analytics");
   };
 
+  const handleLogout = () => {
+      localStorage.clear()
+      setTimeout(() => {
+        toast.success('Logout successful!');
+        window.location.href="/"
+      }, 3000)
+  }
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
       <div className="fixed top-0 left-0 w-full h-16 bg-gray-800 flex items-center justify-between px-8 shadow z-50">
-        <div className="text-xl font-bold text-orange-500">Fashionova Admin</div>
-        <h1 className="text-lg font-semibold">Dashboard</h1>
-        <button className="flex items-center gap-2 text-red-400 hover:text-red-600 transition">
+        <div className="text-xl font-bold text-orange-500"><a href="/">Fashionova</a></div>
+        <h1 className="text-lg font-semibold">Admin Dashboard</h1>
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-red-400 hover:text-red-600 transition">
           <FontAwesomeIcon icon={faRightFromBracket} />
           Logout
         </button>

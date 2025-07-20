@@ -8,6 +8,8 @@ export default function Profile() {
     confirmPassword: '',
     profileImage: null,
   });
+  const storedUser = localStorage.getItem("user")
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -40,25 +42,32 @@ export default function Profile() {
         <h2 className="text-2xl font-semibold text-orange-500">My Profile</h2>
 
         {/* Profile Image */}
-        <div className="flex items-center space-x-4">
-          <img
-            src={
-              form.profileImage
-                ? URL.createObjectURL(form.profileImage)
-                : 'https://via.placeholder.com/80'
-            }
-            alt="Profile"
-            className="w-20 h-20 rounded-full object-cover border-2 border-orange-500"
-          />
-          <label className="cursor-pointer bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded text-sm">
-            Change Photo
-            <input
-              type="file"
-              name="profileImage"
-              onChange={handleChange}
-              className="hidden"
+        <div className="flex items-center space-x-4 justify-between">
+          <div className="flex items-center space-x-4 ">
+            <img
+              src={
+                form.profileImage
+                  ? URL.createObjectURL(form.profileImage)
+                  : 'https://via.placeholder.com/80'
+              }
+              alt="Profile"
+              className="w-20 h-20 rounded-full object-cover border-2 border-orange-500"
             />
-          </label>
+            <label className="cursor-pointer bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded text-sm">
+              Change Photo
+              <input
+                type="file"
+                name="profileImage"
+                onChange={handleChange}
+                className="hidden"
+              />
+            </label>
+          </div>
+          <div className="flex items-center space-x-4">
+            {user.role === 'admin' && (
+              <a href="/dashboard" className="text-orange-400 hover:underline">Dashboard</a>
+            )}
+          </div>
         </div>
 
         {/* Profile Form */}

@@ -37,6 +37,7 @@ const Layout = () => {
     const handleLogout = () => {
         localStorage.clear()
         toast.success('Logout successful!');
+        window.location.href="/"
     }
 
 
