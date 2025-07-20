@@ -30,7 +30,6 @@ export default function Login() {
       });
       // Store data to localStorage
       localStorage.setItem('user', JSON.stringify(response.data.user));
-      // localStorage.setItem('token', JSON.stringify(response.data.token));
 
       toast.success('Login successful!');
       console.log(response.data);

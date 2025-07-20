@@ -220,7 +220,7 @@ export default function UpdateProduct() {
                         <img
                             src={thumnailPreview}
                             alt={thumnailPreview}
-                            className="w-full h-48"
+                            className="w-full h-48 object-contain rounded"
                         />
                     </div>
                 )}
@@ -242,7 +242,7 @@ export default function UpdateProduct() {
                                 <img
                                     src={img}
                                     alt={`Product ${key}`}
-                                    className="w-full h-32 object-cover rounded"
+                                    className="w-full h-32 object-contain rounded"
                                 />
                             </div>
                         ))}

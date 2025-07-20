@@ -47,7 +47,7 @@ export default function App() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="productdetail" element={<DetailProduct />} />
+            <Route path="productdetail/:slug" element={<DetailProduct />} />
             <Route path="cart" element={<Cart />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="order_confirmation" element={<OrderConfirmation />} />
