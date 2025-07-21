@@ -50,7 +50,21 @@ exports.createProduct = async (req, res, next) => {
 // Get all products
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const filter = {};
+
+    if (req.query.bestSeller === 'true') {
+      filter.isBestSeller = true;
+    }
+
+    if (req.query.featured === 'true') {
+      filter.isFeatured = true
+    }
+
+    if (req.query.clearance === 'true') {
+      filter.isClearance = true
+    }
+
+    const products = await Product.find(filter);
     res.json({
       products,
       total: products.length

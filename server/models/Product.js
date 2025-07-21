@@ -14,6 +14,9 @@ const productSchema = new mongoose.Schema({
     stock: { type: Number, required: true },
     thumbnail: { type: String, required: true },
     images: [{ type: String }],
+    isClearance: { type: Boolean, default: false},
+    isBestSeller: { type: Boolean, default: false},
+    isFeatured: { type: Boolean, default: false},
     slug: { type: String, unique: true},
 }, { timestamps: true });
 
