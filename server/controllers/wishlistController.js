@@ -31,7 +31,7 @@ exports.addToWishlist = async (req, res) => {
             });
         }
 
-        // To resitric product if it already exist
+        // To restrict product duplicate
         if (wishlist.products.includes(productId)) {
             return res.status(400).json({
                 message: 'Product already in wishlist'
