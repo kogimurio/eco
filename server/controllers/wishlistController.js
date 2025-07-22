@@ -41,6 +41,10 @@ exports.addToWishlist = async (req, res) => {
         // Add product and Save
         wishlist.products.push(productId);
         await wishlist.save();
+        return res.status(201).json({
+            message: 'Product added to wishlist',
+            wishlist
+        });
         
     } catch (error) {
         console.error('Error:', error)
@@ -61,7 +65,7 @@ exports.removeFromWishlist = async (req, res) => {
             { user: userId },
             { $pull: { products: productId }},
             { new: true }
-        );
+        ).populate("products");
 
         res.status(200).json({
             message: "Product removed from wishlist",
