@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 import LoadingSpinner from '../LoadingSpinner';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -79,9 +80,9 @@ const BestSellers = () => {
         return () => window.removeEventListener("resize", updatedItemsPerPage); // Cleanup
     }, []);
 
-    // const productDetail = (slug) => {
-    //     navigate(`/productdetail/${slug}`);
-    // }
+    const productDetail = (slug) => {
+        navigate(`/productdetail/${slug}`);
+    }
 
     const handleAddToWishlist = async (productId) => {
         try {
@@ -101,14 +102,17 @@ const BestSellers = () => {
                     return [...prevWishlist, { _id: addedProductId }];
                 };
                 return prevWishlist;
-            })
-
-            console.log(response.data.message)
+            });
+            toast.success("Product has been added to your wishlist")
             
         } catch (error) {
             console.error("Error adding product to wishlist:", error);
+            const errorMessage = error.response?.data?.message || error.message || "An error has occured";
+            toast.error(errorMessage);
         }
     }
+
+    const handleCart =async () => {}
 
     return (
         <div className="bg-gray-800 mt-8 py-4 overflow-x-hidden">
@@ -136,7 +140,6 @@ const BestSellers = () => {
                         <div 
                             key={index} 
                             className="relative w-full group cursor-pointer"
-                            // onClick={() =>productDetail(product.slug)}
                             >
                                 <div className="md:left-2 md:top-2 pl-2">
                                     <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
@@ -165,7 +168,9 @@ const BestSellers = () => {
                                         icon={faPlus}
                                         className="text-white text-iconMedium"
                                     />
-                                    <span className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
+                                    <span 
+                                        onClick={() => handleCart(product._id)}
+                                        className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
                                         Add to Cart
                                     </span>
                                 </div>
@@ -173,8 +178,11 @@ const BestSellers = () => {
                                 {/* Icons and animated line divider */}
                                 <div className="absolute bottom-14 right-2 hidden group-hover:flex flex-col items-center gap-2 animate-slide-down">
                                     <button
-                                        onClick={() =>handleAddToWishlist(product._id)}
-                                        className="bg-gray-900 p-2 rounded-full text-white hover:text-red-500"
+                                        onClick={(e) =>{
+                                            e.stopPropagation();
+                                            handleAddToWishlist(product._id)
+                                        }}
+                                        className="bg-gray-900 p-2 z-1000 rounded-full text-white hover:text-red-500"
                                         title="Wish list"
                                     >
                                     <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
@@ -184,8 +192,12 @@ const BestSellers = () => {
                                     <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 group-hover:scale-x-100"></div>
 
                                     <button
-                                    className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
-                                    title="View"
+                                        onClick={(e) =>{
+                                            e.stopPropagation()
+                                            productDetail(product.slug)
+                                        }}
+                                        className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
+                                        title="View"
                                     >
                                     <FontAwesomeIcon icon={faEye} className="text-iconMedium" />
                                     </button>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { FaTrash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../LoadingSpinner';
+import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -25,7 +25,7 @@ export default function WishList() {
         });
         setWishlistProducts(res.data.wishlist?.products || []);
       } catch (error) {
-        console.error("Error:", error);
+        toast.error("Error:", error);
       } finally {
         setLoading(false);
       }
@@ -45,8 +45,9 @@ export default function WishList() {
       });
       setWishlistProducts((prevWishlist)=>
       prevWishlist.filter((item) => item._id !== productId));
+      toast.success("Product has been removed from your wishlist")
     } catch (error) {
-      console.error("Error removing item:", error);
+      toast.error("Error removing item:", error);
     }
   };
 
@@ -59,7 +60,10 @@ export default function WishList() {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl font-bold text-orange-500 mb-6">My Wishlist</h2>
 
-          {wishlistProducts.length === 0 ? (
+        {!token ? (
+          <p className="text-center text-gray-400"><a href='/login' className='text-blue-400 underline'>Login</a> to Add to wishlist.</p>
+        ) : (
+          wishlistProducts.length === 0 ? (
             <p className="text-center text-gray-400">Your wishlist is empty.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -89,7 +93,8 @@ export default function WishList() {
                 </div>
               ))}
             </div>
-          )}
+          )
+        )}
       </div>
     </div>
   );
