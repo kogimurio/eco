@@ -6,9 +6,12 @@ import LoadingSpinner from '../LoadingSpinner';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
+
 export default function WishList() {
-  const [wishlist, setWishlist] = useState([]);
-  const token = localStorage.getItem('token');
+  const [wishlistProducts, setWishlistProducts] = useState([]);
+  const localToken = localStorage.getItem('token');
+  const token = JSON.parse(localToken);
   const [loading, setLoading] = useState(true);
 
   console.log("Token:", token)
@@ -20,7 +23,7 @@ export default function WishList() {
             Authorization: `Bearer ${token}`
           }
         });
-        setWishlist(res.data.wishlist || []);
+        setWishlistProducts(res.data.wishlist?.products || []);
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -32,14 +35,16 @@ export default function WishList() {
   }, [token]);
 
   const removeFromWishlist = async (productId) => {
+    const confirmDelete = window.confirm("Are you sure you want to remove this product from your wishlist");
+    if (!confirmDelete) return;
     try {
         await axios.delete(`${BASE_URL}/wishlist/${productId}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
       });
-      setWishlist((prevWishlist)=>
-      prevWishlist.filter((item) => item.id !== productId));
+      setWishlistProducts((prevWishlist)=>
+      prevWishlist.filter((item) => item._id !== productId));
     } catch (error) {
       console.error("Error removing item:", error);
     }
@@ -54,17 +59,17 @@ export default function WishList() {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl font-bold text-orange-500 mb-6">My Wishlist</h2>
 
-          {wishlist.length === 0 ? (
+          {wishlistProducts.length === 0 ? (
             <p className="text-center text-gray-400">Your wishlist is empty.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {wishlist.map((item) => (
+              {wishlistProducts.map(item => (
                 <div
                   key={item.id}
                   className="bg-gray-800 rounded-lg shadow p-4 flex flex-col space-y-3"
                 >
                   <img
-                    src={item.image}
+                    src={`${BASE_IMAGE_URL}/${item.thumbnail}`}
                     alt={item.name}
                     className="w-full h-40 object-cover rounded"
                   />
@@ -75,7 +80,7 @@ export default function WishList() {
                       <FaEye /> View
                     </button>
                     <button
-                      onClick={() => removeFromWishlist(item.id)}
+                      onClick={() => removeFromWishlist(item._id)}
                       className="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded flex items-center gap-2"
                     >
                       <FaTrash /> Remove

@@ -19,7 +19,11 @@ const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 const BestSellers = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [wishlistProducts, setWishlistProducts] = useState([]);
     const navigate = useNavigate();
+    const localToken = localStorage.getItem('token');
+    const token = JSON.parse(localToken);
+
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(4);
 
@@ -75,8 +79,35 @@ const BestSellers = () => {
         return () => window.removeEventListener("resize", updatedItemsPerPage); // Cleanup
     }, []);
 
-    const productDetail = (slug) => {
-        navigate(`/productdetail/${slug}`);
+    // const productDetail = (slug) => {
+    //     navigate(`/productdetail/${slug}`);
+    // }
+
+    const handleAddToWishlist = async (productId) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/wishlist/`, 
+                {productId},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+
+            });
+
+            const addedProductId = productId;
+
+            setWishlistProducts((prevWishlist)=> {
+                if (!prevWishlist.some((item) => item._id === addedProductId)) {
+                    return [...prevWishlist, { _id: addedProductId }];
+                };
+                return prevWishlist;
+            })
+
+            console.log(response.data.message)
+            
+        } catch (error) {
+            console.error("Error adding product to wishlist:", error);
+        }
     }
 
     return (
@@ -105,7 +136,7 @@ const BestSellers = () => {
                         <div 
                             key={index} 
                             className="relative w-full group cursor-pointer"
-                            onClick={() =>productDetail(product.slug)}
+                            // onClick={() =>productDetail(product.slug)}
                             >
                                 <div className="md:left-2 md:top-2 pl-2">
                                     <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
@@ -142,8 +173,9 @@ const BestSellers = () => {
                                 {/* Icons and animated line divider */}
                                 <div className="absolute bottom-14 right-2 hidden group-hover:flex flex-col items-center gap-2 animate-slide-down">
                                     <button
-                                    className="bg-gray-900 p-2 rounded-full text-white hover:text-red-500"
-                                    title="Wish list"
+                                        onClick={() =>handleAddToWishlist(product._id)}
+                                        className="bg-gray-900 p-2 rounded-full text-white hover:text-red-500"
+                                        title="Wish list"
                                     >
                                     <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
                                     </button>
