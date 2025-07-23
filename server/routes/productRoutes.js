@@ -20,7 +20,7 @@ router.post(
 
 // router.get('/by-query', getProductByQuery);
 router.get('/', getAllProducts); 
-router.get('/:id', getProduct);
+router.get('/:slug', getProduct);
 router.put('/:id', 
   uploadProductImages,
   updateProduct);

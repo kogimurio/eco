@@ -76,14 +76,15 @@ exports.getAllProducts = async (req, res) => {
     
 };
 
-// Get a product by Id through Path parameter
+// Get a product by slug through Path parameter
 exports.getProduct = async (req, res) => {
+  const {slug} = req.params;
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({slug});
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json(product);
+    res.json({product});
   } catch (error) {
     console.error("Error:", error)
     res.status(500).json({ message: 'Failed to load the product' });
