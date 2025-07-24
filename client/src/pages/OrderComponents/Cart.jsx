@@ -100,7 +100,7 @@ export default function Cart() {
 
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6">
-      <h2 className="text-2xl font-semibold mb-6 text-gray-200">Your Shopping Cart <span className="text-gray-400">({totalItems} {totalItems === 1 ? "item" : "items"} )</span></h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-200">Your Shopping Cart <span className="text-orange-500">({totalItems} {totalItems === 1 ? "item" : "items"} )</span></h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items */}
@@ -119,7 +119,7 @@ export default function Cart() {
                   <button 
                     disabled={loadingItem === item.product._id}
                     onClick={() =>{
-                      if (item.quatity > 1) {
+                      if (item.quantity > 1) {
                         handleUpdateCart(item.product._id, item.quantity - 1);
                       }
                     }}
