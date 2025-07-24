@@ -165,3 +165,75 @@ exports.deleteCartProduct = async (req, res) => {
         });
     }
 }
+
+
+// Update cart products
+exports.updateCart = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const { productId, quantity} = req.body;
+
+
+        console.log("Received request to update cart")
+        console.log("userId:", userId);
+        console.log("productId:", productId);
+        console.log("quantity:", quantity);
+
+        // Basic validation
+        if (!productId || !userId || quantity < 0) {
+            return res.status(404).json({
+                message: "product Id and valid quantity are required"
+            });
+        }
+
+        // fetch user cart
+        const cart = await Cart.findOne({ user: userId });
+        if (!cart) {
+            return res.status(404).json({
+                message: "Cart not found"
+            });
+        }
+
+        // Find product in the cart
+        const itemIndex = cart.items.findIndex(
+            item => item.product.toString() === productId
+        )
+
+        // Add or update existing product quantity
+        if (itemIndex === -1) {
+            return res.status(404).json({
+                message: "Product not found"
+            })
+        }
+
+        // Update quantity
+        if (quantity === 0) {
+            // Remove item from cart
+            cart.items.splice(itemIndex, 1);
+        } else {
+            cart.items[itemIndex].quantity = quantity;
+        }
+
+        // Re-Calculate the cart total
+        const newTotal = await Promise.all(cart.items.map(async item => {
+            const product = await Product.findById(item.product);
+            if (!product) {
+                console.warn(`⚠️ Product not found: ${item.product}`);
+                return 0;
+            }
+            return product ? item.quantity * product.price : 0;
+        }));
+        cart.total = newTotal.reduce((sum, val) => sum + val, 0);
+
+        await cart.save();
+        res.status(200).json({
+            message: "Cart updated successfully",
+            cart
+        })
+    } catch (error) {
+        console.error("Error updating cart product:", error);
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+}
