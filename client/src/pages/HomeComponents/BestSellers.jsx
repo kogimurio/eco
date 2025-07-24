@@ -169,7 +169,7 @@ const BestSellers = () => {
                                         className="text-white text-iconMedium"
                                     />
                                     <span 
-                                        onClick={() => handleCart(product._id)}
+                                        onClick={handleCart}
                                         className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
                                         Add to Cart
                                     </span>

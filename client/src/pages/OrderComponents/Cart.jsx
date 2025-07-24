@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingSpinner from "../LoadingSpinner";
+import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -11,6 +12,7 @@ const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 export default function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingItem, setLoadingItem] = useState(null)
     const navigate = useNavigate();
     const localToken = localStorage.getItem('token');
     const token = JSON.parse(localToken);
@@ -19,11 +21,11 @@ export default function Cart() {
       const fetchCart = async () => {
         try {
             const res = await axios.get(`${BASE_URL}/cart`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          setCartItems(res.data.cart.items);
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
+            setCartItems(res.data.cart.items);
         } catch (error) {
           console.error("Error fetching cart:", error);
         } finally {
@@ -33,11 +35,63 @@ export default function Cart() {
       fetchCart()
     }, [token]);
 
+    const handleUpdateCart = async (productId, newQuatity) => {
+      setLoadingItem(productId);
+      try {
+        await axios.put(`${BASE_URL}/cart`, {
+          productId,
+          quantity: newQuatity
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        // Update cart
+        const res = await axios.get(`${BASE_URL}/cart`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setCartItems(res.data.cart.items);
+      } catch (error) {
+        console.error("Error updating cart:", error.response?.data?.message || error.message );
+        toast.error("Error updating cart")
+      } finally {
+        setLoadingItem(null);
+      }
+    }
+
+    const handleCartRemove = async (productId) => {
+      setLoadingItem(productId);
+      try {
+        await axios.delete(`${BASE_URL}/cart/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        // Update cart
+        const res = await axios.get(`${BASE_URL}/cart`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setCartItems(res.data.cart.items);
+        toast.success("Product removed from your cart")
+      } catch (error) {
+        console.error("Error delete product:", error.response?.data?.message || error.message );
+        toast.error("Error delete product")
+      } finally {
+        setLoadingItem(null);
+      }
+    }
+
     
 
   const subtotal = cartItems.reduce((total, item) => {
     return total + (item.product?.price ? item.product.price * item.quantity : 0);
   }, 0);
+
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleCheckout = () => {
     navigate("/checkout")
@@ -46,7 +100,7 @@ export default function Cart() {
 
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6">
-      <h2 className="text-2xl font-semibold mb-6">Your Shopping Cart</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-gray-200">Your Shopping Cart <span className="text-gray-400">({totalItems} {totalItems === 1 ? "item" : "items"} )</span></h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items */}
@@ -62,11 +116,32 @@ export default function Cart() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center border border-gray-700 rounded">
-                  <button className="px-3 py-1 hover:bg-gray-700">-</button>
+                  <button 
+                    disabled={loadingItem === item.product._id}
+                    onClick={() =>{
+                      if (item.quatity > 1) {
+                        handleUpdateCart(item.product._id, item.quantity - 1);
+                      }
+                    }}
+                    className="px-3 py-1 hover:bg-gray-700"
+                  >
+                    {loadingItem === item.product._id ?  <LoadingSpinner size='12' /> : '-'}
+                  </button>
                   <span className="px-4">{item.quantity}</span>
-                  <button className="px-3 py-1 hover:bg-gray-700">+</button>
+                  <button 
+                    disabled={loadingItem === item.product._id}
+                    onClick={() => handleUpdateCart(item.product._id, item.quantity + 1)}
+                    className="px-3 py-1 hover:bg-gray-700"
+                  >
+                    {loadingItem === item.product._id ? <LoadingSpinner size='12' /> : '+'}
+                  </button>
                 </div>
-                <button className="text-red-500 hover:underline text-sm">Remove</button>
+                <button 
+                  disabled={loadingItem === item.product._id}
+                  onClick={() => handleCartRemove(item.product._id)}
+                  className="text-red-500 hover:underline text-sm">
+                    {loadingItem === item.product._id ? <LoadingSpinner size='12' /> : 'Remove'}
+                </button>
               </div>
             </div>
           ))}

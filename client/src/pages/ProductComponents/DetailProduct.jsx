@@ -15,12 +15,14 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
+const localToken = localStorage.getItem('token')
+const token = JSON.parse(localToken);
+
 export default function DetailProduct() {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const { slug } = useParams()
-    const localToken = localStorage.getItem('token')
-    const token = JSON.parse(localToken);
+    
 
     useEffect(() => {
         const fetchProduct = async() => {
@@ -43,6 +45,7 @@ export default function DetailProduct() {
     const handleAddToCart = async () => {
         try {
                 const quantity = 1;
+                
 
             await axios.post(`${BASE_URL}/cart`, 
                 {
@@ -50,13 +53,13 @@ export default function DetailProduct() {
                     quantity: quantity
                 },
                 {
-                    heaaders: {
+                    headers: {
                         Authorization: `Bearer ${token}`
                     }
                 })
             toast.success('Product added to cart')
         } catch (error) {
-            console.error("Error adding product:", error);
+            console.error("Add to Cart Error:", error.response?.data?.message || error.message);
             toast.error("Error adding product")
         }
     }
@@ -151,7 +154,7 @@ export default function DetailProduct() {
 
                                 {/* Add to Cart Button */}
                                 <button 
-                                    onClick={()=> handleAddToCart(product._id)}
+                                    onClick={handleAddToCart}
                                     className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition duration-200">
                                     Add to Cart
                                 </button>
