@@ -3,7 +3,8 @@ const router = express.Router();
 const authMiddleware = require('../middleware/auth')
 const {
     addToCart,
-    getCart
+    getCartProduct,
+    deleteCartProduct
 } = require('../controllers/cartController');
 
 router.post(
@@ -14,7 +15,13 @@ router.post(
 router.get(
     '/',
     authMiddleware,
-    getCart
+    getCartProduct
+);
+
+router.delete(
+    '/:productId',
+    authMiddleware,
+    deleteCartProduct
 );
 
 module.exports = router;
