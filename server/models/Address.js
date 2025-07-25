@@ -6,6 +6,7 @@ const addressSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    email: { type: String, required: true },
     phone: { 
         type: String, 
         required: true,
