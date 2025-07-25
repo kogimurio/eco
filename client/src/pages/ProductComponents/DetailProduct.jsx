@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
 import { toast } from 'react-toastify';
+import { useCart } from '../../context/CartContext';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -18,10 +19,14 @@ const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 const localToken = localStorage.getItem('token')
 const token = JSON.parse(localToken);
 
+
 export default function DetailProduct() {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [wishlistProducts, setWishlistProducts] = useState([]);
     const { slug } = useParams()
+    const { addToCart, cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();
+    const [loadingItem, setLoadingItem] = useState(null)
     
 
     useEffect(() => {
@@ -42,31 +47,58 @@ export default function DetailProduct() {
         
     }, [slug])
 
-    const handleAddToCart = async () => {
-        try {
-                const quantity = 1;
-                
+    const handleAddToCart = async (prodctId) => {
+         try {
+            await addToCart(prodctId, 1);
+            toast.success('Product added to cart');
+         } catch (error) {
+            toast.error("Failed to add to cart");
+         } 
+    };
 
-            await axios.post(`${BASE_URL}/cart`, 
-                {
-                    productId: product._id,
-                    quantity: quantity
-                },
+    const handleAddToWishlist = async (productId) => {
+        try {
+            await axios.post(`${BASE_URL}/wishlist/`, 
+                {productId},
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
-                    }
-                })
-            toast.success('Product added to cart')
+                    },
+
+            });
+
+            const addedProductId = productId;
+
+            setWishlistProducts((prevWishlist)=> {
+                if (!prevWishlist.some((item) => item._id === addedProductId)) {
+                    return [...prevWishlist, { _id: addedProductId }];
+                };
+                return prevWishlist;
+            });
+            toast.success("Product has been added to your wishlist")
+            
         } catch (error) {
-            console.error("Add to Cart Error:", error.response?.data?.message || error.message);
-            toast.error("Error adding product")
+            console.error("Error adding product to wishlist:", error);
+            const errorMessage = error.response?.data?.message || error.message || "An error has occured";
+            toast.error(errorMessage);
         }
     }
 
-    if (loading) {
-        return <LoadingSpinner />
-    };
+    const handleUpdateCart = async (productId, newQuatity) => {
+          setLoadingItem(productId);
+          try {
+            await updateCartItem(productId, newQuatity);
+          } catch (error) {
+            console.error("Error updating cart:", error.response?.data?.message || error.message );
+            toast.error("Error updating cart")
+          } finally {
+            setLoadingItem(null);
+          }
+        }
+
+    const currentQty = product ? cartItems.find((item) => item.product._id === product._id)?.quantity || 0 : 0;
+
+    if (loading || !product) return <LoadingSpinner />;
 
     return (
         <>
@@ -144,24 +176,41 @@ export default function DetailProduct() {
                                 {/* Quantity Controls */}
                                 <div className="flex items-center gap-2">
                                     <div className="border border-gray-400 rounded px-3 py-1 text-center w-16 text-white">
-                                        {product?.quatity}
+                                        {currentQty}
                                     </div>
                                     <div className="flex flex-col justify-center gap-1">
-                                        <FaChevronUp className="cursor-pointer text-white hover:text-blue-400" />
-                                        <FaChevronDown className="cursor-pointer text-white hover:text-blue-400" />
+                                    <FaChevronUp 
+                                        disabled={loadingItem === product._id}
+                                        onClick={() => handleUpdateCart(product._id, currentQty + 1)}
+                                        className="cursor-pointer text-white hover:text-blue-400" 
+                                    />
+                                    <FaChevronDown 
+                                        disabled={loadingItem === product._id}
+                                        onClick={() =>{
+                                            if (currentQty > 1) {
+                                                handleUpdateCart(product._id, currentQty - 1);
+                                            }
+                                        }}
+                                        className="cursor-pointer text-white hover:text-blue-400" 
+                                    />
                                     </div>
                                 </div>
 
                                 {/* Add to Cart Button */}
                                 <button 
-                                    onClick={handleAddToCart}
+                                    onClick={() => handleAddToCart(product._id)}
                                     className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition duration-200">
                                     Add to Cart
                                 </button>
                             </div>
                         </div>
                         {/* Wishlist */}
-                        <div className="mt-4 text-stone-400 text-sm flex items-center gap-2 cursor-pointer">
+                        <div 
+                            onClick={(e) =>{
+                                e.stopPropagation();
+                                handleAddToWishlist(product._id)
+                            }}
+                            className="mt-4 text-stone-400 text-sm flex items-center gap-2 cursor-pointer">
                             <span>Add to Wishlist</span>
                             <button className="text-white hover:text-red-500 text-base">
                                 <FontAwesomeIcon icon={faHeart} />

@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import './App.css';
+import { CartProvider } from './context/CartContext'
 
 // Toast
 import { ToastContainer } from 'react-toastify';
@@ -37,38 +38,40 @@ const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
 export default function App() {
   return (
     <BrowserRouter>
+    <CartProvider>
       <Suspense fallback={<div className="text-center text-white p-10">Loading...</div>}>
-      <ToastContainer position="top-center" autoClose={3000} theme="dark" />
-        <Routes>
-          {/* Public routes with navbar and footer */}
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="*" element={<NoPage />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="productdetail/:slug" element={<DetailProduct />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="checkout" element={<Checkout />} />
-            <Route path="order_confirmation" element={<OrderConfirmation />} />
-            <Route path="wishlist" element={<WishList />} />
-          </Route>
+        <ToastContainer position="top-center" autoClose={3000} theme="dark" />
+          <Routes>
+            {/* Public routes with navbar and footer */}
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="*" element={<NoPage />} />
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="productdetail/:slug" element={<DetailProduct />} />
+              <Route path="cart" element={<Cart />} />
+              <Route path="checkout" element={<Checkout />} />
+              <Route path="order_confirmation" element={<OrderConfirmation />} />
+              <Route path="wishlist" element={<WishList />} />
+            </Route>
 
-          {/* routes without navbar/footer */}
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<Overview />} />
-            <Route path="order" element={<Order />} />
-            <Route path="users" element={<Users />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="products" element={<ProductList />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="order_view" element={<ViewOrder />} />
-            <Route path="add_product" element={<CreateProduct />} />
-            <Route path="add_category" element={<CreateCategory />} />
-            <Route path="edit_product/:id" element={<UpdateProduct />} />
-          </Route>
-        </Routes>
+            {/* routes without navbar/footer */}
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route index element={<Overview />} />
+              <Route path="order" element={<Order />} />
+              <Route path="users" element={<Users />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="products" element={<ProductList />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="order_view" element={<ViewOrder />} />
+              <Route path="add_product" element={<CreateProduct />} />
+              <Route path="add_category" element={<CreateCategory />} />
+              <Route path="edit_product/:id" element={<UpdateProduct />} />
+            </Route>
+          </Routes>
       </Suspense>
+    </CartProvider>
     </BrowserRouter>
   );
 }

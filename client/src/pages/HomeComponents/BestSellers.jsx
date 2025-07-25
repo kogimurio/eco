@@ -12,6 +12,8 @@ import LoadingSpinner from '../LoadingSpinner';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+import { useCart } from '../../context/CartContext';
+
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
@@ -19,8 +21,11 @@ const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 const BestSellers = () => {
     const [products, setProducts] = useState([]);
+    const [prodctId, setProductId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [wishlistProducts, setWishlistProducts] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
+    const { addToCart } = useCart();
     const navigate = useNavigate();
     const localToken = localStorage.getItem('token');
     const token = JSON.parse(localToken);
@@ -41,6 +46,7 @@ const BestSellers = () => {
             try {
             const res = await axios.get(`${BASE_URL}/products`)
             setProducts(res.data.products)
+            setProductId(res.data.products.map((product) => product === product._id))
             } catch (error) {
             console.error(error?.res?.data || error.message);
             } finally {
@@ -86,7 +92,7 @@ const BestSellers = () => {
 
     const handleAddToWishlist = async (productId) => {
         try {
-            const response = await axios.post(`${BASE_URL}/wishlist/`, 
+            await axios.post(`${BASE_URL}/wishlist/`, 
                 {productId},
                 {
                     headers: {
@@ -112,7 +118,39 @@ const BestSellers = () => {
         }
     }
 
-    const handleCart =async () => {}
+    const handleAddToCart = async (prodctId) => {
+        await addToCart(prodctId, 1);
+        toast.success('Product added to cart');
+    };
+
+    // const handleAddToCart = async (productId) => {
+    //     try {
+    //             const quantity = 1;
+                
+    //         await axios.post(`${BASE_URL}/cart`, 
+    //             {
+    //                 productId,
+    //                 quantity
+    //             },
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             })
+    //         toast.success('Product added to cart')
+
+    //         // Re-fetch cart
+    //         const res = await axios.get(`${BASE_URL}/cart`, {
+    //           headers: {
+    //             Authorization: `Bearer ${token}`
+    //           }
+    //         });
+    //         setCartItems(res.data.cart.items);
+    //     } catch (error) {
+    //         console.error("Add to Cart Error:", error.response?.data?.message || error.message);
+    //         toast.error("Error adding product")
+    //     }
+    // }
 
     return (
         <div className="bg-gray-800 mt-8 py-4 overflow-x-hidden">
@@ -169,7 +207,7 @@ const BestSellers = () => {
                                         className="text-white text-iconMedium"
                                     />
                                     <span 
-                                        onClick={handleCart}
+                                        onClick={() => handleAddToCart(product._id)}
                                         className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
                                         Add to Cart
                                     </span>

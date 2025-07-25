@@ -7,9 +7,19 @@ import Banner from "./Banner";
 import Footer from "../FooterComponents/Footer"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useCart } from '../../context/CartContext';
+
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const localToken = localStorage.getItem('token');
+const token = JSON.parse(localToken);
 
 const Layout = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { cartItems } = useCart();
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const user = JSON.parse(localStorage.getItem("user"));
@@ -39,6 +49,26 @@ const Layout = () => {
         toast.success('Logout successful!');
         window.location.href="/"
     }
+
+    // useEffect(() => {
+    //     const fetchCart = async () => {
+    //     try {
+    //         const res = await axios.get(`${BASE_URL}/cart`, {
+    //             headers: {
+    //             Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //         setCartItems(res.data.cart.items);
+    //     } catch (error) {
+    //         console.error("Error fetching cart:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    //     }
+    //     fetchCart()
+    // }, []);
+
+    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
 
     return (
@@ -126,11 +156,18 @@ const Layout = () => {
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
                             <button 
-                                className="text-white hover:text-blue-500" title="Cart"
+                                className="relative text-white hover:text-blue-500" 
+                                title="Cart"
                                 onClick={handleCart}
                             >
-                                <FontAwesomeIcon icon={faShoppingCart} />
+                                <FontAwesomeIcon icon={faShoppingCart} className="text-xl" />
+                                {totalItems > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                                        {totalItems}
+                                    </span>
+                                )}
                             </button>
+
                             {/* Dropdown Group */}
                         <li className="relative group cursor-pointer text-white font-bold mx-4">
                             <div className="flex items-center px-4 py-2 rounded transition-all duration-200 group-hover:bg-gray-900">

@@ -1,58 +1,35 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import LoadingSpinner from "../LoadingSpinner";
 import { toast } from 'react-toastify';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+import { useCart } from '../../context/CartContext';
 
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 
 export default function Cart() {
-    const [cartItems, setCartItems] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const { cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();
     const [loadingItem, setLoadingItem] = useState(null)
     const navigate = useNavigate();
-    const localToken = localStorage.getItem('token');
-    const token = JSON.parse(localToken);
 
     useEffect(() => {
       const fetchCart = async () => {
         try {
-            const res = await axios.get(`${BASE_URL}/cart`, {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            });
-            setCartItems(res.data.cart.items);
+            await fetchCart();
         } catch (error) {
           console.error("Error fetching cart:", error);
         } finally {
-          setLoading(false);
+          setLoadingItem(false);
         }
       }
       fetchCart()
-    }, [token]);
+    }, []);
 
     const handleUpdateCart = async (productId, newQuatity) => {
       setLoadingItem(productId);
       try {
-        await axios.put(`${BASE_URL}/cart`, {
-          productId,
-          quantity: newQuatity
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        // Update cart
-        const res = await axios.get(`${BASE_URL}/cart`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setCartItems(res.data.cart.items);
+        await updateCartItem(productId, newQuatity)
       } catch (error) {
         console.error("Error updating cart:", error.response?.data?.message || error.message );
         toast.error("Error updating cart")
@@ -64,18 +41,7 @@ export default function Cart() {
     const handleCartRemove = async (productId) => {
       setLoadingItem(productId);
       try {
-        await axios.delete(`${BASE_URL}/cart/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        // Update cart
-        const res = await axios.get(`${BASE_URL}/cart`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setCartItems(res.data.cart.items);
+        await removeFromCart(productId);
         toast.success("Product removed from your cart")
       } catch (error) {
         console.error("Error delete product:", error.response?.data?.message || error.message );
@@ -96,7 +62,7 @@ export default function Cart() {
   const handleCheckout = () => {
     navigate("/checkout")
   }
-  if (loading) return <LoadingSpinner />
+  if (loadingItem) return <LoadingSpinner />
 
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6">
