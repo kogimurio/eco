@@ -31,6 +31,7 @@ const Analytics = lazy(() => import('./pages/AdminComponents/Analytics'));
 const ViewOrder = lazy(() => import('./pages/AdminComponents/OrderView'));
 const Cart = lazy(() => import('./pages/OrderComponents/Cart'));
 const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
+const Payments = lazy(() => import('./pages/OrderComponents/Payments'));
 const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'));
 const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
 
@@ -52,6 +53,7 @@ export default function App() {
               <Route path="productdetail/:slug" element={<DetailProduct />} />
               <Route path="cart" element={<Cart />} />
               <Route path="checkout" element={<Checkout />} />
+              <Route path="payments" element={<Payments />} />
               <Route path="order_confirmation" element={<OrderConfirmation />} />
               <Route path="wishlist" element={<WishList />} />
             </Route>
