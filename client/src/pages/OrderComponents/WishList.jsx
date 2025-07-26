@@ -14,7 +14,6 @@ export default function WishList() {
   const token = JSON.parse(localToken);
   const [loading, setLoading] = useState(true);
 
-  console.log("Token:", token)
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
