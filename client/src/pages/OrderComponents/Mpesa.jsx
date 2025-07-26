@@ -1,0 +1,106 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+import { useCart } from '../../context/CartContext';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+
+export default function Mpesa ({ closeModal }) {
+    const [formData, setFormData] = useState({
+        product: '',
+        amount: '',
+        phone: ''
+    });
+    const [loadingItem, setLoadingItem] = useState(null)
+    const { cartItems, loadingCart } = useCart();
+    const navigate = useNavigate(); 
+
+    useEffect(() => {
+        const fetchCart = async () => {
+        try {
+            await fetchCart();
+        } catch (error) {
+            console.error("Error fetching cart:", error);
+        } finally {
+            setLoadingItem(false);
+        }
+        }
+        fetchCart()
+    }, []);
+
+    const subtotal = cartItems.reduce((total, item) => {
+        return total + (item.product?.price ? item.product.price * item.quantity : 0);
+    }, 0);
+
+    const amountToSend = Math.round(subtotal);
+
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.name]: e.target.value});
+    }
+
+    const handleSubmit =async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await axios.post(`${BASE_URL}/mpesa`, {
+                phone: formData.phone,
+                amount: amountToSend,
+                accountReferencee: formData.product
+            });
+            toast.success("STK Push sent! Complete payment on your phone.");
+
+            const checkoutRequestID = res.data.checkoutRequestID;
+            const interval = setInterval(async () => {
+                try {
+                    const statusRes = await axios.get(`${BASE_URL}/payment-status/${checkoutRequestID}`);
+                    if (statusRes.data.status === 'success') {
+                        clearInterval(interval);
+                        toast.success("Payment successful!");
+                        closeModal();
+                        navigate('/order_confirmation');
+                    } else if (statusRes.data.status === 'failed') {
+                        clearInterval(interval);
+                        toast.error("Payment failed or cancelled");
+                    }
+                } catch (error) {
+                    console.error("Polling error:", error.message);
+                }
+            }, 3000); // poll every 3 sec
+            // window.location.href=('/order_confirmation')
+        } catch (error) {
+            toast.error("Failed to send STK Push");
+            console.error(error.response?.data?.message || error.message);
+        }
+    }
+    return (
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+                type="text"
+                name="amount"
+                placeholder="Amount"
+                disabled
+                value={subtotal}
+                onChange={handleChange}
+                className="w-full border px-4 py-2 rounded mt-4"
+            />
+            <input
+                type="text"
+                name="phone"
+                placeholder="Phone (e.g 2547......)"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full border px-4 py-2 rounded mt-4"
+            />
+            <button 
+                type="submit"
+                className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+            >
+                Send STK Push
+            </button>
+        </form>
+    )
+}
