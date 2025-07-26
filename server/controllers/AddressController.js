@@ -39,7 +39,9 @@ exports.createAddress = async (req, res) => {
 exports.updateAddress = async (req, res) => {
     try {
         const { user, email, phone, addressLine, city, postalCode, country } = req.body;
-        console.log('Received required');
+        const userId = req.user.userId;
+        
+        console.log('Received update request for user:', userId);
         console.log('Body:', req.body);
 
         // Fetch existing address
@@ -63,16 +65,17 @@ exports.updateAddress = async (req, res) => {
             address: address
         });
     } catch (error) {
-        console.error("Updating address failed");
+        console.error("Updating address failed:", error);
         return res.status(500).json({
-            message: "Updating address failed"
+            message: "Updating address failed",
+            error: error.message
         });
     }
 }
 
 exports.getAddress = async (req, res) => {
-    const userId = req.user;
-    console.log("userId:", user);
+    const userId = req.user.userId;
+    console.log("user:", userId);
     try {
         const address = await Address.findOne({ user: userId });
         if (!address) {
