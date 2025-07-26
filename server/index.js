@@ -26,6 +26,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const cartRouter = require('./routes/cartRoutes');
 const address = require('./routes/addressRoutes');
+const mpesaRoutes = require('./routes/mpesaRoutes');
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
@@ -34,6 +35,7 @@ app.use('/api/test', testRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/cart', cartRouter);
 app.use('/api/address', address);
+app.use('/api/mpesa', mpesaRoutes);
 
 // ✅ Global error handler (place this **after** all routes!)
 app.use((err, req, res, next) => {
