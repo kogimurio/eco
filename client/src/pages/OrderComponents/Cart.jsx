@@ -70,7 +70,21 @@ export default function Cart() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items */}
-        <div className="lg:col-span-2 space-y-4">
+        {!loadingItem && cartItems.length === 0 ? (
+          <div className="min-h-screen flex items-center justify-center text-white bg-gray-900 p-10 w-full lg:col-span-2">
+            <div className="text-center space-y-4">
+              <h2 className="text-2xl font-bold">🛒 Your cart is empty</h2>
+              <p className="text-gray-400">Looks like you haven't added anything yet.</p>
+              <button
+                onClick={() => navigate('/')}
+                className="px-6 py-2 bg-orange-600 hover:bg-orange-700 rounded"
+              >
+                Go Shopping
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="lg:col-span-2 space-y-4">
           {cartItems.map((item) => (
             <div key={item._id} className="flex items-center justify-between bg-gray-800 rounded-lg p-4 shadow-md">
               <div className="flex items-center gap-4">
@@ -112,6 +126,8 @@ export default function Cart() {
             </div>
           ))}
         </div>
+        )}
+        
 
         {/* Summary */}
         <div className="bg-gray-800 rounded-lg p-6 shadow-md">
@@ -132,9 +148,12 @@ export default function Cart() {
             <span>${subtotal.toFixed(2)}</span>
           </div>
           <button 
-            className="mt-6 w-full bg-orange-600 hover:bg-orange-700 py-2 rounded text-white font-semibold transition cursor-pointer"
+            className={`mt-6 w-full py-2 rounded text-white font-semibold transition ${
+              cartItems.length === 0 ? 'bg-gray-500 cursor-not-allowed' : 'bg-orange-600 hover:bg-orange-700'
+            }`}
             onClick={handleCheckout}
-        >
+            disabled={cartItems.length === 0}
+          >
             Proceed to Checkout
           </button>
         </div>

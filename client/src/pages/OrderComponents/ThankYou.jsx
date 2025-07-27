@@ -1,4 +1,39 @@
+import { useState, useEffect } from 'react'
+import axios from 'axios';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const localToken = localStorage.getItem('token');
+const token = JSON.parse(localToken);
+
 export default function OrderConfirmation() {
+  const [address, setAddress] = useState(null);
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (!token) return;
+
+      try {
+        const res = await axios.get(`${BASE_URL}/address`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (res.data?.success) {
+          setAddress(res.data.address);
+          console.log("✅ Address fetched:", res.data.address);
+        } else {
+          console.warn("⚠️ Address fetch failed:", res.data.message);
+        }
+      } catch (error) {
+        console.error("❌ Failed to fetch address:", error.response?.data?.message || error.message);
+      }
+    };
+
+    fetchAddress();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-6">
       <div className="bg-gray-800 rounded-lg p-8 shadow-lg max-w-xl w-full text-center">
@@ -11,7 +46,7 @@ export default function OrderConfirmation() {
         <div className="bg-gray-700 p-4 rounded-lg text-left space-y-2 mb-6">
           <p><span className="font-semibold text-gray-400">Order ID:</span> #ORD-456789</p>
           <p><span className="font-semibold text-gray-400">Estimated Delivery:</span> 3–5 business days</p>
-          <p><span className="font-semibold text-gray-400">Shipping To:</span> John Doe, Nairobi, Kenya</p>
+          <p><span className="font-semibold text-gray-400">Shipping To:</span> {user?.firstName}, {address?.city || "N/A"}, {address?.country || "N/A"}</p>
         </div>
 
         <div className="flex justify-center gap-4">
