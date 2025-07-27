@@ -83,9 +83,6 @@ export default function Checkout() {
       setFormData({...formData, [e.target.name]: e.target.value});
     }
 
-    const handleThankYou = () => {
-        navigate('/order_confirmation')
-    }
 
 
     const subtotal = cartItems.reduce((total, item) => {

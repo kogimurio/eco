@@ -7,7 +7,8 @@ import { useCart } from '../../context/CartContext';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-
+const localToken = localStorage.getItem('token');
+const token = localToken ? JSON.parse(localToken) : null;
 
 
 export default function Mpesa ({ closeModal }) {
@@ -67,12 +68,16 @@ export default function Mpesa ({ closeModal }) {
                     if (statusRes.data.status === 'success') {
                         clearInterval(interval);
                         toast.success("Payment successful!");
-                        await clearCart();
+                        await axios.post(`${BASE_URL}/orders`, {}, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            });
                         closeModal();
                         
                         setTimeout(() => {
                             window.location.href='/order_confirmation';
-                        }, 400);
+                        }, 600);
                     } else if (statusRes.data.status === 'failed') {
                         clearInterval(interval);
                         toast.error("Payment failed or cancelled");

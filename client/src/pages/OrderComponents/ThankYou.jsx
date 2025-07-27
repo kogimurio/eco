@@ -7,6 +7,7 @@ const token = JSON.parse(localToken);
 
 export default function OrderConfirmation() {
   const [address, setAddress] = useState(null);
+  const [order, setOrder] = useState(null);
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
@@ -34,8 +35,33 @@ export default function OrderConfirmation() {
     fetchAddress();
   }, []);
 
+  useEffect(() => {
+    const fetchOrder = async () => {
+      if (!token) return;
+
+      try {
+        const res = await axios.get(`${BASE_URL}/orders`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (res.data?.success) {
+          setOrder(res.data.order);
+          console.log("✅ Order fetched:", res.data.order);
+        } else {
+          console.warn("⚠️ Order fetch failed:", res.data.message);
+        }
+      } catch (error) {
+        console.error("❌ Failed to fetch Order:", error.response?.data?.message || error.message);
+      }
+    };
+
+    fetchOrder();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center p-6">
+    <div className="min-h-[80vh] bg-gray-900 text-white flex flex-col items-center justify-center p-8">
       <div className="bg-gray-800 rounded-lg p-8 shadow-lg max-w-xl w-full text-center">
         <h2 className="text-3xl font-bold text-green-400 mb-4">🎉 Thank You for Your Order!</h2>
         <p className="text-gray-300 mb-6">
@@ -44,7 +70,9 @@ export default function OrderConfirmation() {
 
         {/* Order Summary */}
         <div className="bg-gray-700 p-4 rounded-lg text-left space-y-2 mb-6">
-          <p><span className="font-semibold text-gray-400">Order ID:</span> #ORD-456789</p>
+          <p><span className="font-semibold text-gray-400">Order ID:</span>
+            {order ? ` #${order._id.toString().slice(-6).toUpperCase()}` : " Loading..."}
+          </p>
           <p><span className="font-semibold text-gray-400">Estimated Delivery:</span> 3–5 business days</p>
           <p><span className="font-semibold text-gray-400">Shipping To:</span> {user?.firstName}, {address?.city || "N/A"}, {address?.country || "N/A"}</p>
         </div>
