@@ -6,7 +6,7 @@ const {
     initiateStkPush,
     mpesaCallback,
     getPaymentStatus
-} = require('../controllers/mpesaController')
+} = require('../controllers/paymentController')
 
 router.post('/',
     initiateStkPush
