@@ -74,12 +74,34 @@ export const CartProvider = ({ children }) => {
         }
     }
 
+    const clearCart =async () => {
+        try {
+            console.log("🧹 Attempting to clear cart from frontend");
+            await axios.delete(`${BASE_URL}/cart`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            await fetchCart();
+        } catch (error) {
+            console.log("Clear cart failed:", error)
+        }
+    };
+
     useEffect(() => {
         fetchCart();
     }, [token]);
 
     return (
-        <CartContext.Provider value={{ removeFromCart, cartItems, loadingCart, fetchCart, addToCart, updateCartItem }}>
+        <CartContext.Provider value={{ 
+            clearCart, 
+            removeFromCart, 
+            cartItems, 
+            loadingCart, 
+            fetchCart, 
+            addToCart, 
+            updateCartItem 
+        }}>
             {children}
         </CartContext.Provider>
     );

@@ -8,6 +8,8 @@ import { useCart } from '../../context/CartContext';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
+
+
 export default function Mpesa ({ closeModal }) {
     const [formData, setFormData] = useState({
         product: '',
@@ -16,6 +18,7 @@ export default function Mpesa ({ closeModal }) {
     });
     const [loadingItem, setLoadingItem] = useState(null)
     const { cartItems, loadingCart } = useCart();
+    const { clearCart } = useCart();
     const navigate = useNavigate(); 
 
     useEffect(() => {
@@ -51,17 +54,25 @@ export default function Mpesa ({ closeModal }) {
                 amount: amountToSend,
                 accountReferencee: formData.product
             });
-            toast.success("STK Push sent! Complete payment on your phone.");
 
-            const checkoutRequestID = res.data.checkoutRequestID;
+            const checkoutRequestID = res.data.data.CheckoutRequestID;
+            toast.success("STK Push sent! Waiting for payment...");
+
+            // Poll for payment result
             const interval = setInterval(async () => {
                 try {
-                    const statusRes = await axios.get(`${BASE_URL}/payment-status/${checkoutRequestID}`);
+                    const statusRes = await axios.get(`${BASE_URL}/mpesa/payment-status/${checkoutRequestID}`);
+                    console.log(`${BASE_URL}/mpesa/payment-status/${checkoutRequestID}`);
+
                     if (statusRes.data.status === 'success') {
                         clearInterval(interval);
                         toast.success("Payment successful!");
+                        await clearCart();
                         closeModal();
-                        navigate('/order_confirmation');
+                        
+                        setTimeout(() => {
+                            window.location.href='/order_confirmation';
+                        }, 400);
                     } else if (statusRes.data.status === 'failed') {
                         clearInterval(interval);
                         toast.error("Payment failed or cancelled");
@@ -72,7 +83,7 @@ export default function Mpesa ({ closeModal }) {
             }, 3000); // poll every 3 sec
             // window.location.href=('/order_confirmation')
         } catch (error) {
-            toast.error("Failed to send STK Push");
+            toast.error(error.response?.data?.message || error.message);
             console.error(error.response?.data?.message || error.message);
         }
     }
