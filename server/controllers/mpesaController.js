@@ -4,7 +4,7 @@ const Payment = require('../models/Payment')
 const { getAccessToken } = require('../utils/mpesa')
 
 exports.initiateStkPush = async(req, res) => {
-    const { phone, amount, accountReference = "EcoShop", transactionDesc = "Checkout Payment" } = req.body
+    const { phone, amount, accountReference = "Fashionova", transactionDesc = "Checkout Payment" } = req.body
 
     try {
         const shortCode = process.env.MPESA_SHORTCODE;
@@ -36,18 +36,33 @@ exports.initiateStkPush = async(req, res) => {
             }
         );
 
+        // ✅ Extract IDs from the response
+        const merchantRequestID = response.data.MerchantRequestID;
+        const checkoutRequestID = response.data.CheckoutRequestID;
         // Save initial payment status to DB (optional)
         // await Payment.create({ phone, amount, status: "pending" });
+        await Payment.create({
+            phone,
+            amount,
+            merchantRequestID,
+            checkoutRequestID,
+            resultCode: null,
+            resultDesc: null,
+            status: 'pending',
+        });
         res.status(200).json({
             message: 'STK Push sent',
-            checkoutRequestID: response.data.CheckoutRequestID
+            data: {
+          CheckoutRequestID: checkoutRequestID,
+          MerchantRequestID: merchantRequestID,
+      },
         });
     } catch (error) {
         console.error("STK Push Error:", error.response?.data || error.message);
         res.status(500).json({
             message: "M-PESA STK Push Failed",
             error
-        })
+        });
     };
 
 }
@@ -56,7 +71,6 @@ exports.initiateStkPush = async(req, res) => {
 exports.mpesaCallback = async (req, res) => {
   try {
     const callbackData = req.body;
-
     const stkCallback = callbackData?.Body?.stkCallback;
 
     const merchantRequestID = stkCallback?.MerchantRequestID;
@@ -64,44 +78,39 @@ exports.mpesaCallback = async (req, res) => {
     const resultCode = stkCallback?.ResultCode;
     const resultDesc = stkCallback?.ResultDesc;
 
+    let updateData = {
+      resultCode,
+      resultDesc,
+      status: resultCode === 0 ? 'success' : 'failed'
+    };
+
+    // If payment is successful, extract phone and amount from callback
     if (resultCode === 0) {
       const amount = stkCallback.CallbackMetadata?.Item?.find(item => item.Name === 'Amount')?.Value;
       const phone = stkCallback.CallbackMetadata?.Item?.find(item => item.Name === 'PhoneNumber')?.Value;
 
-      // Save successful transaction to DB
-      // await Payment.create({ phone, amount, status: "success", merchantRequestID, checkoutRequestID });
-      await Payment.create({
-            phone,
-            amount,
-            merchantRequestID,
-            checkoutRequestID,
-            resultCode,
-            resultDesc,
-            status: resultCode === 0 ? 'success' : 'failed'
-        });
+      updateData.amount = amount;
+      updateData.phone = phone;
 
       console.log("✅ M-PESA Payment Successful", { phone, amount });
-
     } else {
       console.log("❌ M-PESA Payment Failed", { resultDesc });
-
-      // Optionally save failed transaction
-      // await Payment.create({ status: "failed", merchantRequestID, checkoutRequestID, reason: resultDesc });
-      await Payment.create({
-        merchantRequestID,
-        checkoutRequestID,
-        resultCode,
-        resultDesc,
-        status: 'failed'
-    });
     }
 
-    res.status(200).json({ message: "Callback received successfully" });
+    // ✅ Update the matching document instead of creating a new one
+    await Payment.findOneAndUpdate(
+      { checkoutRequestID },
+      updateData,
+      { new: true }
+    );
+
+    res.status(200).json({ message: "Callback received and processed successfully" });
   } catch (error) {
     console.error("Callback processing error:", error);
     res.status(500).json({ error: "Callback processing failed" });
   }
 };
+
 
 exports.getPaymentStatus = async (req, res) => {
   const { checkoutRequestID } = req.params;
@@ -111,7 +120,8 @@ exports.getPaymentStatus = async (req, res) => {
 
     res.status(200).json({ status: payment.status });
   } catch (error) {
-    res.status(500).json({ error: "Failed to check payment status" });
+        console.error("Error checking payment status:", error.message);
+        return res.status(500).json({ error: "Internal server error" });
   }
 };
 

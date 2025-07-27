@@ -237,3 +237,39 @@ exports.updateCart = async (req, res) => {
         });
     }
 }
+
+// Clear Cart
+exports.clearCart = async (req, res) => {
+    try {
+        console.log("🧹 [Clear Cart] Request received");
+        const userId = req.user.userId;
+        const cart = await Cart.findOne({ user: userId });
+
+         // Check if user is authenticated
+        if (!req.user || !req.user.userId) {
+            console.error("❌ No userId found in request");
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        if (!cart) {
+            return res.status(404).json({
+                message: 'Cart not found'
+            });
+        }
+
+        cart.items = [];
+        cart.total = 0;
+        await cart.save();
+        console.log("🧹 Cart cleared for user: userId");
+        
+        return res.status(200).json({
+            message: 'Cart cleared successfully',
+            cart
+        });
+    } catch (error) {
+        console.error('Error clearing cart:', error);
+        return res.status(500).json({
+            message: 'Internal server error'
+        });
+    }
+};

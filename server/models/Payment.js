@@ -7,7 +7,13 @@ const paymentSchema = new mongoose.Schema({
   checkoutRequestID: String,
   resultCode: Number,
   resultDesc: String,
-  status: { type: String, enum: ['success', 'failed'], default: 'pending' }
-}, { timestamps: true });
+  status: {
+    type: String,
+    enum: ['pending', 'success', 'failed'],
+    required: true,
+  },
+}, {
+  timestamps: true
+});
 
-module.exports = mongoose.model("Payment", paymentSchema);
+module.exports = mongoose.model('Payment', paymentSchema);

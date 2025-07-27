@@ -5,7 +5,8 @@ const {
     addToCart,
     getCartProduct,
     deleteCartProduct,
-    updateCart
+    updateCart,
+    clearCart
 } = require('../controllers/cartController');
 
 router.post(
@@ -29,6 +30,12 @@ router.put(
     '/',
     authMiddleware,
     updateCart
+);
+
+router.delete(
+    '/',
+    authMiddleware,
+    clearCart
 );
 
 module.exports = router;
