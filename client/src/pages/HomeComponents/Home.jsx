@@ -17,9 +17,9 @@ const Home = () => {
 
     return (
         <div className="bg-gray-800 min-h-screen">
-            <MinTaskBar />
+            {/* <MinTaskBar /> */}
 
-            <div className="grid w-[90%] mx-auto mt-4 grid-cols-1 md:grid-cols-[1fr_3fr_1fr] gap-4">
+            <div className="grid w-[90%] mx-auto pt-6 grid-cols-1 md:grid-cols-[1fr_3fr_1fr] gap-4">
                 <div>
                     
                 </div>

@@ -1,11 +1,36 @@
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import LoadingSpinner from '../LoadingSpinner';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+
 export default function Users() {
-  const users = [
-    { name: "Jane Doe", email: "jane@gmail.com", role: "Customer", status: "Active" },
-    { name: "Alice Smith", email: "alice@gmail.com", role: "Customer", status: "Active" },
-    { name: "Bob Johnson", email: "bob@gmail.com", role: "Customer", status: "Suspended" },
-    { name: "Emily Rose", email: "emily@gmail.com", role: "Customer", status: "Active" },
-    { name: "Mike Dean", email: "mike@gmail.com", role: "Customer", status: "Suspended" },
-  ];
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/users/get_all_users`)
+        setUsers(response.data.users)
+      } catch (error) {
+        console.error(error.response.data || error.message);
+      } finally{
+        setLoading(false);
+      }
+    }
+    fetchUsers();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center mt-4">
+        <LoadingSpinner />
+      </div>
+    )
+  }
 
   return (
     <div className="p-6">
@@ -34,7 +59,7 @@ export default function Users() {
           <tbody className="text-sm">
             {users.map((user, idx) => (
               <tr key={idx} className="border-b border-gray-700 hover:bg-gray-700/50">
-                <td className="py-3 px-4">{user.name}</td>
+                <td className="py-3 px-4">{user.firstName} {user.lastName}</td>
                 <td className="py-3 px-4">{user.email}</td>
                 <td className="py-3 px-4">{user.role}</td>
                 <td className="py-3 px-4">

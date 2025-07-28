@@ -1,13 +1,53 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import LoadingSpinner from '../LoadingSpinner';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function Order() {
-    const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/orders/all_orders`);
+        setOrders(response.data.orders || []);
+      } catch (error) {
+        console.error("Error fetching orders:", error.response?.data.message || error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    const handleOrderView = () => {
-        navigate("/dashboard/order_view");
+    fetchOrders();
+  }, []);
+
+  const handleOrderView = (orderId) => {
+    navigate(`/dashboard/order_view/${orderId}`);
+  };
+
+  const formatDate = (isoDate) => {
+    return new Date(isoDate).toLocaleDateString();
+  };
+
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-500/20 text-yellow-400";
+      case "shipped":
+        return "bg-blue-500/20 text-blue-400";
+      case "delivered":
+        return "bg-green-500/20 text-green-400";
+      case "cancelled":
+        return "bg-red-500/20 text-red-400";
+      default:
+        return "bg-gray-500/20 text-gray-400";
     }
+  };
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -19,9 +59,7 @@ export default function Order() {
             placeholder="Search by client..."
             className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-          <select
-            className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          >
+          <select className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500">
             <option value="">All Status</option>
             <option value="pending">Pending</option>
             <option value="shipped">Shipped</option>
@@ -37,7 +75,7 @@ export default function Order() {
             <tr className="bg-gray-700 text-left text-sm uppercase">
               <th className="py-3 px-4">Order ID</th>
               <th className="py-3 px-4">Client Name</th>
-              <th className="py-3 px-4">Product</th>
+              <th className="py-3 px-4">Products</th>
               <th className="py-3 px-4">Status</th>
               <th className="py-3 px-4">Total</th>
               <th className="py-3 px-4">Date</th>
@@ -45,50 +83,49 @@ export default function Order() {
             </tr>
           </thead>
           <tbody className="text-sm">
-            {[
-              {
-                id: "ORD203",
-                client: "John Doe",
-                product: "MacBook Pro M3",
-                status: "Pending",
-                total: "$2,500",
-                date: "2025-06-20",
-              },
-              {
-                id: "ORD204",
-                client: "Alice Smith",
-                product: "iPhone 15 Pro",
-                status: "Shipped",
-                total: "$1,100",
-                date: "2025-06-19",
-              },
-            ].map((order, idx) => (
-              <tr key={idx} className="border-b border-gray-700 hover:bg-gray-700/50">
-                <td className="py-3 px-4">{order.id}</td>
-                <td className="py-3 px-4">{order.client}</td>
-                <td className="py-3 px-4">{order.product}</td>
-                <td className="py-3 px-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    order.status === "Pending" ? "bg-yellow-500/20 text-yellow-400" :
-                    order.status === "Shipped" ? "bg-blue-500/20 text-blue-400" :
-                    "bg-green-500/20 text-green-400"
-                  }`}>
-                    {order.status}
-                  </span>
-                </td>
-                <td className="py-3 px-4">{order.total}</td>
-                <td className="py-3 px-4">{order.date}</td>
-                <td className="py-3 px-4 text-right space-x-2">
-                  <button 
-                    className="text-blue-400 hover:text-blue-600 text-sm"
-                    onClick={handleOrderView}
-                >
-                    View
-                </button>
-                  <button className="text-red-400 hover:text-red-600 text-sm">Cancel</button>
+            {loading ? (
+              <tr>
+                <td colSpan="7" className="text-center py-6">
+                  <LoadingSpinner />
                 </td>
               </tr>
-            ))}
+            ) : orders.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="text-center py-6 text-gray-400">
+                  No orders found.
+                </td>
+              </tr>
+            ) : (
+              orders.map((order, idx) => (
+                <tr key={idx} className="border-b border-gray-700 hover:bg-gray-700/50">
+                  <td className="py-3 px-4">{`#${order._id?.slice(-6).toUpperCase()}`}</td>
+                  <td className="py-3 px-4">{order.user?.firstName || "N/A"}</td>
+                  <td className="py-3 px-4">
+                    {order.items?.map((item, i) => (
+                      <div key={i}>{item.product?.name || "Product"} ×{item.quantity}</div>
+                    ))}
+                  </td>
+                  <td className="py-3 px-4">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyles(order.status)}`}>
+                      {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4">${order.total_price?.toFixed(2)}</td>
+                  <td className="py-3 px-4">{formatDate(order.createdAt)}</td>
+                  <td className="py-3 px-4 text-right space-x-2">
+                    <button
+                      className="text-blue-400 hover:text-blue-600 text-sm"
+                      onClick={() => handleOrderView(order._id)}
+                    >
+                      View
+                    </button>
+                    <button className="text-red-400 hover:text-red-600 text-sm">
+                      Cancel
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

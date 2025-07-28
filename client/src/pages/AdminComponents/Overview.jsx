@@ -6,9 +6,40 @@ import {
   faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import LoadingSpinner from '../LoadingSpinner';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
 const Overview = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrans = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/mpesa/all_payments`)
+        setTransactions(response.data.payments)
+        console.log(response.data.payments);
+      } catch (error) {
+        console.error(error.response.data || error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTrans();
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex justify-center">
+        <LoadingSpinner />
+      </div>
+    )
+  }
   return (
     <div className="grid grid-cols-1">
       <div className="p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6 h-28">
@@ -168,20 +199,16 @@ const Overview = () => {
                   </div>
                 </div>
                 <div className="flex justify-between flex-col md:flex-row text-sm text-gray-300">
-                  <div>
-                    <h6 className="text-gray-400 font-medium">John Doe</h6>
-                    <h6 className="text-gray-400 font-medium">Alice Smith</h6>
-                    <h6 className="text-gray-400 font-medium">Bob Johnson</h6>
-                    <h6 className="text-gray-400 font-medium">Emily Rose</h6>
-                    <h6 className="text-gray-400 font-medium">Mike Dean</h6>
-                  </div>
-                  <div>
-                    <p>$ 100</p>
-                    <p>$ 230</p>
-                    <p>$ 350</p>
-                    <p>$ 50</p>
-                    <p>$ 420</p>
-                  </div>
+                  {transactions.map((transaction, index) => (
+                    <span key={index}>
+                      <div>
+                        <h6 className="text-gray-400 font-medium">{transaction.status}</h6>
+                      </div>
+                      <div>
+                        <p>{transaction.amount}</p>
+                      </div>
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>

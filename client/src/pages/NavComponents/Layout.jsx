@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faShoppingCart, faUser, faSearch, faRightToBracket, faRightFromBracket, faGear } from "@fortawesome/free-solid-svg-icons";
 import Banner from "./Banner";
-import Footer from "../FooterComponents/Footer"
+import Footer from "../FooterComponents/Footer";
+import MinTaskBar from "../HomeComponents/MinTaskBar"; 
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect } from 'react';
@@ -50,34 +51,17 @@ const Layout = () => {
         window.location.href="/"
     }
 
-    // useEffect(() => {
-    //     const fetchCart = async () => {
-    //     try {
-    //         const res = await axios.get(`${BASE_URL}/cart`, {
-    //             headers: {
-    //             Authorization: `Bearer ${token}`
-    //             }
-    //         });
-    //         setCartItems(res.data.cart.items);
-    //     } catch (error) {
-    //         console.error("Error fetching cart:", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    //     }
-    //     fetchCart()
-    // }, []);
 
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
 
     return (
         <>
-            <nav className="bg-gray-800 w-full">
+            <nav className="bg-gray-800 w-full fixed top-0 left-0 z-50">
                 {/* Banner */}
                 <Banner />
 
-                <div className="w-[90%] mx-auto py-4 relative">
+                <div className="w-[90%] mx-auto py-1 relative">
 
                     {/* MOBILE: First row */}
                     <div className="flex justify-between items-center md:hidden">
@@ -126,7 +110,7 @@ const Layout = () => {
                     </div>
 
                     {/* Desktop Layout */}
-                    <div className="hidden md:flex justify-between items-center w-full">
+                    <div className="w-full hidden md:flex justify-between items-center">
                         {/* Logo */}
                         <div className="font-hero text-hero text-orange-600 hover:text-orange-400 transition-colors duration-300">
                             <Link to="/">fashionova</Link>
@@ -228,10 +212,12 @@ const Layout = () => {
                         </div>
                     )}
                 </div>
-
+                <MinTaskBar />
             </nav>
 
-            <Outlet />
+            <div className="pt-[160px]">
+                <Outlet />
+            </div>
             <Footer />
         </>
     )

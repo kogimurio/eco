@@ -19,6 +19,9 @@ const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 const localToken = localStorage.getItem('token')
 const token = JSON.parse(localToken);
 
+const storedUser = localStorage.getItem("user")
+const user = storedUser ? JSON.parse(storedUser) : null;
+
 
 export default function DetailProduct() {
     const [product, setProduct] = useState(null);
@@ -102,7 +105,6 @@ export default function DetailProduct() {
 
     return (
         <>
-        <MinTaskBar />
         <MinProductBar />
         <div className="bg-gray-800 py-4 min-h-screen">
             <div className="grid grid-cols-1 max-w-7xl mx-auto overflow-x-hidden px-4">
@@ -137,15 +139,19 @@ export default function DetailProduct() {
                                 <span>Write a Review</span>
                             </div>
                             <div className="w-px h-4 bg-stone-400 ml-2"></div>
-                            <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
-                                <FaPen />
-                                <span>Edit</span>
-                            </div>
-                            <div className="w-px h-4 bg-stone-400 ml-2"></div>
-                            <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
-                                <FontAwesomeIcon icon={faTrash} className="text-red-500 hover:text-red-700 cursor-pointer" />
-                                <span>Delete</span>
-                            </div>
+                            {user.role === 'admin' && (
+                                <>
+                                    <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
+                                        <FaPen />
+                                        <span>Edit</span>
+                                    </div>
+                                    <div className="w-px h-4 bg-stone-400 ml-2"></div>
+                                    <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
+                                        <FontAwesomeIcon icon={faTrash} className="text-red-500 hover:text-red-700 cursor-pointer" />
+                                        <span>Delete</span>
+                                    </div>
+                                </>
+                            )}
                         </div>
                         <hr className="flex my-4 border border-gray-400"/>
                         {/* Product Details */}

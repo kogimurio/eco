@@ -66,7 +66,7 @@ export default function App() {
               <Route path="settings" element={<Settings />} />
               <Route path="products" element={<ProductList />} />
               <Route path="analytics" element={<Analytics />} />
-              <Route path="order_view" element={<ViewOrder />} />
+              <Route path="order_view/:id" element={<ViewOrder />} />
               <Route path="add_product" element={<CreateProduct />} />
               <Route path="add_category" element={<CreateCategory />} />
               <Route path="edit_product/:id" element={<UpdateProduct />} />

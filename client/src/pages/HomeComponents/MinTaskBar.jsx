@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const MinTaskBar = () => {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     return (
-        <div className="h-17 bg-orange-600 py-4">
+        <div className="h-17 bg-orange-600 py-2">
                 <div className="flex items-center justify-center xl:justify-between w-[90%] mx-auto">
                     
                     {/* Desktop Nav (Hidden on Mobile & tablets) */}
