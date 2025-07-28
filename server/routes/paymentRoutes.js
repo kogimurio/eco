@@ -5,7 +5,8 @@ const authMiddleware = require('../middleware/auth')
 const {
     initiateStkPush,
     mpesaCallback,
-    getPaymentStatus
+    getPaymentStatus,
+    getAllPayments
 } = require('../controllers/paymentController')
 
 router.post('/',
@@ -19,6 +20,10 @@ router.post('/callback',
 
 router.get('/payment-status/:checkoutRequestID',
     getPaymentStatus
+)
+
+router.get('/all_payments',
+    getAllPayments
 )
 
 

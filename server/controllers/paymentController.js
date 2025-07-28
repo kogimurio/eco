@@ -126,4 +126,30 @@ exports.getPaymentStatus = async (req, res) => {
 };
 
 
+// Get all payments
+exports.getAllPayments =async (req, res) => {
+    try {
 
+            const payments = await Payment.find()
+            .sort({ createdAt: -1 });
+
+            if (!payments) {
+                return res.status(200).json({
+                    success: true,
+                    payments: null
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                payments
+            })
+
+    } catch (error) {
+        console.log('Error fetching payments:', error)
+        res.status(500).json({
+            success: false,
+            error: error.message
+        })
+    }
+}

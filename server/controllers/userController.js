@@ -110,3 +110,33 @@ exports.getUserProfile = async (req, res) => {
 
 
 
+// Get all users
+exports.getAllUsers =async (req, res) => {
+    try {
+
+            const users = await User.find()
+            .sort({ createdAt: -1 });
+
+            if (!users) {
+                return res.status(200).json({
+                    success: true,
+                    user: null
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                users
+            })
+
+    } catch (error) {
+        console.log('Error fetching users:', error)
+        res.status(500).json({
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+
+
