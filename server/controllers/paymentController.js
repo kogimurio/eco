@@ -137,6 +137,7 @@ exports.getAllPayments =async (req, res) => {
     try {
 
             const payments = await Payment.find()
+            .populate('user', 'firstName lastName email')
             .sort({ createdAt: -1 });
 
             if (!payments) {
