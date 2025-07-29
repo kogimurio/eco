@@ -7,6 +7,7 @@ const paymentSchema = new mongoose.Schema({
   checkoutRequestID: String,
   resultCode: Number,
   resultDesc: String,
+  receipt: String,
   status: {
     type: String,
     enum: ['pending', 'success', 'failed'],

@@ -84,13 +84,19 @@ exports.mpesaCallback = async (req, res) => {
       status: resultCode === 0 ? 'success' : 'failed'
     };
 
+    console.log("🟡 Raw Callback Body:", JSON.stringify(callbackData, null, 2));
+    
     // If payment is successful, extract phone and amount from callback
     if (resultCode === 0) {
+      const metadata = stkCallback.CallbackMetadata?.Item || [];
+
       const amount = stkCallback.CallbackMetadata?.Item?.find(item => item.Name === 'Amount')?.Value;
       const phone = stkCallback.CallbackMetadata?.Item?.find(item => item.Name === 'PhoneNumber')?.Value;
+      const receipt = metadata.find(item => item.Name === 'MpesaReceiptNumber')?.Value;
 
       updateData.amount = amount;
       updateData.phone = phone;
+      updateData.receipt = receipt;
 
       console.log("✅ M-PESA Payment Successful", { phone, amount });
     } else {
