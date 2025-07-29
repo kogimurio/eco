@@ -19,7 +19,7 @@ const Dashboard = () => {
     navigate("/dashboard");
   };
 
-  const handleOrder = () => {
+  const handleOrders = () => {
     navigate("/dashboard/order");
   };
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
             <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
           </div>
           <div 
-            onClick={handleOrder} 
+            onClick={handleOrders} 
             className="flex items-center gap-2 cursor-pointer hover:text-orange-400"
           >
             <FontAwesomeIcon icon={faClipboardList} /> 

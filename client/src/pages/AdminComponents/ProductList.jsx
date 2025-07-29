@@ -2,33 +2,22 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../LoadingSpinner';
 import axios from 'axios';
+import { useAdmin } from '../../context/AdminContext';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function ProductList() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products, loading, fetchProducts } = useAdmin();
+
 
   
   const navigate = useNavigate();
 
   // Fetch products
   useEffect(() => {
-      const fetchProduct = async () => {
-        await new Promise(res => setTimeout(res, 2000));
-        try {
-          const res = await axios.get(`${BASE_URL}/products`)
-          setProducts(res.data.products)
-        } catch (error) {
-          console.error(error?.res?.data || error.message);
-        } finally {
-          setLoading(false)
-        }
-      };
-
-      fetchProduct()
+      fetchProducts();
   }, [])
 
   const handleCreateProduct = () => {
@@ -99,7 +88,9 @@ export default function ProductList() {
       {/* Product Cards */}
       <div className="space-y-4">
         {loading ? (
-          <LoadingSpinner size="60" />
+          <div className='flex justify-center'>
+            <LoadingSpinner size="60" />
+          </div>
         ) : (
           products.map((product) => (
             <div

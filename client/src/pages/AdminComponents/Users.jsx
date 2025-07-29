@@ -1,26 +1,14 @@
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+import { useAdmin } from '../../context/AdminContext';
+
 
 
 export default function Users() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { users, loading, fetchUsers } = useAdmin();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/users/get_all_users`)
-        setUsers(response.data.users)
-      } catch (error) {
-        console.error(error.response.data || error.message);
-      } finally{
-        setLoading(false);
-      }
-    }
     fetchUsers();
   }, []);
 

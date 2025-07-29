@@ -74,7 +74,7 @@ export default function OrderConfirmation() {
             {order ? ` #${order._id.toString().slice(-6).toUpperCase()}` : " Loading..."}
           </p>
           <p><span className="font-semibold text-gray-400">Estimated Delivery:</span> 3–5 business days</p>
-          <p><span className="font-semibold text-gray-400">Shipping To:</span> {order.user.firstName}, {address?.city || "N/A"}, {address?.country || "N/A"}</p>
+          <p><span className="font-semibold text-gray-400">Shipping To:</span> {order?.user?.firstName}, {address?.city || "N/A"}, {address?.country || "N/A"}</p>
         </div>
 
         <div className="flex justify-center gap-4">

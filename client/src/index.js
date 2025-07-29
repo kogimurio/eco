@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import './App.css';
 import { CartProvider } from './context/CartContext'
+import { AdminProvider } from './context/AdminContext';
 
 // Toast
 import { ToastContainer } from 'react-toastify';
@@ -39,9 +40,10 @@ const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
 export default function App() {
   return (
     <BrowserRouter>
-    <CartProvider>
-      <Suspense fallback={<div className="text-center text-white p-10">Loading...</div>}>
-        <ToastContainer position="top-center" autoClose={3000} theme="dark" />
+      <CartProvider>
+        <AdminProvider>
+          <ToastContainer position="top-center" autoClose={3000} theme="dark" />
+
           <Routes>
             {/* Public routes with navbar and footer */}
             <Route path="/" element={<Layout />}>
@@ -58,25 +60,40 @@ export default function App() {
               <Route path="wishlist" element={<WishList />} />
             </Route>
 
-            {/* routes without navbar/footer */}
-            <Route path="/dashboard" element={<Dashboard />}>
-              <Route index element={<Overview />} />
-              <Route path="order" element={<Order />} />
-              <Route path="users" element={<Users />} />
-              <Route path="settings" element={<Settings />} />
-              <Route path="products" element={<ProductList />} />
-              <Route path="analytics" element={<Analytics />} />
-              <Route path="order_view/:id" element={<ViewOrder />} />
-              <Route path="add_product" element={<CreateProduct />} />
-              <Route path="add_category" element={<CreateCategory />} />
-              <Route path="edit_product/:id" element={<UpdateProduct />} />
+            {/* Admin Routes in Suspense */}
+            <Route
+              path="/dashboard"
+              element={
+                <Suspense fallback={<div className="text-center text-white p-10">Loading...</div>}>
+                  <Dashboard />
+                </Suspense>
+              }
+            >
+              <Route
+                index
+                element={
+                  <Suspense fallback={<div className="text-center text-white p-10">Loading...</div>}>
+                    <Overview />
+                  </Suspense>
+                }
+              />
+              <Route path="order" element={<Suspense fallback={<div>Loading...</div>}><Order /></Suspense>} />
+              <Route path="users" element={<Suspense fallback={<div>Loading...</div>}><Users /></Suspense>} />
+              <Route path="settings" element={<Suspense fallback={<div>Loading...</div>}><Settings /></Suspense>} />
+              <Route path="products" element={<Suspense fallback={<div>Loading...</div>}><ProductList /></Suspense>} />
+              <Route path="analytics" element={<Suspense fallback={<div>Loading...</div>}><Analytics /></Suspense>} />
+              <Route path="order_view/:id" element={<Suspense fallback={<div>Loading...</div>}><ViewOrder /></Suspense>} />
+              <Route path="add_product" element={<Suspense fallback={<div>Loading...</div>}><CreateProduct /></Suspense>} />
+              <Route path="add_category" element={<Suspense fallback={<div>Loading...</div>}><CreateCategory /></Suspense>} />
+              <Route path="edit_product/:id" element={<Suspense fallback={<div>Loading...</div>}><UpdateProduct /></Suspense>} />
             </Route>
           </Routes>
-      </Suspense>
-    </CartProvider>
+        </AdminProvider>
+      </CartProvider>
     </BrowserRouter>
   );
 }
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);

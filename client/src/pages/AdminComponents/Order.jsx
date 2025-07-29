@@ -1,28 +1,17 @@
+import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
+import { useAdmin } from '../../context/AdminContext';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function Order() {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { orders, loading, fetchOrders } = useAdmin();
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/orders/all_orders`);
-        setOrders(response.data.orders || []);
-      } catch (error) {
-        console.error("Error fetching orders:", error.response?.data.message || error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
+      fetchOrders();
   }, []);
 
   const handleOrderView = (orderId) => {

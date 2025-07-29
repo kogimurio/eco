@@ -139,7 +139,7 @@ export default function DetailProduct() {
                                 <span>Write a Review</span>
                             </div>
                             <div className="w-px h-4 bg-stone-400 ml-2"></div>
-                            {user.role === 'admin' && (
+                            {user?.role === 'admin' && (
                                 <>
                                     <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
                                         <FaPen />

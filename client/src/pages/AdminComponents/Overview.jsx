@@ -6,32 +6,43 @@ import {
   faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+
+
+import { useAdmin } from '../../context/AdminContext';
+
 import LoadingSpinner from '../LoadingSpinner';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
 const Overview = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { users, products, orders, transactions, loading, fetchTransactions, fetchOrders } = useAdmin();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchTrans = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/mpesa/all_payments`)
-        setTransactions(response.data.payments)
-        console.log(response.data.payments);
-      } catch (error) {
-        console.error(error.response.data || error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchTrans();
+    fetchTransactions();
   }, [])
+
+  useEffect(() => {
+    fetchOrders();
+  }, [])
+
+  const handleOrders = () => {
+    navigate("/dashboard/order");
+  };
+
+  const handleProducts = () => {
+    navigate("/dashboard/products");
+  };
+
+  const handleUsers = () => {
+    navigate("/dashboard/users");
+  };
+
+  const handleTransactions = () => {
+    navigate("/dashboard/transactions");
+  };
 
   if (loading) {
     return (
@@ -90,38 +101,53 @@ const Overview = () => {
                 <div className="flex justify-between items-center mb-4">
                   <h6 className="text-white font-semibold text-base">Latest Orders</h6>
                   <div className="flex items-center gap-1">
-                    <a href="*" className="text-xs text-blue-400 hover:underline">View All</a>
-                    <FontAwesomeIcon
-                      icon={faChevronRight}
-                      className="w-3 h-3 text-white bg-orange-600 rounded-full p-1"
-                    />
+                    <span
+                      onClick={handleOrders}
+                      className="text-xs text-blue-400 hover:underline cursor-pointer flex items-center">
+                        View All
+                        <FontAwesomeIcon
+                          icon={faChevronRight}
+                          className="ml-1 w-3 h-3 text-white bg-orange-600 rounded-full p-1"
+                        />
+                    </span>
                   </div>
                 </div>
-                <div className="flex justify-between flex-col md:flex-row text-sm text-gray-300">
-                  <div>
-                    <h6 className="text-gray-400 font-medium">Order No.</h6>
-                    <p>203</p>
-                    <p>204</p>
-                    <p>205</p>
-                    <p>206</p>
-                    <p>207</p>
-                  </div>
-                  <div>
-                    <h6 className="text-gray-400 font-medium">Client Name</h6>
-                    <p>John Doe</p>
-                    <p>Alice Smith</p>
-                    <p>Bob Johnson</p>
-                    <p>Emily Rose</p>
-                    <p>Michael Scott</p>
-                  </div>
-                  <div>
-                    <h6 className="text-gray-400 font-medium">Status</h6>
-                    <p className="text-yellow-400">Pending</p>
-                    <p className="text-yellow-400">Shipped</p>
-                    <p className="text-yellow-400">Delivered</p>
-                    <p className="text-yellow-400">Cancelled</p>
-                    <p className="text-yellow-400">Processing</p>
-                  </div>
+                <div >
+                    <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden">
+                      <thead>
+                        <tr className="bg-gray-700 text-left text-sm uppercase">
+                          <th className="py-3 px-4">Order No.</th>
+                          <th className="py-3 px-4">Client Name</th>
+                          <th className="py-3 px-4">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm text-gray-300">
+                        {orders.slice(0, 5).map((order, index) => (
+                          <tr
+                            key={index}
+                            className="border-b border-gray-700 hover:bg-gray-700/50 transition duration-150 ease-in-out"
+                          >
+                            <td className="py-3 px-4">{`#${order._id?.slice(-6).toUpperCase()}`}</td>
+                            <td className="py-3 px-4">{order.user?.firstName || "N/A"}</td>
+                            <td className="py-3 px-4">
+                              <span
+                                className={`font-medium ${
+                                  order.status === "pending"
+                                    ? "text-yellow-400"
+                                    : order.status === "shipped"
+                                    ? "text-blue-400"
+                                    : order.status === "delivered"
+                                    ? "text-green-400"
+                                    : "text-gray-400"
+                                }`}
+                              >
+                                {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                 </div>
               </div>
 
@@ -130,29 +156,36 @@ const Overview = () => {
                 <div className="flex justify-between items-center mb-4">
                   <h6 className="text-white font-semibold text-base">Top Products</h6>
                   <div className="flex items-center gap-1">
-                    <a href="*" className="text-xs text-blue-400 hover:underline">View All</a>
-                    <FontAwesomeIcon
-                      icon={faChevronRight}
-                      className="w-3 h-3 text-white bg-orange-600 rounded-full p-1"
-                    />
+                    <span 
+                      onClick={handleProducts}
+                      className="text-xs text-blue-400 hover:underline cursor-pointer flex items-center">
+                        View All
+                        <FontAwesomeIcon
+                        icon={faChevronRight}
+                        className="ml-1 w-3 h-3 text-white bg-orange-600 rounded-full p-1"
+                      />
+                    </span>
                   </div>
                 </div>
-                <div className="flex justify-between flex-col md:flex-row text-sm text-gray-300">
-                  <div>
-                    <h6 className="text-gray-400 font-medium">Samsung Galaxy S25 Ultra</h6>
-                    <h6 className="text-gray-400 font-medium">Apple MacBook Pro M3</h6>
-                    <h6 className="text-gray-400 font-medium">Sony WH-1000XM5</h6>
-                    <h6 className="text-gray-400 font-medium">Dell XPS 15</h6>
-                    <h6 className="text-gray-400 font-medium">Canon EOS R6</h6>
-                  </div>
-                  <div>
-                    <p>500 pcs</p>
-                    <p>300 pcs</p>
-                    <p>250 pcs</p>
-                    <p>150 pcs</p>
-                    <p>120 pcs</p>
-                  </div>
-                </div>
+                <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden">
+                  <thead>
+                    <tr className="bg-gray-700 text-left text-sm uppercase">
+                      <th className="py-3 px-4">Product</th>
+                      <th className="py-3 px-4">Stock</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm text-gray-300">
+                    {products.slice(0, 5).map((product, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-gray-700 hover:bg-gray700/50 transition duration-150 ease-in-out"
+                      >
+                        <td className="py-3 px-4">{product.name}</td>
+                        <td className="py-3 px-4">{product.stock} pcs</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
@@ -162,27 +195,34 @@ const Overview = () => {
                 <div className="flex justify-between items-center mb-4">
                   <h6 className="text-white font-semibold text-base">Users</h6>
                   <div className="flex items-center gap-1">
-                    <a href="*" className="text-xs text-blue-400 hover:underline">View All</a>
-                    <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-white bg-orange-600 rounded-full p-1" />
+                    <span 
+                      onClick={handleUsers}
+                      className="text-xs text-blue-400 hover:underline cursor-pointer flex items-center">
+                        View All
+                        <FontAwesomeIcon icon={faChevronRight} className="ml-1 w-3 h-3 text-white bg-orange-600 rounded-full p-1" />
+                    </span>
                   </div>
                 </div>
-                <div className="space-y-3 text-sm text-gray-300">
-                  {[
-                    ['Jane Doe', 'janedoe@gmail.com', '11__98713.jpg'],
-                    ['Alice Smith', 'alice@gmail.com', '18__10246.jpg'],
-                    ['Bob Johnson', 'bob@gmail.com', '16__10413.jpg'],
-                    ['Emily Rose', 'emily@gmail.com', '20__80554.jpg'],
-                    ['Mike Dean', 'mike@gmail.com', '11__98713.jpg'],
-                  ].map(([name, email, img], i) => (
-                    <div key={i} className="flex justify-between flex-col md:flex-row gap-2">
-                      <div className="flex items-center gap-2">
-                        <img src={img} alt={name} className="w-6 h-6 object-cover rounded-full" />
-                        <h6 className="text-gray-400 font-medium">{name}</h6>
-                      </div>
-                      <div><p>{email}</p></div>
-                    </div>
-                  ))}
-                </div>
+                <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden">
+                  <thead>
+                    <tr className="bg-gray-700 text-left text-sm uppercase">
+                      <th className="py-3 px-4">Name</th>
+                      <th className="py-3 px-4">Email</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm text-gray-300">
+                    {users.slice(0, 5).map((user, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-gray-700 hover:bg-gray-700/50 transition duration-150 ease-in-out"
+                      >
+                        <td className="py-3 px-4">{user.firstName} {user.lastName}</td>
+                        <td className="py-3 px-4">{user.email}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                
               </div>
 
 
@@ -191,25 +231,40 @@ const Overview = () => {
                 <div className="flex justify-between items-center mb-4">
                   <h6 className="text-white font-semibold text-base">Recent Transactions</h6>
                   <div className="flex items-center gap-1">
-                    <a href="*" className="text-xs text-blue-400 hover:underline">View All</a>
-                    <FontAwesomeIcon
-                      icon={faChevronRight}
-                      className="w-3 h-3 text-white bg-orange-600 rounded-full p-1"
-                    />
+                    <span 
+                      onClick={handleTransactions}
+                      className="text-xs text-blue-400 hover:underline cursor-pointer flex items-center">
+                        View All
+                        <FontAwesomeIcon
+                          icon={faChevronRight}
+                          className="ml-1 w-3 h-3 text-white bg-orange-600 rounded-full p-1"
+                        />
+                    </span>
+                    
                   </div>
                 </div>
-                <div className="flex justify-between flex-col md:flex-row text-sm text-gray-300">
-                  {transactions.map((transaction, index) => (
-                    <span key={index}>
-                      <div>
-                        <h6 className="text-gray-400 font-medium">{transaction.status}</h6>
-                      </div>
-                      <div>
-                        <p>{transaction.amount}</p>
-                      </div>
-                    </span>
-                  ))}
-                </div>
+                <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden">
+                  <thead>
+                    <tr className="bg-gray-700 text-left text-sm uppercase">
+                      <th className="py-3 px-4">Trans ID</th>
+                      <th className="py-3 px-4">Amount</th>
+                      <th className="py-3 px-4">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm text-gray-300">
+                    {transactions.slice(0, 5).map((transaction, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-gray-700 hover:bg-gray-700/50 transition duration-100 ease-in-out"
+                      >
+                        <td className="py-3 px-4">{transaction.receipt}</td>
+                        <td className="py-3 px-4">{transaction.amount}</td>
+                        <td className="py-3 px-4">{transaction.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                
               </div>
             </div>
     </div>
