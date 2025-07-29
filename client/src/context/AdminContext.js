@@ -39,7 +39,7 @@ export const AdminProvider = ({ children }) => {
             const response = await axios.get(`${BASE_URL}/users/get_all_users`)
             setUsers(response.data.users)
         } catch (error) {
-            console.error(error.response.data || error.message);
+            console.error(error.response.data.message || error.message);
         } 
     }
 
@@ -53,6 +53,7 @@ export const AdminProvider = ({ children }) => {
         console.error(error.response.data || error.message);
         }
     }
+    
 
     const fetchAllAdminData = async() => {
         setLoading(true);

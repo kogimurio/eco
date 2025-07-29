@@ -6,19 +6,38 @@ import {
   faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
 
 import { useAdmin } from '../../context/AdminContext';
 
 import LoadingSpinner from '../LoadingSpinner';
 
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Overview = () => {
   const { users, products, orders, transactions, loading, fetchTransactions, fetchOrders } = useAdmin();
   const navigate = useNavigate();
+  const [orderItems, setOrderItems] = useState([]);
+  const { id: orderId } = useParams();
+
+  useEffect(() => {
+    const fetchOrderItems = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/orders/order_items/${orderId}`);
+        setOrderItems(response.data.orderItems || []);
+        console.log(response.data.orderItems);
+      } catch (error) {
+        console.error(error.response?.data?.message || error.message);
+      }
+    };
+    fetchOrderItems();
+  }, [orderId]);
+
+  const totalSales = orders.reduce((sum, order) => sum + order.total_price, 0);
+  const totalOrders = orders.length;
+  
 
   useEffect(() => {
     fetchTransactions();
@@ -61,7 +80,7 @@ const Overview = () => {
                     </div>
                     <div>
                     <p className="text-sm text-gray-300">Total Users</p>
-                    <p className="text-xl font-semibold">500</p>
+                    <p className="text-xl font-semibold">{users.length}</p>
                     </div>
                 </div>
 
@@ -71,7 +90,7 @@ const Overview = () => {
                     </div>
                     <div>
                     <p className="text-sm text-gray-300">Total Sales</p>
-                    <p className="text-xl font-semibold">$100,000</p>
+                    <p className="text-xl font-semibold">$1{totalSales}</p>
                     </div>
                 </div>
 
@@ -80,8 +99,8 @@ const Overview = () => {
                     <FontAwesomeIcon icon={faHourglassHalf} className="text-yellow-400 text-xl" />
                     </div>
                     <div>
-                    <p className="text-sm text-gray-300">Pending Orders</p>
-                    <p className="text-xl font-semibold">10</p>
+                      <p className="text-sm text-gray-300">Pending Orders</p>
+                      <p className="text-xl font-semibold">{orders.filter(order => order.status === 'pending').length}</p>
                     </div>
                 </div>
 
@@ -91,7 +110,7 @@ const Overview = () => {
                     </div>
                     <div>
                         <p className="text-sm text-gray-300">Total Orders</p>
-                        <p className="text-xl font-semibold">400</p>
+                        <p className="text-xl font-semibold">{totalOrders}</p>
                     </div>
                 </div>
             </div>
@@ -257,7 +276,9 @@ const Overview = () => {
                         key={index}
                         className="border-b border-gray-700 hover:bg-gray-700/50 transition duration-100 ease-in-out"
                       >
-                        <td className="py-3 px-4">{transaction.receipt}</td>
+                        <td className="py-3 px-4 font-mono text-blue-400 hover:underline cursor-pointer">
+                          {transaction.receipt}
+                        </td>
                         <td className="py-3 px-4">{transaction.amount}</td>
                         <td className="py-3 px-4">{transaction.status}</td>
                       </tr>

@@ -7,7 +7,8 @@ import {
   faGear,
   faDollarSign,
   faHourglassHalf,
-  faListAlt
+  faListAlt,
+  faArrowsRotate 
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Order from "./Order";
@@ -41,6 +42,9 @@ export default function Nav() {
                 </div>
                 <div>
                     <FontAwesomeIcon icon={faBoxOpen} className="text-gray-400 mr-2" /> <a href="*">Products</a>
+                </div>
+                <div>
+                    <FontAwesomeIcon icon={faArrowsRotate } className="text-gray-400 mr-2" /> <a href="*">Transactions</a>
                 </div>
                 <div>
                     <FontAwesomeIcon icon={faUsers} className="text-gray-400 mr-2" /> <a href="*">Users</a>

@@ -30,6 +30,7 @@ const CreateCategory = lazy(() => import('./pages/AdminComponents/AddCategory'))
 const UpdateProduct = lazy(() => import('./pages/AdminComponents/EditProduct'))
 const Analytics = lazy(() => import('./pages/AdminComponents/Analytics'));
 const ViewOrder = lazy(() => import('./pages/AdminComponents/OrderView'));
+const Transaction = lazy(() => import('./pages/AdminComponents/Transaction'));
 const Cart = lazy(() => import('./pages/OrderComponents/Cart'));
 const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
 const Payments = lazy(() => import('./pages/OrderComponents/Payments'));
@@ -86,6 +87,7 @@ export default function App() {
               <Route path="add_product" element={<Suspense fallback={<div>Loading...</div>}><CreateProduct /></Suspense>} />
               <Route path="add_category" element={<Suspense fallback={<div>Loading...</div>}><CreateCategory /></Suspense>} />
               <Route path="edit_product/:id" element={<Suspense fallback={<div>Loading...</div>}><UpdateProduct /></Suspense>} />
+              <Route path="transactions" element={<Suspense fallback={<div>Loading...</div>}><Transaction /></Suspense>} />
             </Route>
           </Routes>
         </AdminProvider>

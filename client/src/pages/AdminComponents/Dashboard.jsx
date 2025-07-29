@@ -7,6 +7,7 @@ import {
   faChartLine,
   faGear,
   faRightFromBracket,
+  faArrowsRotate
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Outlet } from "react-router-dom";
@@ -37,6 +38,10 @@ const Dashboard = () => {
 
   const handleAnalytics = () => {
     navigate("/dashboard/analytics");
+  };
+
+  const handleTransactions = () => {
+    navigate("/dashboard/transactions");
   };
 
   const handleLogout = () => {
@@ -82,6 +87,12 @@ const Dashboard = () => {
             onClick={handleProducts} 
           >
             <FontAwesomeIcon icon={faBoxOpen} /> Products
+          </div>
+          <div 
+            className="flex items-center gap-2 cursor-pointer hover:text-orange-400"
+            onClick={handleTransactions} 
+          >
+            <FontAwesomeIcon icon={faArrowsRotate} /> Transactions
           </div>
           <div 
             className="flex items-center gap-2 cursor-pointer hover:text-orange-400"
