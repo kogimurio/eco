@@ -14,6 +14,8 @@ exports.initiateStkPush = async(req, res) => {
 
         const token = await getAccessToken();
 
+        const userId = req.user.userId;
+
         const response = await axios.post(
             "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
             {
@@ -42,6 +44,7 @@ exports.initiateStkPush = async(req, res) => {
         // Save initial payment status to DB (optional)
         // await Payment.create({ phone, amount, status: "pending" });
         await Payment.create({
+            user: userId,
             phone,
             amount,
             merchantRequestID,
@@ -61,7 +64,7 @@ exports.initiateStkPush = async(req, res) => {
         console.error("STK Push Error:", error.response?.data || error.message);
         res.status(500).json({
             message: "M-PESA STK Push Failed",
-            error
+            error: error.message
         });
     };
 

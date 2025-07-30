@@ -10,8 +10,9 @@ const {
 } = require('../controllers/paymentController')
 
 router.post('/',
+    authMiddleware,
     initiateStkPush
-)
+);
 
 router.post('/callback',
     mpesaCallback

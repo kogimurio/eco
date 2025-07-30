@@ -172,14 +172,7 @@ exports.deleteProduct = async (req, res) => {
         const product = await Product.findById(req.params.id)
         if (!product) return res.status(404).json({ message: 'Product not found' })
 
-        // Delete image from cloudinary
-        // const deletePromises = product.image.map(imgUrl => {
-        //     const publicId = imgUrl.split('/').slice(-1).split('.')[0]; // extract image ID
-        //     return cloudinary.uploader.destroy(`ecoapp/products/${publicId}`);
-        // });
-        // await Promise.all(deletePromises)
-
-        await Product.deleteOne();
+        await product.deleteOne();
         res.json({ message: 'Product and image deleted successfully' });
     } catch (error) {
         console.error('Error deleting product and image:', error);

@@ -66,7 +66,11 @@ exports.addToCart = async (req, res) => {
         console.log("💰 New Cart Total:", cart.total);
 
         await cart.save();
+        
+        // Refetch populated cart to confirm it's saved properly
+        const updatedCart = await Cart.findById(cart._id).populate('items.product');
         console.log("✅ Cart saved successfully!");
+        console.log("📦 Updated Cart (populated):", updatedCart);
 
         res.status(200).json({
             message: "Product added to cart",
