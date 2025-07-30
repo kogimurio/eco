@@ -23,7 +23,7 @@ router.get('/all_orders',
     getAllOrder
 )
 
-router.get('/order_items/:id',
+router.get('/order_items/:orderId',
     getOrderItems
 )
 
