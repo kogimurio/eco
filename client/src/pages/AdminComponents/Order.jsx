@@ -45,7 +45,7 @@ export default function Order() {
         <div className="flex gap-2">
           <input
             type="text"
-            placeholder="Search by client..."
+            placeholder="Search order number..."
             className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
           <select className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500">

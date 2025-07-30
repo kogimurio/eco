@@ -86,7 +86,7 @@ export default function App() {
               <Route path="order_view/:id" element={<Suspense fallback={<div>Loading...</div>}><ViewOrder /></Suspense>} />
               <Route path="add_product" element={<Suspense fallback={<div>Loading...</div>}><CreateProduct /></Suspense>} />
               <Route path="add_category" element={<Suspense fallback={<div>Loading...</div>}><CreateCategory /></Suspense>} />
-              <Route path="edit_product/:id" element={<Suspense fallback={<div>Loading...</div>}><UpdateProduct /></Suspense>} />
+              <Route path="edit_product/:slug" element={<Suspense fallback={<div>Loading...</div>}><UpdateProduct /></Suspense>} />
               <Route path="transactions" element={<Suspense fallback={<div>Loading...</div>}><Transaction /></Suspense>} />
             </Route>
           </Routes>

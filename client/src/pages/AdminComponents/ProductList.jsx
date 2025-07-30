@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../LoadingSpinner';
 import axios from 'axios';
 import { useAdmin } from '../../context/AdminContext';
+import Swal from 'sweetalert2';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -33,19 +34,31 @@ export default function ProductList() {
   }
 
   const handleDeleteProduct = async (id) => {
+    const product = products.find(p => p._id === id);
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      html: `Do you want to delete </br> <span style="color: #ffffff; font-weight: bold;">${product.name}</span>?`,
+      icon: 'warning',
+      color: '#f87171',
+      background: '#1f2937',
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Yes, delete it!',
+    });
 
-    if (!confirmDelete) return;
+    if (!result.isConfirmed) return;
 
     try {
-        await axios.delete(`${BASE_URL}/products/${id}`)
-        alert("Product deleted!");
-        window.location.href = '/dashboard/products'
+      await axios.delete(`${BASE_URL}/products/${id}`);
+      Swal.fire('Deleted!', 'Product has been deleted.', 'success');
+      // navigate('/dashboard/products');
+      window.location.href = '/dashboard/products';
     } catch (error) {
-      console.error("Failed to delete product")
+      Swal.fire('Error', 'Failed to delete the product.', 'error');
     }
-  }
+  };
 
   return (
     <div className="p-6 space-y-6">

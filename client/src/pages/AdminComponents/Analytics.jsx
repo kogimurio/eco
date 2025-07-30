@@ -37,8 +37,11 @@ export default function Analytics() {
 
     orders.forEach(order => {
       order.items.forEach(item => {
-        const productId = item.product._id || item.product;
-        const productName = item.product.name || 'Unnamed Product'
+        if (!item.product) return;
+
+        const productId = typeof item.product === 'object' ? item.product._id : item.product;
+        const productName = item.product?.name || 'Unnamed Product'
+        const productPrice = item.product.price || 0;
 
         if (!productMap[productId]) {
           productMap[productId] = {
@@ -49,7 +52,7 @@ export default function Analytics() {
         }
 
         productMap[productId].sold += item.quantity;
-        productMap[productId].sales += item.quantity * item.product.price
+        productMap[productId].sales += item.quantity * productPrice
       });
     });
     return Object.values(productMap);

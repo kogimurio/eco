@@ -29,14 +29,13 @@ export const CartProvider = ({ children }) => {
     };
 
     const addToCart = async (productId, quantity = 1) => {
+        console.log('Received token:', token);
         try {
             await axios.post(`${BASE_URL}/cart`, {
                 productId,
                 quantity
             }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                withCredentials: true
             });
             // Update cart after adding
             await fetchCart();

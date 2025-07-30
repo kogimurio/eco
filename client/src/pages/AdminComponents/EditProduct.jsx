@@ -28,25 +28,30 @@ export default function UpdateProduct() {
     const fileInputRef = useRef();
     const navigate = useNavigate();
     const { slug } = useParams();
+    const [product, setProduct] = useState(null)
 
     // Fetch product by id
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const res = await axios.get(`${BASE_URL}/products/${slug}`);
-                const product = res.data;
 
+                const fetchedProduct = res.data.product;
+
+                setProduct(fetchedProduct)
+
+
+                console.log("Fetched product ID:", fetchedProduct._id)
                 setFormData({
-                    name: product.name,
-                    price: product.price,
-                    description: product.description,
-                    brand: product.brand,
-                    category: product.category,
-                    stock: product.stock,
+                    name: fetchedProduct.name,
+                    price: fetchedProduct.price,
+                    description: fetchedProduct.description,
+                    brand: fetchedProduct.brand,
+                    category: fetchedProduct.category,
+                    stock: fetchedProduct.stock,
                 });
-                console.log("Current form data:",formData);
-                const cleanThumbnail = (`${BASE_IMAGE_URL}/${product.thumbnail}`).replace(/\\/g, "/")
-                const cleanImages = (product.images || []).map(img => `${BASE_IMAGE_URL}/${img}`.replace(/\\/g, "/"))
+                const cleanThumbnail = (`${BASE_IMAGE_URL}/${fetchedProduct.thumbnail}`).replace(/\\/g, "/")
+                const cleanImages = (fetchedProduct.images || []).map(img => `${BASE_IMAGE_URL}/${img}`.replace(/\\/g, "/"))
                 setThumnailPreview(cleanThumbnail);
                 setImagePreview(cleanImages);
             } catch (error) {
@@ -114,7 +119,7 @@ export default function UpdateProduct() {
 
         try {
             setLoading(true)
-            const response = await axios.put(`${BASE_URL}/products/${slug}`, data, {
+            const response = await axios.put(`${BASE_URL}/products/${product._id}`, data, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             setFormData({
@@ -231,7 +236,7 @@ export default function UpdateProduct() {
                     accept="image/"
                     name="thumnail"
                     onChange={handleThumbnailChange}
-                    required
+                    required={!thumnailPreview}
                     className="p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 {imagePreview.length > 0 && (

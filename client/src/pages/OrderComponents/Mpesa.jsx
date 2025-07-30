@@ -7,8 +7,8 @@ import { useCart } from '../../context/CartContext';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const localToken = localStorage.getItem('token');
-const token = localToken ? JSON.parse(localToken) : null;
+const user = JSON.parse(localStorage.getItem('user'));
+const token = JSON.parse(localStorage.getItem('token'));
 
 
 export default function Mpesa ({ closeModal }) {
@@ -21,6 +21,7 @@ export default function Mpesa ({ closeModal }) {
     const { cartItems, loadingCart } = useCart();
     const { clearCart } = useCart();
     const navigate = useNavigate(); 
+    const userId = user?.id;
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -53,8 +54,14 @@ export default function Mpesa ({ closeModal }) {
             const res = await axios.post(`${BASE_URL}/mpesa`, {
                 phone: formData.phone,
                 amount: amountToSend,
-                accountReferencee: formData.product
-            });
+                accountReferencee: formData.product,
+                user: userId,
+            },{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
 
             const checkoutRequestID = res.data.data.CheckoutRequestID;
             toast.success("STK Push sent! Waiting for payment...");
