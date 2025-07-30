@@ -1,36 +1,81 @@
+import { useEffect, useMemo } from 'react';
+import { useAdmin } from '../../context/AdminContext';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 
-export default function Analytics() {
-  const monthlySales = [
-    { month: 'Jan', sales: 4000 },
-    { month: 'Feb', sales: 3000 },
-    { month: 'Mar', sales: 5000 },
-    { month: 'Apr', sales: 4000 },
-    { month: 'May', sales: 6000 },
-    { month: 'Jun', sales: 7000 },
-    { month: 'Jul', sales: 8000 },
-    { month: 'Aug', sales: 6500 },
-    { month: 'Sep', sales: 7200 },
-    { month: 'Oct', sales: 5300 },
-    { month: 'Nov', sales: 4800 },
-    { month: 'Dec', sales: 9100 },
-  ];
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Dec'
+];
 
-  const productStats = [
-    { name: "Galaxy S25 Ultra", sold: 500 },
-    { name: "MacBook Pro M3", sold: 300 },
-    { name: "Sony WH-1000XM5", sold: 250 },
-    { name: "Canon EOS R6", sold: 180 },
-  ];
+export default function Analytics() {
+  const { orders, fetchOrders } = useAdmin();
+  
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  // Order orders by month and calculate total sales per month
+  const monthlySales = useMemo(() => {
+    const salesMap = {};
+
+    orders.forEach(order => {
+      const date = new Date(order.createdAt);
+      const month = date.getMonth();
+      salesMap[month] = (salesMap[month] || 0) + order.total_price;
+    });
+
+    // Convert to full month structure
+    return monthNames.map((monthName, index) => ({
+      month: monthName,
+      sales: salesMap[index] || 0
+    }));
+  }, [orders]);
+
+  const productStats = useMemo(() => {
+    const productMap ={};
+
+    orders.forEach(order => {
+      order.items.forEach(item => {
+        const productId = item.product._id || item.product;
+        const productName = item.product.name || 'Unnamed Product'
+
+        if (!productMap[productId]) {
+          productMap[productId] = {
+            name: productName,
+            sold: 0,
+            sales: 0
+          };
+        }
+
+        productMap[productId].sold += item.quantity;
+        productMap[productId].sales += item.quantity * item.product.price
+      });
+    });
+    return Object.values(productMap);
+  }, [orders]);
+
 
   return (
     <div className="p-6 text-white">
       <h2 className="text-2xl font-semibold mb-6">Analytics Dashboard</h2>
 
+      {/* Monthly Sales Chart */}
+      <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+        <h3 className="text-lg font-semibold mb-4">Monthly Sales</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={monthlySales}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+            <XAxis dataKey="month" stroke="#ccc" />
+            <YAxis stroke="#ccc" />
+            <Tooltip />
+            <Bar dataKey="sales" fill="#f97316" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
       {/* Sales per Product */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {productStats.map((product, idx) => (
           <div
             key={idx}
@@ -43,23 +88,11 @@ export default function Analytics() {
             <div className="text-right">
               <p className="text-sm text-gray-400">Units Sold</p>
               <p className="text-xl font-semibold text-green-400">{product.sold}</p>
+              <p className="text-sm text-gray-400">Revenue</p>
+              <p className="text-xl font-semibold text-green-400">${product.sales.toFixed(2)}</p>
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Monthly Sales Chart */}
-      <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold mb-4">Monthly Sales</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={monthlySales}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-            <XAxis dataKey="month" stroke="#ccc" />
-            <YAxis stroke="#ccc" />
-            <Tooltip />
-            <Bar dataKey="sales" fill="#f97316" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
       </div>
     </div>
   );

@@ -28,8 +28,8 @@ export default function ProductList() {
     navigate('/dashboard/add_category')
   }
 
-  const handleEditProduct = (id) => {
-    navigate(`/dashboard/edit_product/${id}`)
+  const handleEditProduct = (slug) => {
+    navigate(`/dashboard/edit_product/${slug}`)
   }
 
   const handleDeleteProduct = async (id) => {
@@ -109,7 +109,7 @@ export default function ProductList() {
 
               <div className="flex gap-2 mt-4 md:mt-0">
                 <button 
-                  onClick={() => handleEditProduct(product._id)}
+                  onClick={() => handleEditProduct(product.slug)}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow text-sm">
                   Edit
                 </button>

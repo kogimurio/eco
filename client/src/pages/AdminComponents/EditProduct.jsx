@@ -27,13 +27,13 @@ export default function UpdateProduct() {
     const [loadingCategories, setLoadingCategories] = useState(true)
     const fileInputRef = useRef();
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { slug } = useParams();
 
     // Fetch product by id
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await axios.get(`${BASE_URL}/products/${id}`);
+                const res = await axios.get(`${BASE_URL}/products/${slug}`);
                 const product = res.data;
 
                 setFormData({
@@ -44,6 +44,7 @@ export default function UpdateProduct() {
                     category: product.category,
                     stock: product.stock,
                 });
+                console.log("Current form data:",formData);
                 const cleanThumbnail = (`${BASE_IMAGE_URL}/${product.thumbnail}`).replace(/\\/g, "/")
                 const cleanImages = (product.images || []).map(img => `${BASE_IMAGE_URL}/${img}`.replace(/\\/g, "/"))
                 setThumnailPreview(cleanThumbnail);
@@ -52,8 +53,8 @@ export default function UpdateProduct() {
                 toast.error('Failed to fetch product');
             }
         }
-        if (id) fetchProduct();
-    }, [id]);
+        if (slug) fetchProduct();
+    }, [slug]);
 
     // Fetch Category
     useEffect(() => {
@@ -113,7 +114,7 @@ export default function UpdateProduct() {
 
         try {
             setLoading(true)
-            const response = await axios.put(`${BASE_URL}/products/${id}`, data, {
+            const response = await axios.put(`${BASE_URL}/products/${slug}`, data, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             setFormData({
