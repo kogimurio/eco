@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
-import { useAdmin } from '../../context/AdminContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -11,17 +10,32 @@ const localToken = localStorage.getItem('token');
 const token = JSON.parse(localToken);
 
 
-export default function Order() {
-  const { orders, loading, fetchOrders } = useAdmin();
+export default function ClientOrders() {
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState([])
 
   const navigate = useNavigate();
 
   useEffect(() => {
-      fetchOrders();
+      const fetchClientOrder = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/orders/`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+          })
+          setOrders(response.data.orders)
+        } catch (error) {
+          console.error(error.response.data.message || error.message)
+        } finally {
+          setLoading(false)
+        }
+      }
+      fetchClientOrder()
   }, []);
 
   const handleOrderView = (orderId) => {
-    navigate(`/dashboard/order_view/${orderId}`);
+    navigate(`/client_order_view/${orderId}`);
   };
 
   const formatDate = (isoDate) => {
@@ -43,24 +57,8 @@ export default function Order() {
     }
   };
 
-  const handleStatusChange =async (newStatus, id) => {
-    try {
-      await axios.put(`${BASE_URL}/orders/${id}/status`, 
-        { status: newStatus}, 
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-        });
-      toast.success(`Order marked as ${newStatus}`);
-      fetchOrders();
-    } catch (error) {
-      toast.error("Failed to update order status");
-    }
-  };
-
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gray-900">
       {/* Header */}
       <div className="mb-6 flex justify-between items-center">
         <h2 className="text-2xl font-semibold text-white">Orders</h2>
@@ -85,7 +83,6 @@ export default function Order() {
           <thead>
             <tr className="bg-gray-700 text-left text-sm uppercase">
               <th className="py-3 px-4">Order ID</th>
-              <th className="py-3 px-4">Client Name</th>
               <th className="py-3 px-4">Products</th>
               <th className="py-3 px-4">Status</th>
               <th className="py-3 px-4">Total</th>
@@ -110,7 +107,6 @@ export default function Order() {
               orders.map((order, idx) => (
                 <tr key={idx} className="border-b border-gray-700 hover:bg-gray-700/50">
                   <td className="py-3 px-4">{`#${order._id?.slice(-6).toUpperCase()}`}</td>
-                  <td className="py-3 px-4">{order.user?.firstName || "N/A"}</td>
                   <td className="py-3 px-4">
                     {order.items?.map((item, i) => (
                       <div key={i}>{item.product?.name || "Product"} ×{item.quantity}</div>
@@ -129,11 +125,6 @@ export default function Order() {
                       onClick={() => handleOrderView(order._id)}
                     >
                       View
-                    </button>
-                    <button 
-                      onClick={() => handleStatusChange('cancelled', order._id)}
-                      className="text-red-400 hover:text-red-600 text-sm">
-                      Cancel
                     </button>
                   </td>
                 </tr>

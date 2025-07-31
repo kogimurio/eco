@@ -55,7 +55,7 @@ export default function WishList() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div className="bg-gray-900 text-white p-6">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl font-bold text-orange-500 mb-6">My Wishlist</h2>
 

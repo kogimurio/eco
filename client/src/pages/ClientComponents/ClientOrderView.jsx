@@ -10,7 +10,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const localToken = localStorage.getItem('token');
 const token = JSON.parse(localToken);
 
-export default function ViewOrder() {
+export default function ClientOrderView() {
   const { fetchOrders } = useAdmin();
   const [orderItems, setOrderItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -122,30 +122,6 @@ export default function ViewOrder() {
       <section className="bg-gray-800 p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold mb-4">Actions</h3>
         <div className="flex flex-wrap gap-4">
-          <button
-            onClick={() => handleStatusChange('processing')}
-            className="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded"
-          >
-            Mark as Processing
-          </button>
-          <button
-            onClick={() => handleStatusChange('shipped')}
-            className="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded"
-          >
-            Mark as Shipped
-          </button>
-          <button
-            onClick={() => handleStatusChange('delivered')}
-            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
-          >
-            Mark as Delivered
-          </button>
-          <button
-            onClick={() => printInvoice(order)}
-            className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
-          >
-            Print Invoice
-          </button>
           <button
             onClick={() => handleStatusChange('cancelled')}
             className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded"

@@ -2,7 +2,7 @@ import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { faShoppingCart, faUser, faSearch, faRightToBracket, faRightFromBracket, faGear } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart, faUser, faSearch, faRightToBracket, faRightFromBracket, faGear, faBoxOpen } from "@fortawesome/free-solid-svg-icons";
 import Banner from "./Banner";
 import Footer from "../FooterComponents/Footer";
 import MinTaskBar from "../HomeComponents/MinTaskBar"; 
@@ -49,6 +49,10 @@ const Layout = () => {
         localStorage.clear()
         toast.success('Logout successful!');
         window.location.href="/"
+    }
+
+    const handleOrderList = () => {
+        navigate("/client_order")
     }
 
 
@@ -133,6 +137,14 @@ const Layout = () => {
 
                         {/* Desktop Menu */}
                         <ul className="flex space-x-4 items-center">
+                            {user && (
+                                <button 
+                                    className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list"
+                                    onClick={handleOrderList}
+                                >
+                                    <FontAwesomeIcon icon={faBoxOpen} />
+                                </button>
+                            )}
                             <button 
                                 className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list"
                                 onClick={handleWishList}

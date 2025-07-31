@@ -36,6 +36,8 @@ const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
 const Payments = lazy(() => import('./pages/OrderComponents/Payments'));
 const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'));
 const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
+const ClientOrders = lazy(() => import('./pages/ClientComponents/ClientOrder'));
+const ClientOrderView = lazy(() => import('./pages/ClientComponents/ClientOrderView'));
 
 
 export default function App() {
@@ -59,6 +61,8 @@ export default function App() {
               <Route path="payments" element={<Payments />} />
               <Route path="order_confirmation" element={<OrderConfirmation />} />
               <Route path="wishlist" element={<WishList />} />
+              <Route path="client_order" element={<ClientOrders />} />
+              <Route path="client_order_view/:id" element={<ClientOrderView />} />
             </Route>
 
             {/* Admin Routes in Suspense */}
@@ -88,6 +92,7 @@ export default function App() {
               <Route path="add_category" element={<Suspense fallback={<div>Loading...</div>}><CreateCategory /></Suspense>} />
               <Route path="edit_product/:slug" element={<Suspense fallback={<div>Loading...</div>}><UpdateProduct /></Suspense>} />
               <Route path="transactions" element={<Suspense fallback={<div>Loading...</div>}><Transaction /></Suspense>} />
+              
             </Route>
           </Routes>
         </AdminProvider>

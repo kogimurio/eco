@@ -157,6 +157,8 @@ const Overview = () => {
                                     ? "text-blue-400"
                                     : order.status === "delivered"
                                     ? "text-green-400"
+                                    : order.status === "cancelled"
+                                    ? "text-red-400"
                                     : "text-gray-400"
                                 }`}
                               >

@@ -85,7 +85,7 @@ export default function OrderConfirmation() {
             Back to Home
           </a>
           <a
-            href="/dashboard/order"
+            href="/client_order_view/:id"
             className="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded text-white font-medium transition"
           >
             View My Orders
