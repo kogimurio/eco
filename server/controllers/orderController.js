@@ -61,21 +61,20 @@ exports.getOrder =async (req, res) => {
     try {
             const userId = req.user.userId;
 
-            const order = await Order.findOne({ user: userId })
+            const orders = await Order.find({ user: userId })
             .sort({ createdAt: -1 })
-            .populate('user', 'firstName lastName email')
             .populate('items.product');
 
-            if (!order) {
+            if (!orders) {
                 return res.status(200).json({
                     success: true,
-                    order: null
+                    orders: null
                 });
             }
 
             res.status(200).json({
                 success: true,
-                order
+                orders
             })
 
     } catch (error) {
@@ -121,9 +120,9 @@ exports.getAllOrder =async (req, res) => {
 // Get order items in order per user
 exports.getOrderItems =async (req, res) => {
     try {
-            const { id: orderId } = req.params;
+            const { id } = req.params;
 
-            const orderItems = await OrderItem.find({ order: orderId })
+            const orderItems = await OrderItem.find({ order: id })
             .populate('product')
             .populate({
                 path: 'order',
@@ -154,5 +153,38 @@ exports.getOrderItems =async (req, res) => {
             success: false,
             error: error.message
         })
+    }
+}
+
+
+// Oder status
+exports.statusChange = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const { status: newStatus } = req.body;
+
+        // Fetch order
+        const order = await Order.findById(id);
+
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found"
+            });
+        }
+
+        // Update Order status
+        order.status = newStatus;
+        await order.save()
+
+        return res.status(200).json({
+            message: "Order Updated",
+            order
+        })
+    } catch (error){
+        console.log("Error updating order status:", error);
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
     }
 }

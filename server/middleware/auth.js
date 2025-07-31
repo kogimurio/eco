@@ -3,13 +3,11 @@ const jwt = require('jsonwebtoken');
 // Middleware to authenticate JWT token
 const authMiddleware = (req, res, next) => {
     let token = req.cookies?.token;
-    console.log('Token from cookie:', token);
     
 
     // check token via Authorization header
     if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         token = req.headers.authorization.split(' ')[1];
-        console.log('Token from header:', token);
     }
 
     if (!token) {

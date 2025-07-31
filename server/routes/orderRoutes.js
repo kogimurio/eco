@@ -6,7 +6,8 @@ const {
     createOrder,
     getOrder,
     getAllOrder,
-    getOrderItems
+    getOrderItems,
+    statusChange
 } = require('../controllers/orderController');
 
 router.post('/',
@@ -23,8 +24,12 @@ router.get('/all_orders',
     getAllOrder
 )
 
-router.get('/order_items/:orderId',
+router.get('/order_items/:id',
     getOrderItems
+)
+
+router.put('/:id/status',
+    statusChange
 )
 
 module.exports = router;
