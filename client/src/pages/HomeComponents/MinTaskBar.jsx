@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { faChevronDown, faGift, faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 
 const MinTaskBar = () => {
@@ -23,7 +24,7 @@ const MinTaskBar = () => {
                                     <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer mt-2 text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Women's Fashion</li>
                                     <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Fashion Jewellery</li>
                                     <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Clearance</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Men's Fashion</li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/mens-fashion">Men's Fashion</Link> </li>
                                     <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Kid's Fashion</li>
                                     <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Footware</li>
                                     <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Electronics</li>

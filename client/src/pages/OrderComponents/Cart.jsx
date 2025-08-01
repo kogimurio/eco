@@ -2,15 +2,24 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import LoadingSpinner from "../LoadingSpinner";
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { FaEye } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
+const localToken = localStorage.getItem('token');
+const token = JSON.parse(localToken);
 
 export default function Cart() {
-  const { cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();
+  const { addToCart, cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();
     const [loadingItem, setLoadingItem] = useState(null)
+    const [wishlistProducts, setWishlistProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,6 +34,30 @@ export default function Cart() {
       }
       fetchCart()
     }, []);
+
+    useEffect(() => {
+      const fetchWishlist = async () => {
+        try {
+          const res = await axios.get(`${BASE_URL}/wishlist`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setWishlistProducts(res.data.wishlist?.products || []);
+        } catch (error) {
+          toast.error("Error:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      fetchWishlist();
+    }, [token]);
+
+    const handleAddToCart = async (prodctId) => {
+        await addToCart(prodctId, 1);
+        toast.success('Product added to cart');
+    };
 
     const handleUpdateCart = async (productId, newQuatity) => {
       setLoadingItem(productId);
@@ -62,6 +95,10 @@ export default function Cart() {
   const handleCheckout = () => {
     navigate("/checkout")
   }
+
+  const productDetail = (slug) => {
+      navigate(`/productdetail/${slug}`);
+  }
   if (loadingItem) return <LoadingSpinner />
 
   return (
@@ -71,7 +108,7 @@ export default function Cart() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items */}
         {!loadingItem && cartItems.length === 0 ? (
-          <div className="min-h-screen flex items-center justify-center text-white bg-gray-900 p-10 w-full lg:col-span-2">
+          <div className="min-h-40 flex items-center justify-center text-white bg-gray-900 p-10 w-full lg:col-span-2">
             <div className="text-center space-y-4">
               <h2 className="text-2xl font-bold">🛒 Your cart is empty</h2>
               <p className="text-gray-400">Looks like you haven't added anything yet.</p>
@@ -158,6 +195,51 @@ export default function Cart() {
           </button>
         </div>
       </div>
+      <div className="bg-gray-900 text-white p-6">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-2xl font-bold text-orange-500 mb-6">My Wishlist</h2>
+      
+              {!token ? (
+                <p className="text-center text-gray-400"><a href='/login' className='text-blue-400 underline'>Login</a> to Add to wishlist.</p>
+              ) : (
+                wishlistProducts.length === 0 ? (
+                  <p className="text-center text-gray-400">Your wishlist is empty.</p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {wishlistProducts.map(item => (
+                      <div
+                        key={item.id}
+                        className="bg-gray-800 rounded-lg shadow p-4 flex flex-col space-y-3"
+                      >
+                        <img
+                          src={`${BASE_IMAGE_URL}/${item.thumbnail}`}
+                          alt={item.name}
+                          className="w-full h-40 object-cover rounded"
+                        />
+                        <h3 className="text-lg font-semibold">{item.name}</h3>
+                        <p className="text-orange-400 font-bold">{item.price}</p>
+                        <div className="flex justify-between items-center mt-auto">
+                          <button 
+                            onClick={(e) =>{
+                                e.stopPropagation()
+                                productDetail(item.slug)
+                            }}
+                            className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded flex items-center gap-2">
+                            <FaEye /> View
+                          </button>
+                          <button 
+                            onClick={() => handleAddToCart(item._id)}
+                            className="text-sm bg-orange-600 hover:bg-orange-700 text-white px-8 py-2 rounded flex items-center gap-2">
+                            <FontAwesomeIcon icon={faBagShopping} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
+              )}
+            </div>
+          </div>
     </div>
   );
 }

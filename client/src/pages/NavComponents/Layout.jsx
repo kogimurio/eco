@@ -1,7 +1,7 @@
 import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart, faBagShopping } from '@fortawesome/free-solid-svg-icons';
 import { faShoppingCart, faUser, faSearch, faRightToBracket, faRightFromBracket, faGear, faBoxOpen } from "@fortawesome/free-solid-svg-icons";
 import Banner from "./Banner";
 import Footer from "../FooterComponents/Footer";
@@ -84,13 +84,13 @@ const Layout = () => {
                         {/* Icons (wish, cart, account) */}
                         <div className="flex space-x-4">
                             <button className="text-white hover:text-red-500" title="Wish list">
-                                <FontAwesomeIcon icon={faHeart} />
+                                <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
                             </button>
                             <button 
                                 className="text-white hover:text-blue-500" title="Cart"
                                 onClick={handleCart}
                             >
-                                <FontAwesomeIcon icon={faShoppingCart} />
+                                <FontAwesomeIcon icon={faBagShopping} />
                             </button>
                             <button className="text-white hover:text-blue-500" title="Account">
                                 <FontAwesomeIcon icon={faUser} />
@@ -156,7 +156,7 @@ const Layout = () => {
                                 title="Cart"
                                 onClick={handleCart}
                             >
-                                <FontAwesomeIcon icon={faShoppingCart} className="text-xl" />
+                                <FontAwesomeIcon icon={faBagShopping} className="text-xl" />
                                 {totalItems > 0 && (
                                     <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
                                         {totalItems}

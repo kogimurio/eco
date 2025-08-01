@@ -17,6 +17,7 @@ import Login from './pages/NavComponents/Login';
 import Register from './pages/NavComponents/Register';
 import Profile from './pages/NavComponents/Profile';
 import DetailProduct from './pages/ProductComponents/DetailProduct';
+import MenCategory from './pages/CategoryComponents/MenCategory';
 
 // Lazy-loaded Admin Components
 const Dashboard = lazy(() => import('./pages/AdminComponents/Dashboard'));
@@ -56,6 +57,7 @@ export default function App() {
               <Route path="register" element={<Register />} />
               <Route path="profile" element={<Profile />} />
               <Route path="productdetail/:slug" element={<DetailProduct />} />
+              <Route path="category/:slug" element={<MenCategory />} />
               <Route path="cart" element={<Cart />} />
               <Route path="checkout" element={<Checkout />} />
               <Route path="payments" element={<Payments />} />
