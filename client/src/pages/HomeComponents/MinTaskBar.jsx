@@ -21,16 +21,17 @@ const MinTaskBar = () => {
                             <span onClick={() => setIsDropDownOpen(!isDropDownOpen)} className="cursor-pointer">SHOP BY CATEGORIES</span>
                             {isDropDownOpen && (
                                 <ul className="absolute -left-2 -top-40 z-10 rounded-md shadow-lg mt-60 w-full bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none" >
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer mt-2 text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Women's Fashion</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Fashion Jewellery</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Clearance</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/mens-fashion">Men's Fashion</Link> </li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Kid's Fashion</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Footware</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Electronics</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Furniture</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /> Cookware</li>
-                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faPlus} className="mx-2" /> More</li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer mt-2 text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/womens-fashion">Women's Fashion</Link> </li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/mens-fashion">Men's Fashion</Link></li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/kids-fashion">Kid's Fashion</Link> </li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/footware">Footware</Link> </li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/fashion-jewellery">Fashion Jewellery</Link></li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/maternity-fashion">Maternity Fashion</Link></li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/bags-and-accessories">Bags & Accessories</Link></li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/beauty-and-personal-care">Beauty & Personal Care</Link></li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/lingerie-and-sleepwear">Lingerie & Sleepwear</Link></li>
+                                    <li className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm"><FontAwesomeIcon icon={faChevronRight} className="mx-2" /><Link to="/category/activewear-sportswear">Activewear Sportswear</Link></li>
+                                    
                                 </ul>
                             )}
                         </div>

@@ -9,9 +9,9 @@ const Adds = () => {
                     <img
                         src="/top-banner-01.jpg"
                         alt='banner-bag'
-                        className="rounded w-full object-contain p-0"
+                        className="rounded w-full object-contain p-0 h-[190px]"
                     />
-                    <div className="absolute left-10 top-20 md:left-1 md:top-0.5 lg:left-1 lg:top-1 xl:left-1 xl:top-8">
+                    <div className="absolute left-10 top-20 md:left-1 md:top-0.5 lg:left-1 lg:top-1 xl:left-4 xl:top-8">
                         <h3 className="text-stone-200 text-brandLabe leading-10 tracking-wide truncate">New Sale</h3>
                         <p className="text-body text-white font-semibold truncate">Backpack</p>
                         <div className="group relative flex items-center mt-2 w-fit">
@@ -25,11 +25,11 @@ const Adds = () => {
                         </div>
                     </div>
                 </div>
-                <div className="relative w-full mt-4">
+                <div className="relative w-full mt-2">
                     <img
                         src="/top-banner-02.jpg"
                         alt='banner-bag'
-                        className="rounded w-full object-contain p-0"
+                        className="rounded w-full object-contain p-0 h-[190px]"
                     />
                     <div className="absolute left-28 top-14 md:left-3 md:top-0.5 lg:left-6 lg:top-1 xl:left-14 xl:top-8">
                         <h3 className="text-stone-200 text-brandLabe leading-10 tracking-wide truncate">New Arrivals</h3>

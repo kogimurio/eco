@@ -19,7 +19,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 
-const MenCategory = () => {
+const WomenCategory = () => {
     const [products, setProducts] = useState([]);
     const [prodctId, setProductId] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -38,12 +38,12 @@ const MenCategory = () => {
 
     // Fetch products
     useEffect(() => {
-        const fetchMenCategory = async () => {
+        const fetchWomenCategory = async () => {
             await new Promise(res => setTimeout(res, 2000));
             try {
-            const res = await axios.get(`${BASE_URL}/products?category=${slug}`)
+            const res = await axios.get(`${BASE_URL}/products?category=womens-fashion`)
             setProducts(res.data.products)
-            console.log("Men Category:",res.data.products)
+            console.log("Bag and Accessories Category:",res.data.products)
             setProductId(res.data.products.map((product) => product === product._id))
             } catch (error) {
             console.error(error?.res?.data || error.message);
@@ -52,7 +52,7 @@ const MenCategory = () => {
             }
         };
 
-        fetchMenCategory()
+        fetchWomenCategory()
     }, [])
 
     // Fetch Category
@@ -226,4 +226,4 @@ const MenCategory = () => {
     );
 };
 
-export default MenCategory;
+export default WomenCategory;
