@@ -24,6 +24,8 @@ exports.createCategory = async (req, res) => {
     }
 }
 
+
+// Fetch all categories
 exports.getCategories = async (req, res) => {
     try {
         const category = await Category.find();
@@ -31,7 +33,21 @@ exports.getCategories = async (req, res) => {
             category
         })
     } catch (error) {
-        console.error('❌ Error in Category:', err)
+        console.error('❌ Error in Category:', error)
         return res.status(500).json({ message: 'Error in Category' })
+    }
+}
+
+// Fetch category by slug
+exports.getCategory = async (req, res) => {
+    try {
+        const { slug } = req.params;
+        const category = await Category.findOne({slug});
+        return res.status(200).json({
+            category
+        })
+    } catch (error) {
+        console.error('❌ Error in Category:', error)
+        return res.status(500).json({ message: 'Internal Server Error' })
     }
 }

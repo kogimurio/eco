@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 const cloudinary = require('../config/cloudinary');
 
 //  Create a new product
@@ -64,7 +65,18 @@ exports.getAllProducts = async (req, res) => {
       filter.isClearance = true
     }
 
-    const products = await Product.find(filter);
+    if (req.query.category) {
+      const category = await Category.findOne({ slug: req.query.category });
+      if (category) {
+        filter.category = category._id;
+      } else {
+        return res.status(404).json({
+          message: 'Category not found'
+        });
+      }
+    }
+
+    const products = await Product.find(filter).populate('category');
     res.json({
       products,
       total: products.length
@@ -80,7 +92,7 @@ exports.getAllProducts = async (req, res) => {
 exports.getProduct = async (req, res) => {
   const {slug} = req.params;
   try {
-    const product = await Product.findOne({slug});
+    const product = await Product.findOne({slug}).populate('category', 'name slug');
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
