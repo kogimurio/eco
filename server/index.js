@@ -11,9 +11,12 @@ const app = express();
 // Static assets
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Middleware
+const allowedOrigin = process.env.NODE_ENV === 'production'
+  ? 'https://fashionova-frontend.vercel.app'
+  : 'http://localhost:3000';
+
 app.use(cors({
-  origin: 'http://localhost:3000',                //https://fashionova-frontend.vercel.app
+  origin: allowedOrigin,
   credentials: true
 }));
 app.use(express.json());
