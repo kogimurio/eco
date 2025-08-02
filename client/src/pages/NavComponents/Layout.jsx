@@ -82,20 +82,62 @@ const Layout = () => {
                         </div>
 
                         {/* Icons (wish, cart, account) */}
-                        <div className="flex space-x-4">
-                            <button className="text-white hover:text-red-500" title="Wish list">
-                                <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
+                        <ul className="flex space-x-4 items-center">
+                            {user && (
+                                <button 
+                                    className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list"
+                                    onClick={handleOrderList}
+                                >
+                                    <FontAwesomeIcon icon={faBoxOpen} />
+                                </button>
+                            )}
+                            <button 
+                                className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list"
+                                onClick={handleWishList}
+                            >
+                                <FontAwesomeIcon icon={faHeart} />
                             </button>
                             <button 
-                                className="text-white hover:text-blue-500" title="Cart"
+                                className="relative text-white hover:text-blue-500" 
+                                title="Cart"
                                 onClick={handleCart}
                             >
-                                <FontAwesomeIcon icon={faBagShopping} />
+                                <FontAwesomeIcon icon={faBagShopping} className="text-xl" />
+                                {totalItems > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-orange-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                                        {totalItems}
+                                    </span>
+                                )}
                             </button>
-                            <button className="text-white hover:text-blue-500" title="Account">
-                                <FontAwesomeIcon icon={faUser} />
-                            </button>
-                        </div>
+
+                            {/* Dropdown Group */}
+                        <li className="relative group cursor-pointer text-white font-bold mx-4">
+                            <div className="flex items-center px-4 py-2 rounded transition-all duration-200 group-hover:bg-gray-900">
+                                <FontAwesomeIcon icon={faUser} className="text-white text-sm ml-1" />
+                            </div>
+                            <div className="absolute top-full right-0 w-48 bg-gray-700 rounded shadow-md hidden group-hover:block z-50">
+                                <ul className="py-2">
+                                    {user ? (
+                                        <>
+                                            <li className="text-white hover:text-gray-400 px-4 py-2">
+                                                <FontAwesomeIcon icon={faGear} className="mr-2"/>
+                                                <a href="/profile">Settings</a>
+                                            </li>
+                                            <li onClick={handleLogout} className="text-white hover:text-gray-400 px-4 py-2">
+                                                <FontAwesomeIcon icon={faRightFromBracket} className="mr-2"/>
+                                                Logout
+                                            </li>
+                                        </>
+                                    ): (
+                                        <li className="text-white hover:text-gray-400 px-4 py-2">
+                                            <FontAwesomeIcon icon={faRightToBracket} className="mr-2"/>
+                                            <a href="/login">Login</a>
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        </li>
+                        </ul>
                     </div>
 
                     {/* MOBILE: Second row - Search */}

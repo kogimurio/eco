@@ -74,13 +74,13 @@ const Carousel = () => {
 
                 <button
                     onClick={prevSlide}
-                    className='absolute lg:hidden group-hover:flex left-5 top-1/2 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
+                    className='absolute lg:hidden group-hover:flex left-5 top-1/2 lg:left-2 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
                 >
                     <FontAwesomeIcon icon={faChevronLeft} className="text-white text-lg" />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className='absolute lg:hidden group-hover:flex right-2 top-1/2 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
+                    className='absolute lg:hidden group-hover:flex right-2 top-1/2 lg:right-10 -translate-y-1/2 translate-x-[-0.5rem] group-hover:translate-x-5 transition-all duration-300 ease-in-out px-4 py-2 bg-gray-700 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70'
                     
                 >
                     <FontAwesomeIcon icon={faChevronRight} className="text-white text-lg" /> 
