@@ -209,16 +209,35 @@ const Layout = () => {
                             </button>
                             <ul className="flex flex-col space-y-4 p-4">
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/decorations" onClick={() => setIsMenuOpen(false)}>Decorations</Link>
+                                    <Link to="/category/womens-fashion" onClick={() => setIsMenuOpen(false)}>Women's Fashion</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/electronics" onClick={() => setIsMenuOpen(false)}>Electronics</Link>
+                                    <Link to="/mens-fashion" onClick={() => setIsMenuOpen(false)}>Men's Fashion</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/beddings" onClick={() => setIsMenuOpen(false)}>Beddings</Link>
+                                    <Link to="/kids-fashion" onClick={() => setIsMenuOpen(false)}>Kid's Fashion</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/agriculture" onClick={() => setIsMenuOpen(false)}>Agricultural</Link>
+                                    <Link to="/footware" onClick={() => setIsMenuOpen(false)}>Footware</Link>
+                                </li>
+
+                                <li className="text-white hover:text-gray-400">
+                                    <Link to="/fashion-jewellery" onClick={() => setIsMenuOpen(false)}>Fashion Jewellery</Link>
+                                </li>
+                                <li className="text-white hover:text-gray-400">
+                                    <Link to="/maternity-fashion" onClick={() => setIsMenuOpen(false)}>Maternity Fashion</Link>
+                                </li>
+                                <li className="text-white hover:text-gray-400">
+                                    <Link to="/bags-and-accessories" onClick={() => setIsMenuOpen(false)}>Bags & Accessories</Link>
+                                </li>
+                                <li className="text-white hover:text-gray-400">
+                                    <Link to="/beauty-and-personal-care" onClick={() => setIsMenuOpen(false)}>Beauty & Personal Care</Link>
+                                </li>
+                                <li className="text-white hover:text-gray-400">
+                                    <Link to="/lingerie-and-sleepwear" onClick={() => setIsMenuOpen(false)}>Lingerie & Sleepwear</Link>
+                                </li>
+                                <li className="text-white hover:text-gray-400">
+                                    <Link to="/activewear-sportswear" onClick={() => setIsMenuOpen(false)}>Activewear Sportswear</Link>
                                 </li>
                             </ul>
                         </div>

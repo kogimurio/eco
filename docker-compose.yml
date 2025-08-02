@@ -1,21 +1,17 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
   app:
     build: ./server
     container_name: docker-node-app
     ports:
       - "5000:5000"
-    depends_on:
-      - mongodb
     environment:
-      - MONGO_URL=mongodb://mongodb:27017/mydatabase
-  
+      - USE_DB_SOURCE=atlas
+      - MONGO_URL_ATLAS=mongodb+srv://kogimurio:8ZjR1H61OG2rnQF7@clustermongodb.nxvejnh.mongodb.net/E-CommerceDataBase
+    depends_on:
+      - client
+
   client:
     build: ./client
     container_name: docker-react-app
@@ -23,4 +19,3 @@ services:
       - "3000:3000"
     stdin_open: true
     tty: true
-

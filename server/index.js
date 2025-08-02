@@ -13,7 +13,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware
 app.use(cors({
-  origin: 'https://fashionova-frontend.vercel.app',                  // http://localhost:3000
+  origin: 'http://localhost:3000',                //https://fashionova-frontend.vercel.app
   credentials: true
 }));
 app.use(express.json());

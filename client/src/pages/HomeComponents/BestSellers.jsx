@@ -197,7 +197,7 @@ const BestSellers = () => {
                                     className="w-64 h-72 rounded object-contain hover:scale-105 cursor-pointer transition-transform duration 300"
                                 />
                                 <div className="md:left-2 md:top-2">
-                                    <p className="text-white py-1 pl-2 text-price">{product.price}</p>
+                                    <p className="text-white py-1 pl-2 text-price">${product.price}</p>
                                 </div>
 
                                 {/* Plus icon - always visible */}
