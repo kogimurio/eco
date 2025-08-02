@@ -11,9 +11,9 @@ const Adds = () => {
                         alt='banner-bag'
                         className="rounded w-full object-contain p-0 h-[190px]"
                     />
-                    <div className="absolute left-10 top-20 md:left-1 md:top-0.5 lg:left-1 lg:top-1 xl:left-4 xl:top-8">
-                        <h3 className="text-stone-200 text-brandLabe leading-10 tracking-wide truncate">New Sale</h3>
-                        <p className="text-body text-white font-semibold truncate">Backpack</p>
+                    <div className="absolute left-28 top-8 md:left-1 md:top-10 lg:left-8 lg:top-4 xl:left-5 xl:top-4">
+                        <h3 className="text-stone-200 text-brandLabe leading-tight tracking-wide truncate">New Sale</h3>
+                        <p className="text-body text-white font-semibold leading-snug tracking-wide truncate">Backpack</p>
                         <div className="group relative flex items-center mt-2 w-fit">
                             <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-button rounded-xl hover:bg-orange-700 transition-all">
                                 Shop Now
@@ -31,9 +31,9 @@ const Adds = () => {
                         alt='banner-bag'
                         className="rounded w-full object-contain p-0 h-[190px]"
                     />
-                    <div className="absolute left-28 top-14 md:left-3 md:top-0.5 lg:left-6 lg:top-1 xl:left-14 xl:top-8">
-                        <h3 className="text-stone-200 text-brandLabe leading-10 tracking-wide truncate">New Arrivals</h3>
-                        <p className="text-body text-white font-semibold truncate">Styles Shoes</p>
+                    <div className="absolute left-32 top-4 md:left-3 md:top-10 lg:left-6 lg:top-1 xl:left-14 xl:top-1">
+                        <h3 className="text-stone-200 text-brandLabe leading-tight tracking-wide truncate">New Arrivals</h3>
+                        <p className="text-body text-white font-semibold leading-snug tracking-wide truncate">Styles Shoes</p>
                         <div className="group relative flex items-center mt-2 w-fit">
                             <button className="w-24 origin-left hover:w-28 bg-gray-600 text-white px-2 py-1 text-button rounded-xl hover:bg-orange-700 transition-all">
                                 Shop Now

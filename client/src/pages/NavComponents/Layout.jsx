@@ -212,32 +212,32 @@ const Layout = () => {
                                     <Link to="/category/womens-fashion" onClick={() => setIsMenuOpen(false)}>Women's Fashion</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/mens-fashion" onClick={() => setIsMenuOpen(false)}>Men's Fashion</Link>
+                                    <Link to="/category/mens-fashion" onClick={() => setIsMenuOpen(false)}>Men's Fashion</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/kids-fashion" onClick={() => setIsMenuOpen(false)}>Kid's Fashion</Link>
+                                    <Link to="/category/kids-fashion" onClick={() => setIsMenuOpen(false)}>Kid's Fashion</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/footware" onClick={() => setIsMenuOpen(false)}>Footware</Link>
+                                    <Link to="/category/footware" onClick={() => setIsMenuOpen(false)}>Footware</Link>
                                 </li>
 
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/fashion-jewellery" onClick={() => setIsMenuOpen(false)}>Fashion Jewellery</Link>
+                                    <Link to="/category/fashion-jewellery" onClick={() => setIsMenuOpen(false)}>Fashion Jewellery</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/maternity-fashion" onClick={() => setIsMenuOpen(false)}>Maternity Fashion</Link>
+                                    <Link to="/category/maternity-fashion" onClick={() => setIsMenuOpen(false)}>Maternity Fashion</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/bags-and-accessories" onClick={() => setIsMenuOpen(false)}>Bags & Accessories</Link>
+                                    <Link to="/category/bags-and-accessories" onClick={() => setIsMenuOpen(false)}>Bags & Accessories</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/beauty-and-personal-care" onClick={() => setIsMenuOpen(false)}>Beauty & Personal Care</Link>
+                                    <Link to="/category/beauty-and-personal-care" onClick={() => setIsMenuOpen(false)}>Beauty & Personal Care</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/lingerie-and-sleepwear" onClick={() => setIsMenuOpen(false)}>Lingerie & Sleepwear</Link>
+                                    <Link to="/category/lingerie-and-sleepwear" onClick={() => setIsMenuOpen(false)}>Lingerie & Sleepwear</Link>
                                 </li>
                                 <li className="text-white hover:text-gray-400">
-                                    <Link to="/activewear-sportswear" onClick={() => setIsMenuOpen(false)}>Activewear Sportswear</Link>
+                                    <Link to="/category/activewear-sportswear" onClick={() => setIsMenuOpen(false)}>Activewear Sportswear</Link>
                                 </li>
                             </ul>
                         </div>
