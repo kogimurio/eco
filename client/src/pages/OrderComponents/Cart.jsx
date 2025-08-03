@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faBagShopping, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { FaEye } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 
@@ -230,7 +230,7 @@ export default function Cart() {
                           <button 
                             onClick={() => handleAddToCart(item._id)}
                             className="text-sm bg-orange-600 hover:bg-orange-700 text-white px-8 py-2 rounded flex items-center gap-2">
-                            <FontAwesomeIcon icon={faBagShopping} />
+                            <FontAwesomeIcon icon={faShoppingCart} />
                           </button>
                         </div>
                       </div>

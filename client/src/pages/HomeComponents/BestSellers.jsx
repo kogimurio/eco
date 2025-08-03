@@ -7,6 +7,7 @@ import Pagination from "./Pagination";
 import { faStar as solidStar, faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
+import useResponsiveTextLength from "../../hooks/useResponsiveTextLength";
 
 import LoadingSpinner from '../LoadingSpinner';
 import axios from 'axios';
@@ -19,12 +20,13 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 
-const BestSellers = () => {
+const BestSellers = ({ product }) => {
     const [products, setProducts] = useState([]);
     const [prodctId, setProductId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [wishlistProducts, setWishlistProducts] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    const maxChars = useResponsiveTextLength();
     const { addToCart } = useCart();
     const navigate = useNavigate();
     const localToken = localStorage.getItem('token');
@@ -38,6 +40,10 @@ const BestSellers = () => {
     const currentFeaturedProducts = products.slice(indexOfFirst, indexOfLast);
 
     const totalPages = Math.ceil(products.length / itemsPerPage);
+
+    const truncate = (text) => {
+        return text.length > maxChars ? text.slice(0, maxChars) + "…" : text
+    }
 
     // Fetch products
     useEffect(() => {
@@ -56,6 +62,8 @@ const BestSellers = () => {
 
         fetchProduct()
     }, [])
+
+    
 
     const handlePageChange = (pageNum) => setCurrentPage(pageNum);
 
@@ -123,35 +131,6 @@ const BestSellers = () => {
         toast.success('Product added to cart');
     };
 
-    // const handleAddToCart = async (productId) => {
-    //     try {
-    //             const quantity = 1;
-                
-    //         await axios.post(`${BASE_URL}/cart`, 
-    //             {
-    //                 productId,
-    //                 quantity
-    //             },
-    //             {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`
-    //                 }
-    //             })
-    //         toast.success('Product added to cart')
-
-    //         // Re-fetch cart
-    //         const res = await axios.get(`${BASE_URL}/cart`, {
-    //           headers: {
-    //             Authorization: `Bearer ${token}`
-    //           }
-    //         });
-    //         setCartItems(res.data.cart.items);
-    //     } catch (error) {
-    //         console.error("Add to Cart Error:", error.response?.data?.message || error.message);
-    //         toast.error("Error adding product")
-    //     }
-    // }
-
     return (
         <div className="bg-gray-800 mt-8 py-4 overflow-x-hidden">
             <div className="flex justify-between items-center w-[90%] mx-auto my-4">
@@ -171,7 +150,9 @@ const BestSellers = () => {
             </div>
             
             {loading ? (
-                <LoadingSpinner size="40" />
+                <div className="flex justify-center">
+                    <LoadingSpinner size="40" />
+                </div>
             ) : (
                 <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
                     {currentFeaturedProducts.map((product, index) => (
@@ -181,7 +162,9 @@ const BestSellers = () => {
                             >
                                 <div className="md:left-2 md:top-2 pl-2">
                                     <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
-                                    <p className="text-body text-white py-1">{product.name}</p>
+                                    <p className="text-body text-white py-1">
+                                        {truncate(product.name)}
+                                    </p>
                                 </div>
                                 <div className="flex text-yellow-400 pl-2 pb-2">
                                     <FontAwesomeIcon icon={solidStar} />
