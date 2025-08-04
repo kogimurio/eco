@@ -3,12 +3,16 @@ import { FaTrash, FaEye } from 'react-icons/fa';
 import axios from 'axios';
 import LoadingSpinner from '../LoadingSpinner';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+
+import { useCart } from '../../context/CartContext';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 export default function WishList() {
+  const { addToCart } = useCart();
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const localToken = localStorage.getItem('token');
   const token = JSON.parse(localToken);
@@ -50,6 +54,11 @@ export default function WishList() {
     }
   };
 
+  const handleAddToCart = async (prodctId) => {
+        await addToCart(prodctId, 1);
+        toast.success('Product added to cart');
+    };
+
   if (loading) {
     return <LoadingSpinner />
   }
@@ -87,6 +96,11 @@ export default function WishList() {
                       className="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded flex items-center gap-2"
                     >
                       <FaTrash /> Remove
+                    </button>
+                    <button 
+                      onClick={() => handleAddToCart(item._id)}
+                      className="text-sm bg-orange-600 hover:bg-orange-700 text-white px-8 py-2 rounded flex items-center gap-2">
+                      <FontAwesomeIcon icon={faShoppingCart} />
                     </button>
                   </div>
                 </div>

@@ -35,8 +35,11 @@ export const CartProvider = ({ children }) => {
                 productId,
                 quantity
             }, {
-                withCredentials: true
-            });
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
             // Update cart after adding
             await fetchCart();
         } catch (error) {
