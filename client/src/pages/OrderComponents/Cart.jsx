@@ -99,7 +99,13 @@ export default function Cart() {
   const productDetail = (slug) => {
       navigate(`/productdetail/${slug}`);
   }
-  if (loadingItem) return <LoadingSpinner />
+  if (loadingItem) {
+    return (
+      <div className="flex justify-center">
+        <LoadingSpinner />
+      </div>
+    )
+  } 
 
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6">

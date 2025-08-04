@@ -43,9 +43,11 @@ export default function Login() {
         const role = decode.role
 
         if (role === 'admin') {
-          window.location.href='/dashboard';
+          navigate('/dashboard');
+          // window.location.href='/dashboard';
         } else {
-          window.location.href='/';
+          // window.location.href='/';
+          navigate('/');
         }
       }
       
