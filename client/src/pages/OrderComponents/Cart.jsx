@@ -12,8 +12,7 @@ import { useCart } from '../../context/CartContext';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
-const localToken = localStorage.getItem('token');
-const token = JSON.parse(localToken);
+const token = JSON.parse(localStorage.getItem('token'));
 
 export default function Cart() {
   const { addToCart, cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();

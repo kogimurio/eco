@@ -68,14 +68,14 @@ exports.LoginUser = async (req, res) => {
         );
 
         // set token as HTTP-only cookie
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // true if using HTTPS
-            sameSite: 'Strict',
-            maxAge: 60 * 60 * 1000 // 1 hour
-        })
+        // res.cookie('token', token, {
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === 'production', // true if using HTTPS
+        //     sameSite: 'Strict',
+        //     maxAge: 60 * 60 * 1000 // 1 hour
+        // })
 
-        .json({
+        res.json({
             message: 'Login successful',
             token,
             user: {

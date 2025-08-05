@@ -83,7 +83,7 @@ export default function Mpesa ({ closeModal }) {
                         closeModal();
                         
                         setTimeout(() => {
-                            window.location.href='/order_confirmation';
+                            window.location.href='/order_confirmation, { state: { orderId: createdOrder._id } }';
                         }, 600);
                     } else if (statusRes.data.status === 'failed') {
                         clearInterval(interval);

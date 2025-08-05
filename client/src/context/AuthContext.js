@@ -1,0 +1,2 @@
+// ✅ 3. [Optional] Use a global AuthContext or token state
+// Instead of fetching the token from localStorage everywhere, store it in a React Context on login and make your addToCart() and similar methods consume it directly.

@@ -192,14 +192,14 @@ const BestSellers = ({ product }) => {
                                     <span 
                                         onClick={() => handleAddToCart(product._id)}
                                         className="text-white font-bold text-button ml-2 whitespace-nowrap 
-             opacity-100 lg:opacity-0 lg:group-hover/icon:opacity-100 
-             transition-opacity duration-500">
+                                        opacity-100 lg:opacity-0 lg:group-hover/icon:opacity-100 
+                                        transition-opacity duration-500">
                                         Add to Cart
                                     </span>
                                 </div>
 
                                 {/* Icons and animated line divider */}
-                                <div className="absolute bottom-14 right-2 hidden group-hover:flex flex-col items-center gap-2 animate-slide-down">
+                                <div className="absolute bottom-14 right-2 flex flex-col items-center gap-2 animate-slide-down lg:group-hover:flex">
                                     <button
                                         onClick={(e) =>{
                                             e.stopPropagation();
@@ -212,7 +212,7 @@ const BestSellers = ({ product }) => {
                                     </button>
 
                                     {/* Line divider with animation */}
-                                    <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 group-hover:scale-x-100"></div>
+                                    <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 lg:group-hover:scale-x-100"></div>
 
                                     <button
                                         onClick={(e) =>{

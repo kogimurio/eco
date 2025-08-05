@@ -3,13 +3,12 @@ import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const CartContext = createContext();
-
+const token = JSON.parse(localStorage.getItem('token'));
+console.log("Token from localStorage:", token);
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [loadingCart, setLoadingCart] = useState(true);
 
-    const localToken = localStorage.getItem('token');
-    const token = localToken ? JSON.parse(localToken) : null;
 
     const fetchCart =async () => {
         if (!token) return;

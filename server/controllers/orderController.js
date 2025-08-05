@@ -56,7 +56,7 @@ exports.createOrder = async (req, res) => {
     };
 }
 
-// Get user order per user
+// Get order per user
 exports.getOrder =async (req, res) => {
     try {
             const userId = req.user.userId;
@@ -149,6 +149,37 @@ exports.getOrderItems =async (req, res) => {
 
     } catch (error) {
         console.log('Error fetching order items:', error)
+        res.status(500).json({
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+// Get just paid order
+exports.getPaidOrder =async (req, res) => {
+    try {
+            const userId = req.user.userId;
+            const { id } = req.params;
+
+            const orders = await Order.find({ user: userId, id: id })
+            .createdAt(-1)
+            .populate('items.product');
+
+            if (!orders) {
+                return res.status(200).json({
+                    success: true,
+                    orders: null
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                orders
+            })
+
+    } catch (error) {
+        console.log('Error fetching paid order:', error)
         res.status(500).json({
             success: false,
             error: error.message
