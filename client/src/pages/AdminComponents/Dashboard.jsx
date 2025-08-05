@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   faTachometerAlt,
   faUsers,
@@ -59,26 +59,47 @@ const Dashboard = () => {
   }
   const SidebarLinks = () => (
     <>
-      <div onClick={handleDashboard} className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
+      <div 
+        onClick={() => setIsMenuOpen(false)}
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faTachometerAlt} /> 
+        <Link to="/dashboard">Dashboard</Link> 
       </div>
-      <div onClick={handleOrders} className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faClipboardList} /> Orders
+      <div 
+        onClick={() => setIsMenuOpen(false)}
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faClipboardList} />
+        <Link to="/dashboard/order">Orders</Link> 
       </div>
-      <div onClick={handleProducts} className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faBoxOpen} /> Products
+      <div 
+        onClick={() => setIsMenuOpen(false)}
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faBoxOpen} /> 
+        <Link to="/dashboard/products">Products</Link>
       </div>
-      <div onClick={handleTransactions} className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faArrowsRotate} /> Transactions
+      <div 
+        onClick={() => setIsMenuOpen(false)} 
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faArrowsRotate} /> 
+        <Link to="/dashboard/transactions">Transactions</Link>
       </div>
-      <div onClick={handleUsers} className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faUsers} /> Users
+      <div 
+        onClick={() => setIsMenuOpen(false)}
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faUsers} /> 
+        <Link to="/dashboard/users">Users</Link>
       </div>
-      <div onClick={handleAnalytics} className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faChartLine} /> Analytics
+      <div 
+        onClick={() => setIsMenuOpen(false)}
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faChartLine} /> 
+        <Link to="/dashboard/analytics">Analytics</Link>
       </div>
-      <div onClick={handleSettings} className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faGear} /> Settings
+      <div 
+        onClick={() => setIsMenuOpen(false)} 
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faGear} /> 
+        <Link to="/dashboard/settings">Settings</Link>
       </div>
     </>
   );
@@ -98,7 +119,7 @@ const Dashboard = () => {
           {/* Hamburger for mobile */}
           <button 
             onClick={handleToggle}
-            className="lg:hidden text-white text-2xl"
+            className="lg:hidden text-white text-3xl"
           >
             &#9776;
           </button>
@@ -134,7 +155,7 @@ const Dashboard = () => {
             >
               &times;
             </button>
-              <SidebarLinks />
+              <SidebarLinks  />
           </div>
         )}
 
