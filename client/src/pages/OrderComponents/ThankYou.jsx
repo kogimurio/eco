@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const localToken = localStorage.getItem('token');
@@ -10,10 +9,7 @@ export default function OrderConfirmation() {
   const [address, setAddress] = useState(null);
   const [order, setOrder] = useState(null);
   const user = JSON.parse(localStorage.getItem('user'));
-  const { state } = useLocation();
-  const orderId = state?.orderId;
 
-  console.log("Paid order Id:", orderId);
   useEffect(() => {
     const fetchAddress = async () => {
       if (!token) return;
@@ -41,10 +37,10 @@ export default function OrderConfirmation() {
 
   useEffect(() => {
     const fetchOrder = async () => {
-      if (!token || !orderId) return;
+      if (!token) return;
 
       try {
-        const res = await axios.get(`${BASE_URL}/orders/${orderId}`, {
+        const res = await axios.get(`${BASE_URL}/orders`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -52,17 +48,17 @@ export default function OrderConfirmation() {
 
         if (res.data?.success) {
           setOrder(res.data.order);
-          console.log("✅ Paid fetched Order:", res.data.order);
+          console.log("✅ Order fetched:", res.data.order);
         } else {
-          console.warn("⚠️ Paid Order fetch failed:", res.data.message);
+          console.warn("⚠️ Order fetch failed:", res.data.message);
         }
       } catch (error) {
-        console.error("❌ Failed to fetch paid Order:", error.response?.data?.message || error.message);
+        console.error("❌ Failed to fetch Order:", error.response?.data?.message || error.message);
       }
     };
 
     fetchOrder();
-  }, [orderId]);
+  }, []);
 
   return (
     <div className="min-h-[80vh] bg-gray-900 text-white flex flex-col items-center justify-center p-8">
@@ -89,7 +85,7 @@ export default function OrderConfirmation() {
             Back to Home
           </a>
           <a
-            href={`/client_order_view/${order._id}`}
+            href="/client_order_view/:id"
             className="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded text-white font-medium transition"
           >
             View My Orders

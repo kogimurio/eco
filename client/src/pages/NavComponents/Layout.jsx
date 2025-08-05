@@ -47,7 +47,7 @@ const Layout = () => {
 
     const handleLogout = () => {
         localStorage.clear()
-        toast.success('Logout successful!');
+        toast.success('Logout successful!');  // Would you like help adding automatic token expiration handling (like auto logout or redirect to login)?
         window.location.href="/"
     }
 
@@ -85,7 +85,7 @@ const Layout = () => {
                         <ul className="flex space-x-4 items-center">
                             {user && (
                                 <button 
-                                    className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list"
+                                    className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Orders"
                                     onClick={handleOrderList}
                                 >
                                     <FontAwesomeIcon icon={faBoxOpen} />
@@ -181,7 +181,7 @@ const Layout = () => {
                         <ul className="flex space-x-4 items-center">
                             {user && (
                                 <button 
-                                    className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Wish list"
+                                    className="text-white hover:text-red-500 transition-transform duration-300 hover:scale-x-[-1]" title="Orders"
                                     onClick={handleOrderList}
                                 >
                                     <FontAwesomeIcon icon={faBoxOpen} />

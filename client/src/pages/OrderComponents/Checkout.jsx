@@ -73,7 +73,7 @@ export default function Checkout() {
             country: res.data.address.country || '',
           }));
         } catch (error) {
-          console.error("Failed to fetch address:", error.res.data.message || error.message);
+          console.error("Something went wrong:", error.response?.data?.message || error.message || error.toString());
         }
       }
       fetchAddress();
@@ -207,7 +207,7 @@ export default function Checkout() {
               />
               <input
                 type="text"
-                name="postalcode"
+                name="postalCode"
                 value={formData.postalCode}
                 onChange={handleChange}
                 placeholder="Postal Code"
