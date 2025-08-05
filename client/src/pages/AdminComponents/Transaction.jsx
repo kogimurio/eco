@@ -24,7 +24,7 @@ export default function Transactions() {
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="mb-6 flex justify-between items-center">
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2">
         <h2 className="text-2xl font-semibold text-white">Transactions</h2>
         <input
           type="text"

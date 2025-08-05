@@ -6,12 +6,13 @@ export default function Settings() {
       {/* Profile Settings */}
       <section className="bg-gray-800 p-6 rounded-lg shadow-md space-y-4">
         <h3 className="text-lg font-semibold">Admin Profile</h3>
-        <div className="grid gap-4 md:grid-cols-2">
-          <input type="text" placeholder="Name" className="p-2 rounded bg-gray-700 text-white" />
-          <input type="email" placeholder="Email" className="p-2 rounded bg-gray-700 text-white" />
-          <input type="password" placeholder="New Password" className="p-2 rounded bg-gray-700 text-white" />
-          <input type="file" className="p-2 bg-gray-700 rounded text-white" />
+        <div className="grid gap-4 md:grid-cols-2 px-4">
+          <input type="text" placeholder="Name" className="p-2 rounded bg-gray-700 text-white w-full" />
+          <input type="email" placeholder="Email" className="p-2 rounded bg-gray-700 text-white w-full" />
+          <input type="password" placeholder="New Password" className="p-2 rounded bg-gray-700 text-white w-full" />
+          <input type="file" className="p-2 bg-gray-700 rounded text-white w-full" />
         </div>
+
         <button className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded mt-2">Update Profile</button>
       </section>
 

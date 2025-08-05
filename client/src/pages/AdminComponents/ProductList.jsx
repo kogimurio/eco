@@ -77,7 +77,7 @@ export default function ProductList() {
           </button>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input
             type="text"
             value={search}

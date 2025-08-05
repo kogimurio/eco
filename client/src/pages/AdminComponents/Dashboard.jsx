@@ -22,33 +22,6 @@ const Dashboard = () => {
     setIsMenuOpen(prev => !prev);
   }
 
-  const handleDashboard = () => {
-    navigate("/dashboard");
-  };
-
-  const handleOrders = () => {
-    navigate("/dashboard/order");
-  };
-
-  const handleProducts = () => {
-    navigate("/dashboard/products");
-  };
-
-  const handleUsers = () => {
-    navigate("/dashboard/users");
-  };
-
-  const handleSettings = () => {
-    navigate("/dashboard/settings");
-  };
-
-  const handleAnalytics = () => {
-    navigate("/dashboard/analytics");
-  };
-
-  const handleTransactions = () => {
-    navigate("/dashboard/transactions");
-  };
 
   const handleLogout = () => {
       localStorage.clear()
@@ -127,7 +100,7 @@ const Dashboard = () => {
           {/* Logout button - always visible */}
           <button 
             onClick={handleLogout}
-            className="hidden sm:flex items-center gap-2 text-red-400 hover:text-red-600 transition"
+            className="hidden lg:flex items-center gap-2 text-red-400 hover:text-red-600 transition"
           >
             <FontAwesomeIcon icon={faRightFromBracket} />
             Logout
@@ -156,6 +129,13 @@ const Dashboard = () => {
               &times;
             </button>
               <SidebarLinks  />
+              <button 
+                onClick={handleLogout}
+                className="hidden sm:flex items-center gap-2 text-red-400 hover:text-red-600 transition"
+              >
+                <FontAwesomeIcon icon={faRightFromBracket} />
+                Logout
+              </button>
           </div>
         )}
 
