@@ -248,7 +248,7 @@ const Overview = () => {
 
 
         {/* Transaction Card */}
-        <div className="bg-gray-700 rounded-xl p-6 shadow-md">
+        <div className="grid grid-cols-1 place-items-center bg-gray-700 rounded-xl p-6 shadow-md">
           <div className="flex justify-between items-center mb-4">
             <h6 className="text-white font-semibold text-base">Recent Transactions</h6>
             <div className="flex items-center gap-1">
