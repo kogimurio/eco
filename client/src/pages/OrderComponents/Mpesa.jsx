@@ -76,15 +76,18 @@ export default function Mpesa ({ closeModal }) {
                     if (statusRes.data.status === 'success') {
                         clearInterval(interval);
                         toast.success("Payment successful! Redirecting.....");
-                        await axios.post(`${BASE_URL}/orders`, {}, {
+                        const orderRes = await axios.post(`${BASE_URL}/orders`, {}, {
                                 headers: {
                                     Authorization: `Bearer ${token}`
                                 }
                             });
+                            const orderId = orderRes.data.order._id;
+                            console.log("Just paid order response:", orderRes);
+                            console.log("Just paid order ID:", orderId);
                         closeModal();
                         
                         setTimeout(() => {
-                            window.location.href='/order_confirmation';
+                            window.location.href=`/order_confirmation?orderId=${orderId}`;
                         }, 600);
                     } else if (statusRes.data.status === 'failed') {
                         clearInterval(interval);

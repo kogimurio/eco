@@ -76,7 +76,6 @@ export default function ClientOrderView() {
     }
   };
   
-  const printInvoice = () => {}
 
 
   return (

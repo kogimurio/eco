@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const localToken = localStorage.getItem('token');
 const token = JSON.parse(localToken);
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search)
+}
+
 export default function OrderConfirmation() {
   const [address, setAddress] = useState(null);
   const [order, setOrder] = useState(null);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const query = useQuery();
+  const orderId = query.get('orderId');
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -37,10 +43,10 @@ export default function OrderConfirmation() {
 
   useEffect(() => {
     const fetchOrder = async () => {
-      if (!token) return;
+      if (!token || !orderId) return;
 
       try {
-        const res = await axios.get(`${BASE_URL}/orders`, {
+        const res = await axios.get(`${BASE_URL}/orders/paid/${orderId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -58,7 +64,9 @@ export default function OrderConfirmation() {
     };
 
     fetchOrder();
-  }, []);
+  }, [orderId]);
+
+
 
   return (
     <div className="min-h-[80vh] bg-gray-900 text-white flex flex-col items-center justify-center p-8">
@@ -85,10 +93,10 @@ export default function OrderConfirmation() {
             Back to Home
           </a>
           <a
-            href="/client_order_view/:id"
+            href={`/client_order_view/${order?._id}`}
             className="bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded text-white font-medium transition"
           >
-            View My Orders
+            View My Order
           </a>
         </div>
       </div>
