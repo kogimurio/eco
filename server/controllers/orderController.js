@@ -159,30 +159,26 @@ exports.getOrderItems =async (req, res) => {
 // Get just paid order
 exports.getPaidOrder =async (req, res) => {
     try {
-            const userId = req.user.userId;
-            const { id } = req.params;
 
-            const orders = await Order.find({ user: userId, id: id })
-            .createdAt(-1)
-            .populate('items.product');
+            const order = await Order.findById(req.params.id).populate('user');
 
-            if (!orders) {
-                return res.status(200).json({
-                    success: true,
-                    orders: null
+            if (!order) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Order not found"
                 });
             }
 
             res.status(200).json({
                 success: true,
-                orders
+                order
             })
 
     } catch (error) {
         console.log('Error fetching paid order:', error)
         res.status(500).json({
             success: false,
-            error: error.message
+            message: error.message
         })
     }
 }
