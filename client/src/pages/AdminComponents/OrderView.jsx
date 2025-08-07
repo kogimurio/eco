@@ -78,79 +78,79 @@ export default function ViewOrder() {
   };
   
   const printInvoice = () => {
-  const printWindow = window.open('', '_blank', 'width=900,height=650');
+    const printWindow = window.open('', '_blank', 'width=900,height=650');
 
-  if (!printWindow) {
-    alert("Popup blocked! Please allow popups for this site.");
-    return;
-  }
+    if (!printWindow) { 
+      alert("Popup blocked! Please allow popups for this site.");
+      return;
+    }
 
-  const itemRows = orderItems.map(item => `
-    <tr>
-      <td>${item.product?.name}</td>
-      <td>${item.quantity}</td>
-      <td>$${(item.price * item.quantity).toFixed(2)}</td>
-    </tr>
-  `).join('');
+    const itemRows = orderItems.map(item => `
+      <tr>
+        <td>${item.product?.name}</td>
+        <td>${item.quantity}</td>
+        <td>$${(item.price * item.quantity).toFixed(2)}</td>
+      </tr>
+    `).join('');
 
-  const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Invoice - ${order?._id}</title>
-        <style>
-          body { font-family: sans-serif; padding: 20px; }
-          h2 { margin-bottom: 10px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-          th { background-color: #f4f4f4; }
-        </style>
-      </head>
-      <body>
-        <h2>Invoice</h2>
-        <p><strong>Order ID:</strong> ${order?._id}</p>
-        <p><strong>Date:</strong> ${createdAt}</p>
-        <p><strong>Status:</strong> ${order?.status}</p>
-        <p><strong>Total:</strong> $${total?.toFixed(2)}</p>
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Invoice - ${order?._id}</title>
+          <style>
+            body { font-family: sans-serif; padding: 20px; }
+            h2 { margin-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f4f4f4; }
+          </style>
+        </head>
+        <body>
+          <h2>Invoice</h2>
+          <p><strong>Order ID:</strong> ${order?._id}</p>
+          <p><strong>Date:</strong> ${createdAt}</p>
+          <p><strong>Status:</strong> ${order?.status}</p>
+          <p><strong>Total:</strong> $${total?.toFixed(2)}</p>
 
-        <h3>Customer Information</h3>
-        <p><strong>Name:</strong> ${order?.user?.firstName} ${order?.user?.lastName}</p>
-        <p><strong>Email:</strong> ${order?.user?.email}</p>
-        <p><strong>Phone:</strong> ${address?.phone}</p>
-        <p><strong>Address:</strong> ${address?.postalCode}, ${address?.addressLine}, ${address?.city}, ${address?.country}</p>
+          <h3>Customer Information</h3>
+          <p><strong>Name:</strong> ${order?.user?.firstName} ${order?.user?.lastName}</p>
+          <p><strong>Email:</strong> ${order?.user?.email}</p>
+          <p><strong>Phone:</strong> ${address?.phone}</p>
+          <p><strong>Address:</strong> ${address?.postalCode}, ${address?.addressLine}, ${address?.city}, ${address?.country}</p>
 
-        <h3>Items</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Qty</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${itemRows}
-          </tbody>
-        </table>
-      </body>
-    </html>
-  `;
+          <h3>Items</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemRows}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `;
 
-  printWindow.document.open();
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
+    printWindow.document.open();
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
 
-  // Wait for content to load, then print
-  printWindow.onload = function () {
-    printWindow.focus();
-    printWindow.print();
+    // Wait for content to load, then print
+    printWindow.onload = function () {
+      printWindow.focus();
+      printWindow.print();
 
-    // Optional: Close after delay to avoid race conditions
-    setTimeout(() => {
-      printWindow.close();
-    }, 1000);
+      // Optional: Close after delay to avoid race conditions
+      setTimeout(() => {
+        printWindow.close();
+      }, 1000);
+    };
   };
-};
 
 
 
