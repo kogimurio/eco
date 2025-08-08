@@ -249,9 +249,11 @@ const Overview = () => {
 
         {/* Transaction Card */}
         <div className="grid grid-cols-1 place-items-center bg-gray-700 rounded-xl p-6 shadow-md">
-          <div className="flex justify-between items-center mb-4">
-            <h6 className="text-white font-semibold text-base">Recent Transactions</h6>
-            <div className="flex items-center gap-1">
+          <div className="w-full grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <h6 className="text-white font-semibold text-base">Recent Trans</h6>
+            </div>
+            <div className="flex justify-end items-center gap-1">
               <span 
                 onClick={handleTransactions}
                 className="text-xs text-blue-400 hover:underline cursor-pointer flex items-center">
@@ -261,7 +263,6 @@ const Overview = () => {
                     className="ml-1 w-3 h-3 text-white bg-orange-600 rounded-full p-1"
                   />
               </span>
-              
             </div>
           </div>
           <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden">
@@ -287,7 +288,6 @@ const Overview = () => {
               ))}
             </tbody>
           </table>
-          
         </div>
       </div>
     </div>

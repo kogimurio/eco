@@ -288,7 +288,7 @@ const Layout = () => {
                 <MinTaskBar />
             </nav>
 
-            <div className="pt-[160px]">
+            <div className="pt-[130px]">
                 <Outlet />
             </div>
             <Footer />
