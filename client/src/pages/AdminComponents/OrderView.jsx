@@ -107,6 +107,7 @@ export default function ViewOrder() {
           </style>
         </head>
         <body>
+        <img src="https://fashionova-frontend.vercel.app/fashionova-preview.png" alt="Fashionova Logo" style="width: 120px; margin-bottom: 20px;"/>
           <h2>Invoice</h2>
           <p><strong>Order ID:</strong> ${order?._id}</p>
           <p><strong>Date:</strong> ${createdAt}</p>
@@ -132,6 +133,10 @@ export default function ViewOrder() {
               ${itemRows}
             </tbody>
           </table>
+          <footer style="margin-top: 40px; text-align: center; color: #888; font-size: 0.9em;">
+            Thank you for shopping with Fashionova!
+            Need help? Contact us at <a href="mailto:support@fashionova.com">support@fashionova.com</a>
+          </footer>
         </body>
       </html>
     `;
