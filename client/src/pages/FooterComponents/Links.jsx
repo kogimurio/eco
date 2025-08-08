@@ -42,11 +42,11 @@ export default function Links() {
                             Lumumba Drive <br />
                         </p>
                         <p className="text-stone-400 text-sm mb-1">
-                            info@afriwebpro.dev
+                            fashionova.com
                         </p>
                         <p className="text-stone-400 text-sm mb-1">
                             +254 712 345 678 <br />
-                            +254 712 345 678
+                            +254 712 345 876
                         </p>
                     </div>
                 </div>
