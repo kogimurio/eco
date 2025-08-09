@@ -1,7 +1,12 @@
 const Order = require('../models/Order');
+const User = require('../models/User');
 const OrderItem = require('../models/OrderItem');
 const Cart = require('../models/Cart');
 const Address = require('../models/Address');
+const transporter = require('../utils/mailer');
+const ejs = require('ejs');
+const path = require('path');
+const pdf = require('html-pdf');
 
 exports.createOrder = async (req, res) => {
     const userId = req.user.userId;
@@ -28,6 +33,37 @@ exports.createOrder = async (req, res) => {
         });
 
         await order.save();
+
+        const user = await User.findById(userId);
+
+        const invoiceHTML = await ejs.renderFile(
+            path.join(__dirname, '../templates/invoice.ejs'),
+            {
+                user,
+                order,
+                items: cart.items
+            }
+        );
+
+        pdf.create(invoiceHTML).toBuffer(async (err, buffer) => {
+            if (err) {
+                console.log("PDF generation error:", err);
+                return;
+            }
+
+            await transporter.sendMail({
+                from: process.env.EMAIL_USER,
+                to: user.email,
+                subject: 'Your Order Invoice - Fashionova',
+                text: 'Thanks for your purchase! Please find your invoice attached.',
+                attachments: [
+                    {
+                        filename: `invoice-${order._id}.pdf`,
+                        content: buffer
+                    }
+                ]
+            });
+        });
 
         // Create individual order items
         for (const item of cart.items) {
