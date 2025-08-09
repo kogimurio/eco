@@ -107,7 +107,11 @@ export default function ViewOrder() {
           </style>
         </head>
         <body>
-        <img src="https://fashionova-frontend.vercel.app/fashionova-preview.png" alt="Fashionova Logo" style="width: 120px; margin-bottom: 20px;"/>
+        <img 
+          src="https://fashionova-frontend.vercel.app/fashionova-preview.png" 
+          alt="Fashionova Logo" 
+          style="width: 120px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto;"
+        />
           <h2>Invoice</h2>
           <p><strong>Order ID:</strong> ${order?._id}</p>
           <p><strong>Date:</strong> ${createdAt}</p>
@@ -180,10 +184,10 @@ export default function ViewOrder() {
       <section className="bg-gray-800 p-6 rounded-lg shadow-md mb-6">
         <h3 className="text-lg font-semibold mb-4">Customer Information</h3>
         <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-300">
-          <p><span className="font-medium text-white">Name:</span> {order.user.firstName}</p>
-          <p><span className="font-medium text-white">Email:</span> {order.user.email}</p>
-          <p><span className="font-medium text-white">Phone:</span> {address.phone}</p>
-          <p><span className="font-medium text-white">Address:</span> {address.postalCode}, {address.addressLine} {address.city}, {address.country}</p>
+          <p><span className="font-medium text-white">Name:</span> {order?.user?.firstName}</p>
+          <p><span className="font-medium text-white">Email:</span> {order?.user?.email}</p>
+          <p><span className="font-medium text-white">Phone:</span> {address?.phone}</p>
+          <p><span className="font-medium text-white">Address:</span> {address?.postalCode}, {address?.addressLine} {address?.city}, {address?.country}</p>
         </div>
       </section>
 

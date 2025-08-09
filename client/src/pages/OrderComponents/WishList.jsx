@@ -60,7 +60,11 @@ export default function WishList() {
     };
 
   if (loading) {
-    return <LoadingSpinner />
+    return (
+      <div className="flex justify-center">
+        <LoadingSpinner />
+      </div>
+    )
   }
 
   return (
