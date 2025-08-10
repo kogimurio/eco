@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Offer = () => {
     const slides = [
-        { image: "/offer-img-01.jpg", title: "SONY PS5", offer: "Up to 30%" },
-        { image: "/offer-img-02.jpg", title: "SAMSUNG GALAXY S24", offer: "Up to 30%" },
-        { image: "/offer-img-03.jpg", title: 'LG TV 32"', offer: "Up to 30%" },
-        { image: "/offer-img-04.jpg", title: 'LG TV 50"', offer: "Up to 40%" },
-        { image: "/offer-img-05.jpg", title: 'LG TV 65"', offer: "Up to 45%" },
+        { image: "/offer-img-01.jpg", title: "Baseball Cap", offer: "Up to 30%" },
+        { image: "/offer-img-02.jpg", title: "Ladies Shirt Casual Long Sleeve", offer: "Up to 30%" },
+        { image: "/offer-img-03.jpg", title: 'Tote Bags"', offer: "Up to 30%" },
+        { image: "/offer-img-04.jpg", title: 'Ladies Shirt Casual Short Sleeve"', offer: "Up to 40%" },
+        { image: "/offer-img-05.jpg", title: 'Elegant Ladies Quartz Watch"', offer: "Up to 45%" },
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);
