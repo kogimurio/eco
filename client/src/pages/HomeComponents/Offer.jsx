@@ -6,9 +6,9 @@ const Offer = () => {
     const slides = [
         { image: "/offer-img-01.jpg", title: "Baseball Cap", offer: "Up to 30%" },
         { image: "/offer-img-02.jpg", title: "Long Sleeve", offer: "Up to 30%" },
-        { image: "/offer-img-03.jpg", title: 'Tote Bags"', offer: "Up to 30%" },
-        { image: "/offer-img-04.jpg", title: 'Ladies Shirt"', offer: "Up to 40%" },
-        { image: "/offer-img-05.jpg", title: 'Ladies Watch"', offer: "Up to 45%" },
+        { image: "/offer-img-03.jpg", title: 'Tote Bags', offer: "Up to 30%" },
+        { image: "/offer-img-04.jpg", title: 'Ladies Shirt', offer: "Up to 40%" },
+        { image: "/offer-img-05.jpg", title: 'Ladies Watch', offer: "Up to 45%" },
     ];
 
     const [currentIndex, setCurrentIndex] = useState(0);
