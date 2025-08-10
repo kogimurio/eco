@@ -87,6 +87,7 @@ export default function Mpesa ({ closeModal }) {
                         closeModal();
                         
                         setTimeout(() => {
+                            // navigate(`/order_confirmation?orderId=${orderId}`);
                             window.location.href=`/order_confirmation?orderId=${orderId}`;
                         }, 600);
                     } else if (statusRes.data.status === 'failed') {
