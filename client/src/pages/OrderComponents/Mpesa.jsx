@@ -111,7 +111,7 @@ export default function Mpesa ({ closeModal }) {
                 name="amount"
                 placeholder="Amount"
                 disabled
-                value={subtotal}
+                value={subtotal.toFixed(2)}
                 onChange={handleChange}
                 className="w-full border px-4 py-2 rounded mt-4"
             />

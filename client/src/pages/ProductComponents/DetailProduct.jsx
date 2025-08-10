@@ -121,7 +121,7 @@ export default function DetailProduct() {
                         <hr className="flex my-4 border border-gray-400"/>
                         <a href="*" className="text-xs text-stone-400">{product?.brand}</a>
 
-                        <p className="py-3 text-white">{product?.price}</p>
+                        <p className="py-3 text-white">${product?.price}</p>
                         <div className="flex text-yellow-400 pb-2">
                             <FontAwesomeIcon icon={solidStar} />
                             <FontAwesomeIcon icon={solidStar} />
@@ -165,12 +165,12 @@ export default function DetailProduct() {
                                 <p className="text-white text-sm">Wine Vintage: </p>
                             </div>
                             <div>
-                                <p className="pl-6 text-stone-400 text-sm">{product?.sku}</p>
-                                <p className="pl-6 text-stone-400 text-sm">{product?.condition}</p>
-                                <p className="pl-6 text-stone-400 text-sm">{product?.weight}</p>
-                                <p className="pl-6 text-stone-400 text-sm">{product?.wrapping}</p>
-                                <p className="pl-6 text-stone-400 text-sm">{product?.shipping}</p>
-                                <p className="pl-6 text-stone-400 text-sm">{product?.vintage}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.sku || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.condition || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.weight || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.wrapping || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.shipping || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.vintage || "N/A"}</p>
                             </div>
                         </div>
                         <hr className="flex my-4 border border-gray-400"/>

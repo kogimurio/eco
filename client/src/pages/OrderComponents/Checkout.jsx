@@ -240,7 +240,7 @@ export default function Checkout() {
           <h3 className="text-lg font-semibold">Order Summary</h3>
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span>{subtotal}</span>
+            <span>${subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span>Shipping</span>
@@ -248,7 +248,7 @@ export default function Checkout() {
           </div>
           <div className="flex justify-between font-bold text-lg">
             <span>Total</span>
-            <span>{subtotal}</span>
+            <span>${subtotal.toFixed(2)}</span>
           </div>
 
           {isAddressComplete() ? (
