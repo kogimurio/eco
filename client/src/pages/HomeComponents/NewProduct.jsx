@@ -150,7 +150,11 @@ const NewProduct = () => {
                             icon={faPlus}
                             className="text-white text-iconMedium"
                         />
-                        <span className="text-white font-bold text-button ml-2 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500">
+                        <span 
+                            className="text-white font-bold text-button ml-2 whitespace-nowrap 
+                                opacity-100 lg:opacity-0 lg:group-hover/icon:opacity-100 
+                                transition-opacity duration-500"
+                            >
                             Add to Cart
                         </span>
                     </div>

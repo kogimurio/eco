@@ -180,9 +180,10 @@ export default function Cart() {
           </div>
           <div className="flex justify-between mb-4">
             <span className="text-gray-400">Shipping</span>
-            {cartItems.map((shipping, id) => (
+            <span>Free</span>
+            {/* {cartItems.map((shipping, id) => (
               <span key={id}>{shipping.product?.shipping}</span>
-            ))}
+            ))} */}
           </div>
           <hr className="border-gray-700 mb-4" />
           <div className="flex justify-between font-bold text-lg">
