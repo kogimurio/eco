@@ -42,7 +42,7 @@ module.exports = {
       fontSize: {
         hero: ['clamp(2rem, 4vw, 2.25rem)', { lineHeight: '1.1' }],    
         brand: ['clamp(2rem, 4vw, 2rem)', { lineHeight: '1.1' }],
-        sectionHeading: ['clamp(1.75rem, 4vw, 1.75rem)', { lineHeight: '1.2' }], 
+        sectionHeading: ['clamp(1.5rem, 1.5vw, 1.5rem)', { lineHeight: '1.2' }], 
         productTitle: ['clamp(1rem, 2vw, 1.5rem)', { lineHeight: '1.3' }],  
         price: ['clamp(0.875rem, 2vw, 1.25rem)', { lineHeight: '1.3' }],  
         button: ['clamp(0.875rem, 1vw, 1rem)', { lineHeight: '1.3' }],    

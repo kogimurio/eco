@@ -1,16 +1,18 @@
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { faStar as solidStar, faStarHalfStroke, faTrash  } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faEye, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import MinTaskBar from "../HomeComponents/MinTaskBar";
+import { useNavigate } from "react-router-dom";
 import MinProductBar from "./MinProductBar"
 import { FaPen, FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../LoadingSpinner";
 import { toast } from 'react-toastify';
 import { useCart } from '../../context/CartContext';
+import useResponsiveTextLength from "../../hooks/useResponsiveTextLength";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -25,11 +27,14 @@ const user = storedUser ? JSON.parse(storedUser) : null;
 
 export default function DetailProduct() {
     const [product, setProduct] = useState(null);
+    const [relatedProducts, setRelatedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [wishlistProducts, setWishlistProducts] = useState([]);
     const { slug } = useParams()
     const { addToCart, cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();
     const [loadingItem, setLoadingItem] = useState(null)
+    const maxChars = useResponsiveTextLength();
+    const navigate = useNavigate();
     
 
     useEffect(() => {
@@ -49,6 +54,28 @@ export default function DetailProduct() {
         fetchProduct();
         
     }, [slug])
+
+    useEffect(() => {
+        const fetchProduct = async() => {
+            try {
+                const res = await axios.get(`${BASE_URL}/products/related_products/${slug}`)
+                setRelatedProducts(res.data.relatedProducts)
+                console.log("Related products response:",res.data);
+            } catch (error) {
+                console.error("Error in fetching related products:", error);
+            } finally {
+                setLoading(false);
+            }
+            
+        }
+
+        fetchProduct();
+        
+    }, [slug])
+
+    const truncate = (text) => {
+        return text.length > maxChars ? text.slice(0, maxChars) + "…" : text
+    }
 
     const handleAddToCart = async (prodctId) => {
          try {
@@ -100,6 +127,10 @@ export default function DetailProduct() {
         }
 
     const currentQty = product ? cartItems.find((item) => item.product._id === product._id)?.quantity || 0 : 0;
+
+    const productDetail = (slug) => {
+        navigate(`/productdetail/${slug}`);
+    }
 
     if (loading || !product) return <LoadingSpinner />;
 
@@ -246,6 +277,95 @@ export default function DetailProduct() {
             </div>
             
         </div>
+        {relatedProducts.length > 0 && (
+            <div className="bg-gray-700 py-4 overflow-x-hidden">
+            <div className="flex justify-between items-center w-[80%] mx-auto my-4">
+                <h2 className="text-white text-sectionHeading font-semibold text-left">Customers who viewed this also viewed</h2>
+            </div>
+            
+            {loading ? (
+                <div className="flex justify-center">
+                    <LoadingSpinner size="40" />
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[80%] mx-auto">
+                    {relatedProducts.map((product, index) => (
+                        <div 
+                            key={index} 
+                            className="relative w-full group cursor-pointer"
+                            >
+                                <div className="md:left-2 md:top-2 pl-2">
+                                    <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
+                                    <p className="text-body text-white py-1">
+                                        {truncate(product.name)}
+                                    </p>
+                                </div>
+                                <div className="flex text-yellow-400 pl-2 pb-2">
+                                    <FontAwesomeIcon icon={solidStar} />
+                                    <FontAwesomeIcon icon={solidStar} />
+                                    <FontAwesomeIcon icon={solidStar} />
+                                    <FontAwesomeIcon icon={faStarHalfStroke} />
+                                    <FontAwesomeIcon icon={regularStar} />
+                                </div>
+
+                                <img
+                                    src={`${BASE_IMAGE_URL}/${product.thumbnail}`}
+                                    alt={product.name}
+                                    className="w-64 h-72 rounded object-contain hover:scale-105 cursor-pointer transition-transform duration 300"
+                                />
+                                <div className="md:left-2 md:top-2">
+                                    <p className="text-white py-1 pl-2 text-price">${product.price}</p>
+                                </div>
+
+                                {/* Plus icon - always visible */}
+                                <div className="absolute bottom-3 right-2 w-38 group/icon lg:bg-gray-900  lg:w-8 lg:hover:w-36 bg-orange-600 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
+                                    <FontAwesomeIcon
+                                        icon={faPlus}
+                                        className="text-white text-iconMedium"
+                                    />
+                                    <span 
+                                        onClick={() => handleAddToCart(product._id)}
+                                        className="text-white font-bold text-button ml-2 whitespace-nowrap 
+                                        opacity-100 lg:opacity-0 lg:group-hover/icon:opacity-100 
+                                        transition-opacity duration-500">
+                                        Add to Cart
+                                    </span>
+                                </div>
+
+                                {/* Icons and animated line divider */}
+                                <div className="absolute bottom-14 right-2 flex flex-col items-center gap-2 animate-slide-down lg:group-hover:flex">
+                                    <button
+                                        onClick={(e) =>{
+                                            e.stopPropagation();
+                                            handleAddToWishlist(product._id)
+                                        }}
+                                        className="bg-gray-900 p-2 z-1000 rounded-full text-white hover:text-red-500"
+                                        title="Wish list"
+                                    >
+                                    <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
+                                    </button>
+
+                                    {/* Line divider with animation */}
+                                    <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 lg:group-hover:scale-x-100"></div>
+
+                                    <button
+                                        onClick={(e) =>{
+                                            e.stopPropagation()
+                                            productDetail(product.slug)
+                                        }}
+                                        className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
+                                        title="View"
+                                    >
+                                    <FontAwesomeIcon icon={faEye} className="text-iconMedium" />
+                                    </button>
+                                </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+        )}
+        
         </>
         
     );
