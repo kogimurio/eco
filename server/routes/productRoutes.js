@@ -6,8 +6,8 @@ const {
     getAllProducts,
     getProduct,
     updateProduct,
-    deleteProduct
-    // getProductByQuery
+    deleteProduct,
+    getRelatedProducts
 } = require('../controllers/productController');
 
 
@@ -25,6 +25,7 @@ router.put('/:id',
   uploadProductImages,
   updateProduct);
 router.delete('/:id', deleteProduct);
+router.get('/related_products/:slug', getRelatedProducts);
 // Get product by query string
 
 module.exports = router;

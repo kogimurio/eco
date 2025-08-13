@@ -104,24 +104,6 @@ exports.getProduct = async (req, res) => {
     
 };
 
-// Get a product by Id through Query string
-// exports.getProductByQuery = async (req, res) => {
-//     try {
-//         const { id } = req.query;
-//         if (!id) {
-//             return res.status(400).json({ message: 'Product ID is required' });
-//         }
-//         const product = await Product.findById(id);
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found' });
-//         }
-//         res.status(200).json(product);
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: 'Server error', error: err.message });
-//     }
-// };
-
 // Update a product
 exports.updateProduct = async (req, res, next) => {
   try {
@@ -191,4 +173,32 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ message: 'Error deleting product and image'});
     }
 };
+
+// Get products from category
+exports.getRelatedProducts = async (req, res) => {
+  const slug = req.params.slug;
+
+  try {
+    const product = await Product.findOne({ slug });
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found"
+      });
+    }
+
+    const relatedProducts = await Product.find({
+      category: product.category._id,
+      slug: { $ne: slug }
+    }).limit(6);
+
+    res.json({
+      relatedProducts
+    })
+  } catch (error) {
+    console.log('Error fetching related products:', error);
+    res.status(500).json({
+      message: 'Internal server error'
+    })
+  }
+}
 
