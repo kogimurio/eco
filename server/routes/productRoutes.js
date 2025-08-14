@@ -7,7 +7,11 @@ const {
     getProduct,
     updateProduct,
     deleteProduct,
-    getRelatedProducts
+    getRelatedProducts,
+    getBestSellers,
+    getFeaturedProducts,
+    getClearanceProducts,
+    getNewProducts
 } = require('../controllers/productController');
 
 
@@ -19,6 +23,10 @@ router.post(
 );
 
 // router.get('/by-query', getProductByQuery);
+router.get('/best-sellers', getBestSellers);
+router.get('/featured', getFeaturedProducts);
+router.get('/clearance', getClearanceProducts);
+router.get('/new', getNewProducts);
 router.get('/', getAllProducts); 
 router.get('/:slug', getProduct);
 router.put('/:id', 
@@ -26,6 +34,6 @@ router.put('/:id',
   updateProduct);
 router.delete('/:id', deleteProduct);
 router.get('/related_products/:slug', getRelatedProducts);
-// Get product by query string
+
 
 module.exports = router;

@@ -2,6 +2,22 @@ const Product = require('../models/Product');
 const Category = require('../models/Category');
 const cloudinary = require('../config/cloudinary');
 
+// Get products by filter
+const getFilteredProducts = async (filter, res) => {
+  try {
+    const products = await Product.find(filter).populate('category');
+    return res.json({
+      products,
+      total: products.length
+    });
+  } catch (error) {
+    console.log('Error:', error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    })
+  }
+}
+
 //  Create a new product
 exports.createProduct = async (req, res, next) => {
   try {
@@ -30,6 +46,11 @@ exports.createProduct = async (req, res, next) => {
       brand,
       category,
       stock,
+      giftWrapping: req.body.giftWrapping === 'true' || req.body.giftWrapping === true,
+      vintage: '',
+      isClearance: req.body.isClearance === 'true' || req.body.isClearance === true,
+      isBestSeller: req.body.isBestSeller === 'true' || req.body.isBestSeller === true,
+      isFeatured: req.body.isFeatured === 'true' || req.body.isFeatured === true,
       thumbnail,
       images: otherImages
     });
@@ -48,45 +69,34 @@ exports.createProduct = async (req, res, next) => {
 };
 
 
-// Get all products
+// Get all Products
 exports.getAllProducts = async (req, res) => {
-  try {
-    const filter = {};
-
-    if (req.query.bestSeller === 'true') {
-      filter.isBestSeller = true;
-    }
-
-    if (req.query.featured === 'true') {
-      filter.isFeatured = true
-    }
-
-    if (req.query.clearance === 'true') {
-      filter.isClearance = true
-    }
-
-    if (req.query.category) {
-      const category = await Category.findOne({ slug: req.query.category });
-      if (category) {
-        filter.category = category._id;
-      } else {
-        return res.status(404).json({
-          message: 'Category not found'
-        });
-      }
-    }
-
-    const products = await Product.find(filter).populate('category');
-    res.json({
-      products,
-      total: products.length
-    });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ message: 'Error in fetching products:', error });
-  }
+  await getFilteredProducts({}, res);
     
 };
+
+// Best sellers Products
+exports.getBestSellers = async (req, res) => {
+  await getFilteredProducts({ isBestSeller: true }, res);
+}
+
+// Featured Products
+exports.getFeaturedProducts = async (req, res) => {
+  await getFilteredProducts({ isFeatured: true }, res);
+}
+
+// Clearance Products
+exports.getClearanceProducts = async (req, res) => {
+  await getFilteredProducts({ isClearance: true }, res);
+}
+
+// New Products
+exports.getNewProducts = async (req, res) => {
+  const daysAgo = 30;
+  const dateLimit = new Date();
+  dateLimit.setDate(dateLimit.getDate() - daysAgo);
+  await getFilteredProducts({ createdAt: { $gte: dateLimit } }, res);
+}
 
 // Get a product by slug through Path parameter
 exports.getProduct = async (req, res) => {
@@ -201,4 +211,6 @@ exports.getRelatedProducts = async (req, res) => {
     })
   }
 }
+
+
 
