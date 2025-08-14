@@ -23,11 +23,11 @@ router.post(
 );
 
 // router.get('/by-query', getProductByQuery);
+router.get('/', getAllProducts); 
 router.get('/best-sellers', getBestSellers);
 router.get('/featured', getFeaturedProducts);
 router.get('/clearance', getClearanceProducts);
 router.get('/new', getNewProducts);
-router.get('/', getAllProducts); 
 router.get('/:slug', getProduct);
 router.put('/:id', 
   uploadProductImages,
