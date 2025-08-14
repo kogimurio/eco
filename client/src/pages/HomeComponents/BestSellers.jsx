@@ -50,7 +50,7 @@ const BestSellers = ({ product }) => {
         const fetchProduct = async () => {
             await new Promise(res => setTimeout(res, 2000));
             try {
-            const res = await axios.get(`${BASE_URL}/products`)
+            const res = await axios.get(`${BASE_URL}/products/best-sellers`)
             setProducts(res.data.products)
             setProductId(res.data.products.map((product) => product === product._id))
             } catch (error) {

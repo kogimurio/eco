@@ -14,7 +14,12 @@ export default function CreateProduct() {
         description: '',
         brand: '',
         category: '',
-        stock: ''
+        stock: '',
+        giftWrapping: '',
+        vintage: '',
+        isClearance: '',
+        isBestSeller: '',
+        isFeatured: ''
     });
     const [images, setImages] = useState([]);
     const [imagePreview, setImagePreview] = useState([]);
@@ -92,6 +97,11 @@ export default function CreateProduct() {
         data.append('category', formData.category);
         data.append('stock', formData.stock);
         data.append('thumbnail', thumbnail);
+        data.append('giftWrapping', formData.giftWrapping);
+        data.append('isClearance', formData.isClearance);
+        data.append('isBestSeller', formData.isBestSeller);
+        data.append('isFeatured', formData.isFeatured);
+        data.append('vintage', formData.vintage);
         images.forEach(img => {
             data.append('images', img);
         });
@@ -136,6 +146,67 @@ export default function CreateProduct() {
                     onChange={handleChange}
                     placeholder="Product Name"
                     required
+                    className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <label className="flex items-center gap-2">
+                    <input
+                        type="checkbox"
+                        name="giftWrapping"
+                        checked={formData.giftWrapping}
+                        onChange={(e) => 
+                            setFormData({...formData, giftWrapping: e.target.checked })
+                        }
+                        placeholder="Gift Wrapping"
+                        className="w-5 h-5 text-orange-500 cursor-pointer"
+                    />
+                    Gift Wrapping
+                </label>
+                <label className="flex items-center gap-2">
+                    <input
+                        type="checkbox"
+                        name="isClearance"
+                        checked={formData.isClearance}
+                        onChange={(e) => 
+                            setFormData({...formData, isClearance: e.target.checked })
+                        }
+                        placeholder="Gift Wrapping"
+                        className="w-5 h-5 text-orange-500 cursor-pointer"
+                    />
+                    Is Clearance
+                </label>
+                <label className="flex items-center gap-2">
+                    <input
+                        type="checkbox"
+                        name="isBestSeller"
+                        checked={formData.isBestSeller}
+                        onChange={(e) => 
+                            setFormData({...formData, isBestSeller: e.target.checked })
+                        }
+                        placeholder="Gift Wrapping"
+                        className="w-5 h-5 text-orange-500 cursor-pointer"
+                    />
+                    Is Best Seller
+                </label>
+                <label className="flex items-center gap-2">
+                    <input
+                        type="checkbox"
+                        name="isFeatured"
+                        checked={formData.isFeatured}
+                        onChange={(e) => 
+                            setFormData({...formData, isFeatured: e.target.checked })
+                        }
+                        placeholder="Gift Wrapping"
+                        className="w-5 h-5 text-orange-500 cursor-pointer"
+                    />
+                    Is Featured
+                </label>
+                
+                <input
+                    type="number"
+                    name="vintage"
+                    value={formData.vintage}
+                    onChange={handleChange}
+                    placeholder="vintage"
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
                 <input
