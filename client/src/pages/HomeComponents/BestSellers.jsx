@@ -17,7 +17,7 @@ import { useCart } from '../../context/CartContext';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
+export const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 
 const BestSellers = ({ product }) => {

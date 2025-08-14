@@ -126,13 +126,17 @@ export default function DetailProduct() {
           }
         }
 
-    const currentQty = product ? cartItems.find((item) => item.product._id === product._id)?.quantity || 0 : 0;
+    const currentQty = product ? cartItems.find((item) => item.product?._id === product?._id)?.quantity || 0 : 0;
 
     const productDetail = (slug) => {
         navigate(`/productdetail/${slug}`);
     }
 
-    if (loading || !product) return <LoadingSpinner />;
+    if (loading || !product) {
+        <div className="flex justify-center">
+            return <LoadingSpinner />;
+        </div>
+    }
 
     return (
         <>
@@ -217,15 +221,15 @@ export default function DetailProduct() {
                                     </div>
                                     <div className="flex flex-col justify-center gap-1">
                                     <FaChevronUp 
-                                        disabled={loadingItem === product._id}
-                                        onClick={() => handleUpdateCart(product._id, currentQty + 1)}
+                                        disabled={loadingItem === product?._id}
+                                        onClick={() => handleUpdateCart(product?._id, currentQty + 1)}
                                         className="cursor-pointer text-white hover:text-blue-400" 
                                     />
                                     <FaChevronDown 
-                                        disabled={loadingItem === product._id}
+                                        disabled={loadingItem === product?._id}
                                         onClick={() =>{
                                             if (currentQty > 1) {
-                                                handleUpdateCart(product._id, currentQty - 1);
+                                                handleUpdateCart(product?._id, currentQty - 1);
                                             }
                                         }}
                                         className="cursor-pointer text-white hover:text-blue-400" 
