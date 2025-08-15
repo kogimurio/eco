@@ -203,7 +203,7 @@ export default function DetailProduct() {
                                 <p className="pl-6 text-stone-400 text-sm">{product?.sku || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.condition || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.weight || "N/A"}</p>
-                                <p className="pl-6 text-stone-400 text-sm">{product?.wrapping || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.giftWrapping || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.shipping || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.vintage || "N/A"}</p>
                             </div>

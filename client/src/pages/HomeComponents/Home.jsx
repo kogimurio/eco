@@ -5,6 +5,7 @@ import Adds from './Adds';
 import Categories from './Categories';
 import SubBanner from './SubBanner';
 import FeaturedProduct from './FeaturedProduct';
+import Clearance from "./Clearance";
 import BestSellers from "./BestSellers";
 import BottomBanner from "./BottomBanner";
 import NewProduct from './NewProduct';
@@ -31,6 +32,7 @@ const Home = () => {
             <Offer />
             <Categories />
             <SubBanner />
+            <Clearance />
             <FeaturedProduct />
             <BestSellers />
             <BottomBanner />

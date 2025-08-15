@@ -20,7 +20,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 
-const BestSellers = ({ product }) => {
+const Clearance = ({ product }) => {
     const [products, setProducts] = useState([]);
     const [prodctId, setProductId] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ const BestSellers = ({ product }) => {
         const fetchProduct = async () => {
             await new Promise(res => setTimeout(res, 2000));
             try {
-            const res = await axios.get(`${BASE_URL}/products/best-sellers`)
+            const res = await axios.get(`${BASE_URL}/products/clearance`)
             setProducts(res.data.products)
             setProductId(res.data.products.map((product) => product === product._id))
             } catch (error) {
@@ -134,7 +134,7 @@ const BestSellers = ({ product }) => {
     return (
         <div className="bg-gray-800 mt-8 py-4 overflow-x-hidden">
             <div className="flex justify-between items-center w-[90%] mx-auto my-4">
-                <h2 className="text-white text-sectionHeading font-semibold whitespace-nowrap">Best Sellers</h2>
+                <h2 className="text-white text-sectionHeading font-semibold whitespace-nowrap">Clearance</h2>
 
                 {/* Line Breaker */}
                 <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto border-t border-gray-600 my-2"></div>
@@ -184,7 +184,7 @@ const BestSellers = ({ product }) => {
                                 </div>
 
                                 {/* Plus icon - always visible */}
-                                <div className="absolute bottom-3 right-2 w-32 group/icon lg:bg-gray-900  lg:w-8 lg:hover:w-36 bg-orange-600 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
+                                <div className="absolute bottom-3 right-2 w-38 group/icon lg:bg-gray-900  lg:w-8 lg:hover:w-36 bg-orange-600 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
                                     <FontAwesomeIcon
                                         icon={faPlus}
                                         className="text-white text-iconMedium"
@@ -235,4 +235,4 @@ const BestSellers = ({ product }) => {
     );
 };
 
-export default BestSellers;
+export default Clearance;

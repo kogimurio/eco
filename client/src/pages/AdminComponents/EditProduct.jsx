@@ -16,7 +16,12 @@ export default function UpdateProduct() {
         description: '',
         brand: '',
         category: '',
-        stock: ''
+        stock: '',
+        vintage: '',
+        giftWrapping: false,
+        isClearance: false,
+        isBestSeller: false,
+        isFeatured: false
     });
     const [images, setImages] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -49,6 +54,11 @@ export default function UpdateProduct() {
                     brand: fetchedProduct.brand,
                     category: fetchedProduct.category,
                     stock: fetchedProduct.stock,
+                    vintage: fetchedProduct.vintage,
+                    giftWrapping: fetchedProduct.giftWrapping,
+                    isClearance: fetchedProduct.isClearance,
+                    isBestSeller: fetchedProduct.isBestSeller,
+                    isFeatured: fetchedProduct.isFeatured,
                 });
                 const cleanThumbnail = (`${BASE_IMAGE_URL}/${fetchedProduct.thumbnail}`).replace(/\\/g, "/")
                 const cleanImages = (fetchedProduct.images || []).map(img => `${BASE_IMAGE_URL}/${img}`.replace(/\\/g, "/"))
@@ -111,6 +121,11 @@ export default function UpdateProduct() {
         data.append('brand', formData.brand);
         data.append('category', formData.category);
         data.append('stock', formData.stock);
+        data.append('vintage', formData.vintage);
+        data.append('giftWrapping', formData.giftWrapping);
+        data.append('isClearance', formData.isClearance);
+        data.append('isBestSeller', formData.isBestSeller);
+        data.append('isFeatured', formData.isFeatured);
         data.append('thumbnail', thumbnailFile);
         images.forEach(img => {
             data.append('images', img);
@@ -128,7 +143,12 @@ export default function UpdateProduct() {
                 description: '',
                 brand: '',
                 category: '',
-                stock: ''
+                stock: '',
+                vintage: '',
+                giftWrapping: false,
+                isClearance: false,
+                isBestSeller: false,
+                isFeatured: false
             });
             setImages([]);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -155,6 +175,67 @@ export default function UpdateProduct() {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Product Name"
+                    required
+                    className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <label className="flex items-center gap-2 text-gray-300">
+                    <input 
+                        type="checkbox"
+                        name="giftWrapping"
+                        checked={formData.giftWrapping}
+                        onChange={(e) => setFormData({
+                            ...formData,
+                            giftWrapping: e.target.checked
+                        })}
+                        className="form-checkbox h-4 w-4 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                    />
+                    Gift Wrapping
+                </label>
+                <label className="flex items-center gap-2 text-gray-300">
+                    <input 
+                        type="checkbox"
+                        name="isClearance"
+                        checked={formData.isClearance}
+                        onChange={(e) => setFormData({
+                            ...formData,
+                            isClearance: e.target.checked
+                        })}
+                        className="form-checkbox h-4 w-4 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                    />
+                    Is Clearance
+                </label>
+                <label className="flex items-center gap-2 text-gray-300">
+                    <input 
+                        type="checkbox"
+                        name="isBestSeller"
+                        checked={formData.isBestSeller}
+                        onChange={(e) => setFormData({
+                            ...formData,
+                            isBestSeller: e.target.checked
+                        })}
+                        className="form-checkbox h-4 w-4 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                    />
+                    Is BestSeller
+                </label>
+                <label className="flex items-center gap-2 text-gray-300">
+                    <input 
+                        type="checkbox"
+                        name="isFeatured"
+                        checked={formData.isFeatured}
+                        onChange={(e) => setFormData({
+                            ...formData,
+                            isFeatured: e.target.checked
+                        })}
+                        className="form-checkbox h-4 w-4 text-orange-500 focus:ring-orange-500 cursor-pointer"
+                    />
+                    Is Featured
+                </label>
+                <input
+                    type="number"
+                    name="vintage"
+                    value={formData.vintage}
+                    onChange={handleChange}
+                    placeholder="vintage (in years)"
                     required
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
