@@ -283,7 +283,7 @@ export default function DetailProduct() {
         </div>
         {relatedProducts.length > 0 && (
             <div className="bg-gray-700 py-4 overflow-x-hidden">
-            <div className="flex justify-between items-center w-[80%] mx-auto my-4">
+            <div className="flex justify-between items-center w-[90%] mx-auto my-4">
                 <h2 className="text-white text-lg font-semibold text-left">Customers who viewed this also viewed</h2>
             </div>
             
@@ -325,7 +325,7 @@ export default function DetailProduct() {
                                 <div className="absolute bottom-3 right-2 w-28  group/icon lg:bg-gray-900  lg:w-8 lg:hover:w-36 bg-orange-600 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
                                     <FontAwesomeIcon
                                         icon={faPlus}
-                                        className="hidden lg:flex text-white text-iconMedium"
+                                        className="text-white text-iconMedium"
                                     />
                                     <span 
                                         onClick={() => handleAddToCart(product._id)}
