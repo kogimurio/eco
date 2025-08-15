@@ -322,10 +322,10 @@ export default function DetailProduct() {
                                 </div>
 
                                 {/* Plus icon - always visible */}
-                                <div className="absolute bottom-3 right-2 w-38 group/icon lg:bg-gray-900  lg:w-8 lg:hover:w-36 bg-orange-600 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
+                                <div className="absolute bottom-3 right-2 w-28  group/icon lg:bg-gray-900  lg:w-8 lg:hover:w-36 bg-orange-600 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
                                     <FontAwesomeIcon
                                         icon={faPlus}
-                                        className="text-white text-iconMedium"
+                                        className="hidden lg:flex text-white text-iconMedium"
                                     />
                                     <span 
                                         onClick={() => handleAddToCart(product._id)}
