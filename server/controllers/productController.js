@@ -5,7 +5,9 @@ const cloudinary = require('../config/cloudinary');
 // Get products by filter
 const getFilteredProducts = async (filter, res) => {
   try {
-    const products = await Product.find(filter).populate('category');
+    const products = await Product.find(filter)
+    .sort({ createdAt: -1 })
+    .populate('category');
     return res.json({
       products,
       total: products.length
@@ -124,7 +126,12 @@ exports.updateProduct = async (req, res, next) => {
       description,
       brand,
       category,
-      stock
+      stock,
+      giftWrapping,
+      vintage,
+      isClearance,
+      isBestSeller,
+      isFeatured
     } = req.body;
 
     console.log('Files:', req.files);
@@ -143,6 +150,11 @@ exports.updateProduct = async (req, res, next) => {
     if (brand) product.brand = brand;
     if (category) product.category = category;
     if (stock) product.stock = stock;
+    if (giftWrapping) product.giftWrapping = req.body.giftWrapping === 'true' || req.body.giftWrapping === true;
+    if (vintage) product.vintage = vintage;
+    if (isClearance) product.isClearance = req.body.isClearance === 'true' || req.body.isClearance === true;
+    if (isBestSeller) product.isBestSeller = req.body.isBestSeller === 'true' || req.body.isBestSeller === true;
+    if (isFeatured) product.isFeatured = req.body.isFeatured === 'true' || req.body.isFeatured === true;
 
     if (req.files) {
       if (req.files.thumbnail && req.files.thumbnail.length > 0 ) {
@@ -159,6 +171,7 @@ exports.updateProduct = async (req, res, next) => {
 
     await product.save();
 
+    console.log('Product updated:', product);
     return res.status(200).json({
       message: 'Product updated',
       product: product
