@@ -22,7 +22,7 @@ export default function Nav() {
     }
     return (
         <>
-            <div className="bg-gray-800 h-14 text-white flex items-center justify-between rounded-t-lg shadow px-6">
+            {/* <div className="bg-gray-800 h-14 text-white flex items-center justify-between rounded-t-lg shadow px-6">
                 <div>
                     logo
                 </div>
@@ -55,7 +55,7 @@ export default function Nav() {
                 <div>
                     <FontAwesomeIcon icon={faGear} className="text-gray-400 mr-2" /> <a href="*">Settings</a>
                 </div>
-            </div>
+            </div> */}
         </>
         
     )

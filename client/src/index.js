@@ -4,6 +4,7 @@ import { Suspense, lazy } from 'react';
 import './App.css';
 import { CartProvider } from './context/CartContext'
 import { AdminProvider } from './context/AdminContext';
+import { NotificationProvider } from './context/NotificationContext';
 
 // Toast
 import { ToastContainer } from 'react-toastify';
@@ -32,6 +33,7 @@ const UpdateProduct = lazy(() => import('./pages/AdminComponents/EditProduct'))
 const Analytics = lazy(() => import('./pages/AdminComponents/Analytics'));
 const ViewOrder = lazy(() => import('./pages/AdminComponents/OrderView'));
 const Transaction = lazy(() => import('./pages/AdminComponents/Transaction'));
+const Notifications = lazy(() => import('./pages/AdminComponents/Notification'));
 const Cart = lazy(() => import('./pages/OrderComponents/Cart'));
 const Checkout = lazy(() => import('./pages/OrderComponents/Checkout'));
 const Payments = lazy(() => import('./pages/OrderComponents/Payments'));
@@ -72,7 +74,9 @@ export default function App() {
               path="/dashboard"
               element={
                 <Suspense fallback={<div className="text-center text-white p-10">Loading...</div>}>
-                  <Dashboard />
+                  <NotificationProvider>
+                    <Dashboard />
+                  </NotificationProvider>
                 </Suspense>
               }
             >
@@ -94,7 +98,7 @@ export default function App() {
               <Route path="add_category" element={<Suspense fallback={<div>Loading...</div>}><CreateCategory /></Suspense>} />
               <Route path="edit_product/:slug" element={<Suspense fallback={<div>Loading...</div>}><UpdateProduct /></Suspense>} />
               <Route path="transactions" element={<Suspense fallback={<div>Loading...</div>}><Transaction /></Suspense>} />
-              
+              <Route path="notifications" element={<Suspense fallback={<div>Loading...</div>}><Notifications /></Suspense>} />
             </Route>
           </Routes>
         </AdminProvider>

@@ -70,20 +70,19 @@ export default function Mpesa ({ closeModal }) {
             const interval = setInterval(async () => {
                 try {
                     const statusRes = await axios.get(`${BASE_URL}/mpesa/payment-status/${checkoutRequestID}`);
-                    console.log(`${BASE_URL}/mpesa/payment-status/${checkoutRequestID}`);
-                    console.log("Current payment status:", statusRes.data.status);
+                    
+                    console.log("Current payment status:", statusRes.data);
+                    
 
                     if (statusRes.data.status === 'success') {
                         clearInterval(interval);
+                        // clearTimeout(timeout);
+
                         toast.success("Payment successful! Redirecting.....");
-                        const orderRes = await axios.post(`${BASE_URL}/orders`, {}, {
-                                headers: {
-                                    Authorization: `Bearer ${token}`
-                                }
-                            });
-                            const orderId = orderRes.data.order._id;
-                            console.log("Just paid order response:", orderRes);
-                            console.log("Just paid order ID:", orderId);
+                        
+                        const orderId = statusRes.data.orderId;
+                        console.log("Order ID from backend:", orderId);
+
                         closeModal();
                         
                         setTimeout(() => {
@@ -92,13 +91,20 @@ export default function Mpesa ({ closeModal }) {
                         }, 600);
                     } else if (statusRes.data.status === 'failed') {
                         clearInterval(interval);
+                        // clearTimeout(timeout);
                         toast.error("Payment failed or cancelled");
                     }
                 } catch (error) {
                     console.error("Polling error:", error.message);
                 }
-            }, 3000); // poll every 3 sec
-            // window.location.href=('/order_confirmation')
+            }, 3000);
+
+            // Auto stop polling after 60 seconds
+            // const timeout = setTimeout(() => {
+            //     clearInterval(interval);
+            //     toast.error("Payment timeout: No response received within 60 seconds.")
+            //     closeModal();
+            // }, 60000);
         } catch (error) {
             toast.error(error.response?.data?.message || error.message);
             console.error(error.response?.data?.message || error.message);

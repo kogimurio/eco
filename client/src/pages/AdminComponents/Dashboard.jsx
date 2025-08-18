@@ -69,6 +69,12 @@ const Dashboard = () => {
         <Link to="/dashboard/analytics">Analytics</Link>
       </div>
       <div 
+        onClick={() => setIsMenuOpen(false)}
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        <FontAwesomeIcon icon={faChartLine} /> 
+        <Link to="/dashboard/notifications">Notifications</Link>
+      </div>
+      <div 
         onClick={() => setIsMenuOpen(false)} 
         className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
         <FontAwesomeIcon icon={faGear} /> 
