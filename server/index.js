@@ -36,6 +36,7 @@ const cartRouter = require('./routes/cartRoutes');
 const address = require('./routes/addressRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
@@ -46,6 +47,7 @@ app.use('/api/cart', cartRouter);
 app.use('/api/address', address);
 app.use('/api/mpesa', paymentRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // ✅ Global error handler (place this **after** all routes!)
 app.use((err, req, res, next) => {

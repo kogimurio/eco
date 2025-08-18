@@ -3,6 +3,7 @@ const User = require('../models/User');
 const OrderItem = require('../models/OrderItem');
 const Cart = require('../models/Cart');
 const Address = require('../models/Address');
+const Notification = require('../models/Notification');
 const transporter = require('../utils/mailer');
 const ejs = require('ejs');
 const path = require('path');
@@ -11,6 +12,7 @@ const { getIO } = require('../socket');
 
 
 exports.createOrderForUser = async (userId, checkoutRequestID) => {
+    const notifications = [];
     try {
         const user = await User.findById(userId);
             if (!user) throw new Error("User not found"); 
@@ -38,12 +40,13 @@ exports.createOrderForUser = async (userId, checkoutRequestID) => {
         await order.save();
 
         // Create notification
-        // const notification = new Notification({
-        //     type: "order",
-        //     message: `New order placed by ${user.email}`,
-        //     data: { orderId: order._id }
-        // });
-        // await notification.save();
+        const orderNotification = new Notification({
+            type: "order",
+            message: `New order placed by ${user.email}`,
+            data: { orderId: order._id },
+        })
+        await orderNotification.save();
+        notifications.push(orderNotification);
 
         io.emit("test_event", { msg: "Hello from backend" });
         
@@ -61,18 +64,23 @@ exports.createOrderForUser = async (userId, checkoutRequestID) => {
             item.product.stock = Math.max(item.product.stock - item.quantity, 0);
             await item.product.save();
 
-            io.to("admins").emit("stock_updated", {
-                product: item.product.name,
-                stock: item.product.stock
-            });
+            // Only trigger if stock < 5
+            if (item.product.stock < 5) {
+                // Create notification
+                const stockNotification = new Notification({
+                    type: "stock",
+                    message: `Low stock ${item.product.name} (remaining ${item.product.stock})`,
+                    data: { product: item.product.name, stock: item.product.stock },
+                })
+                await stockNotification.save();
+                notifications.push(stockNotification);
 
-            // Create notification for stock update
-            // const stockNotification = new Notification({
-            //     type: "stock",
-            //     message: `Stock updated for ${item.product.name}: ${item.product.stock} remaining`,
-            //     data: { product: item.product._id, stock: item.product.stock }
-            // });
-            // await stockNotification.save();
+                // Emit stock update
+                io.to("admins").emit("stock_updated", {
+                    product: item.product.name,
+                    stock: item.product.stock
+                });
+            }
         }
 
         // Create order items
@@ -119,7 +127,7 @@ exports.createOrderForUser = async (userId, checkoutRequestID) => {
         cart.total = 0;
         await cart.save();
 
-        return order;
+        return { order, notifications };
     } catch (err) {
         console.error("Order creation error:", err);
         throw err;
@@ -129,8 +137,8 @@ exports.createOrderForUser = async (userId, checkoutRequestID) => {
 
 exports.createOrder = async (req, res) => {
     try {
-        const order = await createOrderForUser(req.user.userId, req.body.checkoutRequestID);
-        res.status(201).json(order);
+        const { order, notifications } = await createOrderForUser(req.user.userId, req.body.checkoutRequestID);
+        res.status(201).json({ order, notifications });
     } catch (err) {
         console.error("Order creation error:", err);
         res.status(500).json({ message: "Internal Server Error" });
