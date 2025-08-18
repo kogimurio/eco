@@ -12,12 +12,12 @@ export default function Notifications() {
             <h3 className="font-bold mb-2">Notifications</h3>
             <ul className="space-y-2">
             {notifications.length === 0 ? (
-                <li className="text-gray-100 italic text-center">No notifications</li>
+                <li className="text-gray-600 italic text-center">No notifications</li>
             ) : (
                 notifications.map((n, i) => (
-                <li key={i} className="bg-gray-100 p-2 rounded">
+                <li key={i} className="bg-gray-600 p-2 rounded">
                     {n.type === "stock" && (
-                    <p>⚠️ Stock low: {n.product} (remaining {n.quantity})</p>
+                    <p>⚠️ Stock low: {n.product} (remaining {n.stock})</p>
                     )}
                     {n.type === "order" && (
                     <p>🛒 New order placed: #{n.orderId}</p>
