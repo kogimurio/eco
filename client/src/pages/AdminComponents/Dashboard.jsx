@@ -7,7 +7,8 @@ import {
   faChartLine,
   faGear,
   faRightFromBracket,
-  faArrowsRotate
+  faArrowsRotate,
+  faBell
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Outlet } from "react-router-dom";
@@ -71,7 +72,7 @@ const Dashboard = () => {
       <div 
         onClick={() => setIsMenuOpen(false)}
         className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
-        <FontAwesomeIcon icon={faChartLine} /> 
+        <FontAwesomeIcon icon={faBell} /> 
         <Link to="/dashboard/notifications">Notifications</Link>
       </div>
       <div 
