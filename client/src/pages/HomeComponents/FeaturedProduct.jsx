@@ -190,7 +190,7 @@ const BestSellers = ({ product }) => {
                                     `}>
                                     <FontAwesomeIcon
                                         icon={faPlus}
-                                        className="text-white text-iconMedium"
+                                        className={`${product.stock === 0 ? 'hidden' : 'text-white text-iconMedium'}`}
                                     />
                                     <span 
                                         onClick={product.stock === 0 ? null : () => handleAddToCart(product._id)}

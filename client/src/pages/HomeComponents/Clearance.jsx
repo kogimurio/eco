@@ -189,7 +189,7 @@ const Clearance = ({ product }) => {
                                 lg:bg-gray-900  lg:w-8 lg:hover:w-36 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500`}>
                                     <FontAwesomeIcon
                                         icon={faPlus}
-                                        className="text-white text-iconMedium"
+                                        className={`${product.stock === 0 ? 'hidden' : 'text-white text-iconMedium'}`}
                                     />
                                     <span 
                                         onClick={product.stock === 0 ? null : () => handleAddToCart(product._id)}
