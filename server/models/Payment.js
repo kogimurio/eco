@@ -6,6 +6,11 @@ const paymentSchema = new mongoose.Schema({
       ref: 'User',
       required: true
   },
+  order: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: 'Order',
+      required: false
+  },
   phone: String,
   amount: Number,
   merchantRequestID: String,

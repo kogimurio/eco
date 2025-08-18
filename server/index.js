@@ -5,8 +5,13 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const testRoutes = require('./routes/testRoutes');
+const http = require("http");
+const { initSocket } = require("./socket");
 
 const app = express();
+const server = http.createServer(app);
+
+initSocket(server);
 
 // Static assets
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -77,4 +82,5 @@ mongoose
 
 // Start server
 const PORT = 5000;
-app.listen(PORT, () => console.log(`Server is running on http:localhost:${PORT}`));
+server.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
+

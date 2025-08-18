@@ -7,35 +7,85 @@ const transporter = require('../utils/mailer');
 const ejs = require('ejs');
 const path = require('path');
 const pdf = require('html-pdf');
+const { getIO } = require('../socket');
 
-exports.createOrder = async (req, res) => {
-    const userId = req.user.userId;
 
+exports.createOrderForUser = async (userId, checkoutRequestID) => {
     try {
+        const user = await User.findById(userId);
+            if (!user) throw new Error("User not found"); 
+
+        const io = getIO();
+
         // Fetch cart
-        const cart = await Cart.findOne({ user: userId }).populate('items.product');
-        // Basic validation
+        const cart = await Cart.findOne({ user: user._id }).populate('items.product');
         if (!cart || cart.items.length === 0) {
-            return res.status(400).json({
-                message: "Cart is empty"
-            });
+            throw new Error("Cart is empty");
         }
+
         // Create order
         const order = new Order({
             user: userId,
             total_price: cart.total,
-            status: 'pending',
+            checkoutRequestID: checkoutRequestID,
             items: cart.items.map(item => ({
                 product: item.product._id,
                 quantity: item.quantity,
                 price: item.product.price
-            }))
+            })),
+            status: 'processing',
         });
-
         await order.save();
 
-        const user = await User.findById(userId);
+        // Create notification
+        // const notification = new Notification({
+        //     type: "order",
+        //     message: `New order placed by ${user.email}`,
+        //     data: { orderId: order._id }
+        // });
+        // await notification.save();
 
+        io.emit("test_event", { msg: "Hello from backend" });
+        
+        // Emit order creation event
+        io.to("admins").emit("order_created", {
+            orderId: order._id,
+            user: user.email,
+            total: order.total_price,
+            status: order.status,
+            createdAt: order.createdAt
+        });
+
+        // Deduct stock + emit stock update
+        for (const item of cart.items) {
+            item.product.stock = Math.max(item.product.stock - item.quantity, 0);
+            await item.product.save();
+
+            io.to("admins").emit("stock_updated", {
+                product: item.product.name,
+                stock: item.product.stock
+            });
+
+            // Create notification for stock update
+            // const stockNotification = new Notification({
+            //     type: "stock",
+            //     message: `Stock updated for ${item.product.name}: ${item.product.stock} remaining`,
+            //     data: { product: item.product._id, stock: item.product.stock }
+            // });
+            // await stockNotification.save();
+        }
+
+        // Create order items
+        for (const item of cart.items) {
+            await OrderItem.create({
+                order: order._id,
+                product: item.product._id,
+                quantity: item.quantity,
+                price: item.product.price
+            });
+        }
+
+        // Generate invoice & send email
         const invoiceHTML = await ejs.renderFile(
             path.join(__dirname, '../templates/invoice.ejs'),
             {
@@ -64,33 +114,31 @@ exports.createOrder = async (req, res) => {
                 ]
             });
         });
-
-        // Create individual order items
-        for (const item of cart.items) {
-            await OrderItem.create({
-                order: order._id,
-                product: item.product._id,
-                quantity: item.quantity,
-                price: item.product.price
-            });
-        }
-
+        // Clear cart
         cart.items = [];
         cart.total = 0;
         await cart.save();
 
-        res.status(201).json({
-            message: 'Order placed successfully',
-            orderId: order._id,
-            order
-        })
-    } catch (error) {
-        console.error("Create order error:", error);
-        res.status(500).json({
-            message: 'Internal server error'
-        });
-    };
+        return order;
+    } catch (err) {
+        console.error("Order creation error:", err);
+        throw err;
+    }
 }
+
+
+exports.createOrder = async (req, res) => {
+    try {
+        const order = await createOrderForUser(req.user.userId, req.body.checkoutRequestID);
+        res.status(201).json(order);
+    } catch (err) {
+        console.error("Order creation error:", err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
+
 
 // Get order per user
 exports.getOrder =async (req, res) => {
@@ -251,3 +299,5 @@ exports.statusChange = async (req, res) => {
         });
     }
 }
+
+
