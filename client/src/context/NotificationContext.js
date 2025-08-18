@@ -6,15 +6,16 @@ import axios from 'axios';
 const NotificationContext = createContext();
 export const useNotification = () => useContext(NotificationContext);
 
+
+const rawToken = localStorage.getItem('token');
+const token = JSON.parse(rawToken);
+
 export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
     const socketRef = useRef(null);
 
     useEffect(() => {
-        const rawToken = localStorage.getItem('token');
         if (!rawToken) return;
-
-        const token = JSON.parse(rawToken);
         console.log("🔑 Sending socket token:", token);
 
         // Fetch existing notifications from DB
@@ -33,6 +34,7 @@ export const NotificationProvider = ({ children }) => {
         };
         fetchNotifications();
 
+        
         // Connect socket
         socketRef.current = io(`${process.env.REACT_APP_BASE_URL_IMAGE}`, {
             auth: { token },
@@ -81,8 +83,29 @@ export const NotificationProvider = ({ children }) => {
         };
     }, []);
 
+    // Mark notification as read
+    const markAsRead = async (id) => {
+        try {
+            await axios.patch(
+                `${process.env.REACT_APP_BASE_URL}/notifications/${id}/read`,
+                {},
+                { headers: {
+                    Authorization: `Bearer ${token}`
+                }}
+            );
+            setNotifications((prev) =>
+            prev.map(n =>
+                n._id === id ? { ...n, read: true } : n
+            ));
+        } catch (error) {
+            console.error("Failed to mark notification as read:", error);
+            toast.error("Failed to mark notification as read");
+        }
+    } 
+
+
     return (
-        <NotificationContext.Provider value={{ notifications, setNotifications }}>
+        <NotificationContext.Provider value={{ notifications, setNotifications, markAsRead }}>
             {children}
         </NotificationContext.Provider>
     );

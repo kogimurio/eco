@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   faTachometerAlt,
   faUsers,
@@ -14,10 +14,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Outlet } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { useNotification } from "../../context/NotificationContext";
 
 const Dashboard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const { notifications } = useNotification();
+
+  const unreadNotifications = notifications.filter(n => !n.read).length || 0;
 
   const handleToggle = () => {
     setIsMenuOpen(prev => !prev);
@@ -71,8 +74,13 @@ const Dashboard = () => {
       </div>
       <div 
         onClick={() => setIsMenuOpen(false)}
-        className="flex items-center gap-2 cursor-pointer hover:text-orange-400">
+        className="flex items-center gap-2 cursor-pointer hover:text-orange-400 relative">
         <FontAwesomeIcon icon={faBell} /> 
+          {unreadNotifications > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              {unreadNotifications}
+            </span>
+          )}
         <Link to="/dashboard/notifications">Notifications</Link>
       </div>
       <div 
