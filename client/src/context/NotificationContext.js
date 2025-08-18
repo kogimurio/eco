@@ -14,11 +14,29 @@ export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
     const socketRef = useRef(null);
 
+    // Socket init
+    useEffect(() => {
+        const socket = io(`${process.env.REACT_APP_BASE_URL}`);
+
+        socket.on("count", () => {
+            console.log("🔌 Connected to notifications socket");
+        });
+
+        socket.on("notification", (newNotification) => {
+            setNotifications((prev) => [newNotification, ...prev]);
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
+    // Initial fetch notifications from DB
     useEffect(() => {
         if (!rawToken) return;
         console.log("🔑 Sending socket token:", token);
 
-        // Fetch existing notifications from DB
+        
         const fetchNotifications = async () => {
             try {
                 const response = await axios.get(
@@ -33,54 +51,6 @@ export const NotificationProvider = ({ children }) => {
             }
         };
         fetchNotifications();
-
-        
-        // Connect socket
-        socketRef.current = io(`${process.env.REACT_APP_BASE_URL_IMAGE}`, {
-            auth: { token },
-        });
-
-        socketRef.current.on("connect", () => {
-            console.log("✅ Socket connected:", socketRef.current.id);
-        });
-
-        // Stock alerts
-        socketRef.current.on("stock_updated", (data) => {
-            const msg = `⚠️ Stock low: ${data.product} (remaining ${data.stock})`;
-
-            const stockNotification = {
-                _id: Date.now().toString(), // temporary client ID
-                type: "stock",
-                message: msg,
-                data,
-                read: false,
-                createdAt: new Date().toISOString(),
-            };
-
-            setNotifications((prev) => [...prev, stockNotification]);
-            toast.warn(msg);
-        });
-
-        // Order alerts
-        socketRef.current.on("order_created", (data) => {
-            const msg = `🛒 New order placed: #${data.orderId}`;
-
-            const orderNotification = {
-                _id: Date.now().toString(),
-                type: "order",
-                message: msg,
-                data,
-                read: false,
-                createdAt: new Date().toISOString(),
-            };
-
-            setNotifications((prev) => [...prev, orderNotification]);
-            toast.info(msg);
-        });
-
-        return () => {
-            socketRef.current.disconnect();
-        };
     }, []);
 
     // Mark notification as read

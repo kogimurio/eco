@@ -1,35 +1,11 @@
 import React from 'react';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
-import axios from 'axios';
 import { useNotification } from '../../context/NotificationContext';
 
-const rawToken = localStorage.getItem('token');
-const token = JSON.parse(rawToken);
 
 export default function Notifications() {
-    const { notifications, setNotifications, markAsRead } = useNotification();
+    const { notifications, markAsRead } = useNotification();
 
-    useEffect(() => {
-        if (!rawToken) return;
-        console.log("🔑 Sending socket token:", token);
 
-        // Fetch existing notifications from DB
-        const fetchNotifications = async () => {
-            try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_BASE_URL}/notifications`,
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
-                console.log("Fetched notifications:", response.data.notifications);
-                setNotifications(response.data.notifications || []);
-            } catch (error) {
-                console.error("Failed to fetch notifications:", error);
-                toast.error("Failed to fetch notifications");
-            }
-        };
-        fetchNotifications();
-    }, [setNotifications]);
 
     return (
         <div className="fixed top-20 right-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg  w-[50%] max-h-96 overflow-y-auto">
