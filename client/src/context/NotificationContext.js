@@ -40,7 +40,7 @@ export const NotificationProvider = ({ children }) => {
         const fetchNotifications = async () => {
             try {
                 const response = await axios.get(
-                    `${process.env.REACT_APP_BASE_URL}/notifications`,
+                    `${process.env.REACT_APP_BASE_URL_IMAGE}/notifications`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 console.log("Fetched notifications:", response.data.notifications);
