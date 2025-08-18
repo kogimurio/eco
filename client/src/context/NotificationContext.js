@@ -18,7 +18,7 @@ export const NotificationProvider = ({ children }) => {
         console.log("🔑 Sending socket token:", token);
 
         // Create socket
-        socketRef.current = io('http://localhost:5000', {
+        socketRef.current = io('process.env.REACT_APP_BASE_URL_IMAGE', {
             auth: { token },
         });
 
