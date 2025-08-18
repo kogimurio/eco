@@ -19,21 +19,21 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Overview = () => {
   const { users, products, orders, transactions, loading, fetchTransactions, fetchOrders } = useAdmin();
   const navigate = useNavigate();
-  const [orderItems, setOrderItems] = useState([]);
+  // const [orderItems, setOrderItems] = useState([]);
   const { id: orderId } = useParams();
 
-  useEffect(() => {
-    const fetchOrderItems = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/orders/order_items/${orderId}`);
-        setOrderItems(response.data.orderItems || []);
-        console.log(response.data.orderItems);
-      } catch (error) {
-        console.error(error.response?.data?.message || error.message);
-      }
-    };
-    fetchOrderItems();
-  }, [orderId]);
+  // useEffect(() => {
+  //   const fetchOrderItems = async () => {
+  //     try {
+  //       const response = await axios.get(`${BASE_URL}/orders/order_items/${orderId}`);
+  //       setOrderItems(response.data.orderItems || []);
+  //       console.log(response.data.orderItems);
+  //     } catch (error) {
+  //       console.error(error.response?.data?.message || error.message);
+  //     }
+  //   };
+  //   fetchOrderItems();
+  // }, [orderId]);
 
   const totalSales = orders.reduce((sum, order) => sum + order.total_price, 0);
   const totalOrders = orders.length;
