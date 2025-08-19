@@ -57,7 +57,6 @@ exports.initiateStkPush = async (req, res) => {
         // Create pending payment record
         await Payment.create({
             user: req.user.userId,
-            order: order._id,
             phone,
             amount: cart.total,
             merchantRequestID: MerchantRequestID,
@@ -81,42 +80,59 @@ exports.initiateStkPush = async (req, res) => {
 exports.mpesaCallback = async (req, res) => {
     try {
         const stkCallback = req.body?.Body?.stkCallback;
-        const { MerchantRequestID, CheckoutRequestID, ResultCode, ResultDesc } = stkCallback;
+        const { CheckoutRequestID, ResultCode, ResultDesc } = stkCallback;
 
-        let updateData = { resultCode: ResultCode, resultDesc: ResultDesc, status: ResultCode === 0 ? 'success' : 'failed' };
+        let updateData = { 
+            resultCode: ResultCode, 
+            resultDesc: ResultDesc, 
+            status: ResultCode === 0 ? 'success' : 'failed' 
+        };
 
         if (ResultCode === 0) {
             const metadata = stkCallback.CallbackMetadata?.Item || [];
-            const amount = metadata.find(item => item.Name === 'Amount')?.Value;
-            const phone = metadata.find(item => item.Name === 'PhoneNumber')?.Value;
-            const receipt = metadata.find(item => item.Name === 'MpesaReceiptNumber')?.Value;
-
-            updateData.amount = amount;
-            updateData.phone = phone;
-            updateData.receipt = receipt;
+            const amount = metadata.find(i => i.Name === 'Amount')?.Value;
+            const phone = metadata.find(i => i.Name === 'PhoneNumber')?.Value;
+            const receipt = metadata.find(i => i.Name === 'MpesaReceiptNumber')?.Value;
 
             // Find payment record
             const payment = await Payment.findOne({ checkoutRequestID: CheckoutRequestID });
             if (payment) {
                 const userId = payment.user;
-                const order = await createOrderForUser(userId, CheckoutRequestID);
-                updateData.order = order._id;
+
+                const { order } = await createOrderForUser(userId, CheckoutRequestID);
+
+                payment.amount = amount;
+                payment.phone = phone;
+                payment.receipt = receipt;
+                payment.resultCode = ResultCode;
+                payment.resultDesc = ResultDesc;
+                payment.status = "success";
+                payment.order = order._id;
+
                 await payment.save();
+
                 console.log(`✅ Order ${order._id} created for user ${userId}`);
+
+                return res.status(200).json({ 
+                    message: "Payment success, order created", 
+                    orderId: order._id 
+                });
             }
         } else {
             console.log("❌ Payment failed:", ResultDesc);
+            return res.status(400).json({ 
+                message: "Payment failed", 
+                reason: ResultDesc 
+            });
         }
 
-        // Update payment record
-        await Payment.findOneAndUpdate({ checkoutRequestID: CheckoutRequestID }, updateData, { new: true });
-
-        res.status(200).json({ message: "Callback processed successfully" });
     } catch (error) {
         console.error("Callback processing error:", error);
-        res.status(500).json({ error: "Callback processing failed" });
+        return res.status(500).json({ error: "Callback processing failed" });
     }
 };
+
+
 
 
 
@@ -129,13 +145,13 @@ exports.getPaymentStatus = async (req, res) => {
         message: "Payment not found"
     });
 
-    console.log("Order ID:", payment.order ? payment.order._id : "No order associated");
+    console.log("Order ID:", payment.order || "No order associated");
     console.log("Payment status:", payment.status);
     res.status(200).json({ 
         status: payment.status,
         resultCode: payment.resultCode,
         resultDesc: payment.resultDesc,
-        orderId: payment.order ? payment.order._id : null
+        orderId: payment.order || null
     });
   } catch (error) {
         console.error("Error checking payment status:", error.message);
