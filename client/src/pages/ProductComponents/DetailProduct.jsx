@@ -283,7 +283,7 @@ export default function DetailProduct() {
         </div>
         {relatedProducts.length > 0 && (
             <div className="bg-gray-700 py-4 overflow-x-hidden">
-            <div className="flex justify-between items-center w-[90%] mx-auto my-4">
+            <div className="w-[80%] mx-auto my-4">
                 <h2 className="text-white text-lg font-semibold text-left">Customers who viewed this also viewed</h2>
             </div>
             
