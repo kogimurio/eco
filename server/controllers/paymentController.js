@@ -16,6 +16,7 @@ exports.initiateStkPush = async (req, res) => {
         console.log("req.user.userId:", req.user.userId);
         // Check cart
         const cart = await Cart.findOne({ user: userId }).populate('items.product');
+        const order = await Order.findOne({ user: userId })
         if (!cart || cart.items.length === 0) {
             return res.status(400).json({ message: 'Cart is empty' });
         }
@@ -56,6 +57,7 @@ exports.initiateStkPush = async (req, res) => {
         // Create pending payment record
         await Payment.create({
             user: req.user.userId,
+            order: order._id,
             phone,
             amount: cart.total,
             merchantRequestID: MerchantRequestID,
@@ -98,7 +100,7 @@ exports.mpesaCallback = async (req, res) => {
             if (payment) {
                 const userId = payment.user;
                 const order = await createOrderForUser(userId, CheckoutRequestID);
-                payment.order = order._id;
+                updateData.order = order._id;
                 await payment.save();
                 console.log(`✅ Order ${order._id} created for user ${userId}`);
             }
