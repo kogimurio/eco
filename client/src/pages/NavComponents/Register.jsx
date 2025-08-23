@@ -62,6 +62,7 @@ export default function Register() {
     }
   }
 
+
   const rules = checkPasswordRules(formData.password)
   const passwordMatch = formData.password === formData.confirmPassword && formData.confirmPassword.length > 0;
   const allRulesPassed = Object.values(rules).every(Boolean) && passwordMatch;
@@ -71,6 +72,7 @@ export default function Register() {
 
     if (!validateForm()) {
       toast.error("Please fix errors before registering")
+      return;
     }
 
     if (formData.password !== formData.confirmPassword) {
