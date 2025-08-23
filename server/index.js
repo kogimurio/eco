@@ -9,8 +9,12 @@ const http = require("http");
 const { initSocket } = require("./socket");
 
 const app = express();
+
+// 🖥️ Create an HTTP server from the Express app
 const server = http.createServer(app);
 
+// 🔌 Initialize Socket.IO on top of the same HTTP server
+// HTTP and WebSocket connections run together.
 initSocket(server);
 
 // Static assets
@@ -84,5 +88,7 @@ mongoose
 
 // Start server
 const PORT = 5000;
+
+// 🚀 Start the HTTP + Socket.IO server, listening for requests on the given port
 server.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
 

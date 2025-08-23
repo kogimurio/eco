@@ -22,8 +22,8 @@ exports.initiateStkPush = async (req, res) => {
         }
 
         const formattedPhone = 
-        phone.startsWith("0") ? "254" + phone.substring(1) :
-        phone.startsWith("+") ? phone.substring(1)
+        phone.startsWith("0") ? "254" + phone.slice(1) :
+        phone.startsWith("+") ? phone.slice(1)
         : phone;
 
         const shortCode = process.env.MPESA_SHORTCODE;
@@ -82,11 +82,14 @@ exports.mpesaCallback = async (req, res) => {
         const stkCallback = req.body?.Body?.stkCallback;
         const { CheckoutRequestID, ResultCode, ResultDesc } = stkCallback;
 
-        let updateData = { 
-            resultCode: ResultCode, 
-            resultDesc: ResultDesc, 
-            status: ResultCode === 0 ? 'success' : 'failed' 
-        };
+        // Find payment record
+        const payment = await Payment.findOne({ checkoutRequestID: CheckoutRequestID });
+        if (!payment) {
+            return res.status(404).json({
+                message: "Payment record not found"
+            })
+        }
+
 
         if (ResultCode === 0) {
             const metadata = stkCallback.CallbackMetadata?.Item || [];
@@ -94,33 +97,34 @@ exports.mpesaCallback = async (req, res) => {
             const phone = metadata.find(i => i.Name === 'PhoneNumber')?.Value;
             const receipt = metadata.find(i => i.Name === 'MpesaReceiptNumber')?.Value;
 
-            // Find payment record
-            const payment = await Payment.findOne({ checkoutRequestID: CheckoutRequestID });
-            if (payment) {
-                const userId = payment.user;
+            const userId = payment.user;
+            const { order } = await createOrderForUser(userId, CheckoutRequestID);
 
-                const { order } = await createOrderForUser(userId, CheckoutRequestID);
+            payment.amount = amount;
+            payment.phone = phone;
+            payment.receipt = receipt;
+            payment.resultCode = ResultCode;
+            payment.resultDesc = ResultDesc;
+            payment.status = "success";
+            payment.order = order._id;
 
-                payment.amount = amount;
-                payment.phone = phone;
-                payment.receipt = receipt;
-                payment.resultCode = ResultCode;
-                payment.resultDesc = ResultDesc;
-                payment.status = "success";
-                payment.order = order._id;
+            await payment.save();
 
-                await payment.save();
+            console.log(`✅ Order ${order._id} created for user ${userId}`);
 
-                console.log(`✅ Order ${order._id} created for user ${userId}`);
-
-                return res.status(200).json({ 
-                    message: "Payment success, order created", 
-                    orderId: order._id 
-                });
-            }
+            return res.status(200).json({ 
+                message: "Payment success, order created", 
+                orderId: order._id 
+            });
         } else {
+            payment.resultCode = ResultCode;
+            payment.resultDesc = ResultDesc;
+            payment.status = "failed";
+            await payment.save();
+
             console.log("❌ Payment failed:", ResultDesc);
-            return res.status(400).json({ 
+            return res.status(200).json({ 
+                status: "failed",
                 message: "Payment failed", 
                 reason: ResultDesc 
             });
@@ -134,21 +138,26 @@ exports.mpesaCallback = async (req, res) => {
 
 
 
-
-
 exports.getPaymentStatus = async (req, res) => {
   try {
     const { checkoutRequestID } = req.params;
     const payment = await Payment.findOne({ checkoutRequestID });
-    if (!payment) return res.status(404).json({ 
+
+    if (!payment) return res.status(200).json({ 
         status: "pending",
-        message: "Payment not found"
+        message: "Payment not yet initiated"
     });
+
+    let status = payment.status || 'pending';
+    if (!["success", "failed", "pending"].includes(status)) {
+        status = "pending";
+    }
 
     console.log("Order ID:", payment.order || "No order associated");
     console.log("Payment status:", payment.status);
+
     res.status(200).json({ 
-        status: payment.status,
+        status,
         resultCode: payment.resultCode,
         resultDesc: payment.resultDesc,
         orderId: payment.order || null

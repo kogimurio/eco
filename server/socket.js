@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 let io;
 
 function initSocket(server) {
+    // ✅ Initialize a new Socket.IO server instance, Allow all origins, Accept only GET and POST methods
     io = new Server(server, {
         cors: {
             origin: "*",
@@ -11,7 +12,11 @@ function initSocket(server) {
         },
     });
 
-    // Middleware: auth every socket connection
+    // 🛡️ Middleware to authenticate every new socket connection
+    // - Extract the JWT token from the handshake (socket.handshake.auth.token)
+    // - If no token, reject the connection
+    // - If valid, attach the decoded payload (user info, role, email, userId) to socket.user
+    // - If invalid, throw an authentication error
     io.use((socket, next) => {
         const token = socket.handshake.auth.token;
         if (!token) return next(new Error("❌ No token provided"));
@@ -25,6 +30,11 @@ function initSocket(server) {
         }
     });
     
+    // 🎧 Handle a new client connection
+    // - Log when a socket successfully connects
+    // - If the connected user is an admin:
+    //     → Add them to the special "admins" room
+    //     → Log which admin joined
     io.on("connection", (socket) => {
         console.log("✅ Socket connected:", socket.id);
 
