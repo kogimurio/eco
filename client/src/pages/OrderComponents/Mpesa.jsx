@@ -76,7 +76,7 @@ export default function Mpesa ({ closeModal }) {
 
                     if (statusRes.data.status === 'success') {
                         clearInterval(interval);
-                        // clearTimeout(timeout);
+                        
 
                         toast.success("Payment successful! Redirecting.....");
                         
@@ -86,25 +86,22 @@ export default function Mpesa ({ closeModal }) {
                         closeModal();
                         
                         setTimeout(() => {
-                            // navigate(`/order_confirmation?orderId=${orderId}`);
                             window.location.href=`/order_confirmation?orderId=${orderId}`;
                         }, 600);
                     } else if (statusRes.data.status === 'failed') {
                         clearInterval(interval);
-                        // clearTimeout(timeout);
-                        toast.error("Payment failed or cancelled");
+                        console.log("Closing modal on failure");
+                        closeModal();
+                        
+                        const reason = statusRes.data.resultDesc || "Payment failed or cancelled";
+                        toast.error(`Payment failed ${reason}`);
                     }
                 } catch (error) {
                     console.error("Polling error:", error.message);
                 }
             }, 3000);
 
-            // Auto stop polling after 60 seconds
-            // const timeout = setTimeout(() => {
-            //     clearInterval(interval);
-            //     toast.error("Payment timeout: No response received within 60 seconds.")
-            //     closeModal();
-            // }, 60000);
+            
         } catch (error) {
             toast.error(error.response?.data?.message || error.message);
             console.error(error.response?.data?.message || error.message);
@@ -124,7 +121,7 @@ export default function Mpesa ({ closeModal }) {
             <input
                 type="text"
                 name="phone"
-                placeholder="Phone (e.g 2547......)"
+                placeholder="Phone (e.g 0712345678)"
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full border px-4 py-2 rounded mt-4"

@@ -29,6 +29,8 @@ export default function Checkout() {
   const { cartItems } = useCart();
   const [loadingItem, setLoadingItem] = useState(null)
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const [addressSaved, setAddressSaved] = useState(false);
 
     useEffect(() => {
       const fetchCart = async () => {
@@ -89,8 +91,42 @@ export default function Checkout() {
       return total + (item.product?.price ? item.product.price * item.quantity : 0);
     }, 0);
 
+    const validateForm = () => {
+      const newErrors = {};
+
+      if (!formData.phone.trim()) {
+        newErrors.phone = "Phone number is required";
+      } else if (!/^(07\d{8}|01[01]\d{7}|\+254\d{9})$/.test(formData.phone)) {
+        newErrors.phone = "Enter a validate phone number";
+      }
+
+      if (!formData.addressLine.trim()) {
+        newErrors.addressLine = "Street address is required";
+      }
+
+      if (!formData.city.trim()) {
+        newErrors.city = "City is required";
+      }
+
+      if (!formData.postalCode.trim()) {
+        newErrors.postalCode = "Postcode is required";
+      }
+
+      if (!formData.country.trim()) {
+        newErrors.country = "Please select your country";
+      }
+
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0; // true if no errors
+    }
+
     const handleSubmit =async (e) => {
       e.preventDefault();
+
+      if (!validateForm()) {
+        toast.error("Please fix errors before submitting");
+        return;
+      }
 
       const payload = {
         user: user.id,
@@ -105,8 +141,10 @@ export default function Checkout() {
       try {
         setLoading(true);
 
+        let response;
+
         if (address) {
-          const response = await axios.put(`${BASE_URL}/address`, payload, {
+          response = await axios.put(`${BASE_URL}/address`, payload, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -114,18 +152,13 @@ export default function Checkout() {
           console.log("Update address:", response.data);
           toast.success("Address updated")
         } else {
-          const response = await axios.post(`${BASE_URL}/address`, payload)
-          setFormData({
-            user: '',
-            phone: '',
-            addressLine: '',
-            city: '',
-            postalCode: '',
-            country: ''
-          });
+          response = await axios.post(`${BASE_URL}/address`, payload)
           console.log(response.data);
           toast.success("Your address has been added")
         }
+
+        setAddress(response.data.address);
+        setAddressSaved(true);
         
       } catch (error) {
         toast.error("Internal server error")
@@ -143,15 +176,18 @@ export default function Checkout() {
       setSeletedMethod(null)
     }
 
-    const isAddressComplete = () => {
+    const isAddressSavedAndComplete = () => {
       return (
-        formData.phone.trim() !== '' &&
-        formData.addressLine.trim() !== '' &&
-        formData.city.trim() !== '' &&
-        formData.postalCode.trim() !== '' &&
-        formData.country.trim() !== ''
+        address &&
+        address.phone?.trim() !== '' &&
+        address.addressLine?.trim() !== '' &&
+        address.city?.trim() !== '' &&
+        address.postalCode?.trim() !== '' &&
+        address.country?.trim() !== ''
       );
     };
+
+    
   return (
     <div className="bg-gray-900 text-white min-h-screen p-6">
       <h2 className="text-2xl font-semibold mb-6">Checkout</h2>
@@ -163,68 +199,86 @@ export default function Checkout() {
           <div className="lg:col-span-2 bg-gray-800 p-6 rounded-lg shadow-md">
             
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="text"
-                name="user"
-                value={user.firstName}
-                disabled
-                onChange={handleChange}
-                placeholder="Full Name"
-                className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
-              />
-              <input
-                type="email"
-                name="email"
-                value={user.email}
-                disabled
-                onChange={handleChange}
-                placeholder="Email Address"
-                className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
-              />
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Phone Number"
-                className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
-              />
-              <input
-                type="text"
-                name="addressLine"
-                value={formData.addressLine}
-                onChange={handleChange}
-                placeholder="Street Address"
-                className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
-              />
-              <input
-                type="text"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                placeholder="City"
-                className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
-              />
-              <input
-                type="text"
-                name="postalCode"
-                value={formData.postalCode}
-                onChange={handleChange}
-                placeholder="Postal Code"
-                className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
-              />
-              <select
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 col-span-1 md:col-span-2"
-              >
-                <option value="">Select Country</option>
-                <option value="Kenya">Kenya</option>
-                <option value="USA">USA</option>
-                <option value="UK">UK</option>
-              </select>
-
+              <div>
+                <input
+                  type="text"
+                  name="user"
+                  value={user.firstName}
+                  disabled
+                  onChange={handleChange}
+                  placeholder="Full Name"
+                  className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
+                />
+              </div>
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  value={user.email}
+                  disabled
+                  onChange={handleChange}
+                  placeholder="Email Address"
+                  className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
+                />
+              </div>
+              <div>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Phone Number"
+                  className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
+                />
+                {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="addressLine"
+                  value={formData.addressLine}
+                  onChange={handleChange}
+                  placeholder="Street Address"
+                  className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
+                />
+                {errors.addressLine && <p className="text-red-500 text-sm">{errors.addressLine}</p>}
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="City"
+                  className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
+                />
+                {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                  placeholder="Postal Code"
+                  className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 w-full"
+                />
+                {errors.postalCode && <p className="text-red-500 text-sm">{errors.postalCode}</p>}
+              </div>
+              <div>
+                <select
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="p-3 bg-gray-700 rounded text-white placeholder-gray-400 col-span-1 md:col-span-2 w-full"
+                >
+                  <option value="">Select Country</option>
+                  <option value="Kenya">Kenya</option>
+                  <option value="USA">USA</option>
+                  <option value="UK">UK</option>
+                </select>
+                {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
+              </div>
               <button
                 type="submit"
                 className="mt-2 md:col-span-2 w-full bg-orange-600 hover:bg-orange-700 py-2 rounded text-white font-semibold transition"
@@ -251,7 +305,7 @@ export default function Checkout() {
             <span>${subtotal.toFixed(2)}</span>
           </div>
 
-          {isAddressComplete() ? (
+          {isAddressSavedAndComplete() ? (
             <div className="bg-gray-800 text-white w-full max-w-md rounded-lg shadow-lg p-6 space-y-6">
               <h2 className="text-2xl font-semibold text-center uppercase tracking-wide">Select Payment</h2>
 

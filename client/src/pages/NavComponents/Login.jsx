@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -13,6 +14,8 @@ export default function Login() {
     email: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false)
+  const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
   
   
@@ -20,6 +23,18 @@ export default function Login() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required"
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address"
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,33 +77,49 @@ export default function Login() {
     }
   };
 
+  if (!validateForm) {
+    toast.error("Please fix errors before login")
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4">
       <form
         onSubmit={handleSubmit}
+        noValidate
         className="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md space-y-6"
       >
         <h2 className="text-2xl font-bold text-center text-orange-500">Login to Your Account</h2>
 
-        <input
-          type="email"
-          placeholder="Email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
-        />
+        <div>
+          <input
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          {errors.email && <p className='text-red-500 text-sm'>{errors.email}</p>}
+        </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
-        />
+        <div className='relative'>
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <button
+            onClick={() => setShowPassword(!showPassword)}
+            className='absolute right-2 top-4'
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
 
         <button
           type="submit"
