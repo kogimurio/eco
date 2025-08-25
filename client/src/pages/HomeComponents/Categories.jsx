@@ -86,7 +86,7 @@ const Categories = () => {
                 <h2 className="text-white text-lg sm:text-xl md:text-2xl lg:3xl xl:sectionHeading font-semibold">Shop Categories</h2>
 
                 {/* Line Breaker */}
-                <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto border-t border-gray-800 my-2"></div>
+                <div className="hidden md:flex w-full max-w-xs md:max-w-md lg:max-w-lg mx-auto border-t border-gray-600 my-2"></div>
                 
                 {/* Pagination */}
                 <div className="flex items-center gap-2 mt-2 justify-center">

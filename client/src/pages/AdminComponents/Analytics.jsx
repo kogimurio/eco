@@ -1,8 +1,9 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAdmin } from '../../context/AdminContext';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
+import Pagination from './Pagination';
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -10,6 +11,16 @@ const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
 
 export default function Analytics() {
   const { orders, fetchOrders } = useAdmin();
+
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+
+  
+
+  const handlePageChange = (pageNum) => setCurrentPage(pageNum);
   
   useEffect(() => {
     fetchOrders();
@@ -58,6 +69,10 @@ export default function Analytics() {
     return Object.values(productMap);
   }, [orders]);
 
+  const currentProducts = productStats.slice(indexOfFirst, indexOfLast);
+
+  const totalPages = Math.ceil(productStats.length / itemsPerPage);
+
 
   return (
     <div className="p-6 text-white">
@@ -79,7 +94,7 @@ export default function Analytics() {
 
       {/* Sales per Product */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {productStats.map((product, idx) => (
+        {currentProducts.map((product, idx) => (
           <div
             key={idx}
             className="bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center"
@@ -96,6 +111,14 @@ export default function Analytics() {
             </div>
           </div>
         ))}
+      </div>
+      {/* Pagination */}
+      <div className="flex items-center gap-2 mt-4 justify-center">
+          <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+          />
       </div>
     </div>
   );

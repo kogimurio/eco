@@ -4,6 +4,7 @@ import LoadingSpinner from '../LoadingSpinner';
 import axios from 'axios';
 import { useAdmin } from '../../context/AdminContext';
 import Swal from 'sweetalert2';
+import Pagination from './Pagination';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -12,7 +13,17 @@ export default function ProductList() {
   const [filter, setFilter] = useState('all');
   const { products, loading, fetchProducts } = useAdmin();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
 
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+
+  const currentProducts = products.slice(indexOfFirst, indexOfLast);
+
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  const handlePageChange = (pageNum) => setCurrentPage(pageNum);
   
   const navigate = useNavigate();
 
@@ -105,7 +116,7 @@ export default function ProductList() {
             <LoadingSpinner size="60" />
           </div>
         ) : (
-          products.map((product) => (
+          currentProducts.map((product) => (
             <div
               key={product._id}
               className="bg-gray-800 rounded-xl p-6 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center"
@@ -136,6 +147,14 @@ export default function ProductList() {
         ))
         )}
         
+      </div>
+      {/* Pagination */}
+      <div className="flex items-center gap-2 mt-4 justify-center">
+          <Pagination 
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+          />
       </div>
     </div>
   );

@@ -61,7 +61,7 @@ const Blog = () => {
         <div className="w-[90%] mx-auto mt-4 overflow-hidden">
             <div className="flex justify-between items-center w-[90%] mx-auto my-4">
                 <h2 className="text-white text-sectionHeading font-semibold whitespace-nowrap">Latest Blog</h2>
-                <div className="w-full max-w-xs mx-auto border-t border-gray-600 my-2"></div>
+                <div className="hidden md:flex w-full max-w-xs md:max-w-md lg:max-w-lg mx-auto border-t border-gray-600 my-2"></div>
                 <div className="flex items-center gap-2 mt-4 justify-center">
                     <Pagination 
                         currentPage={currentIndex + 1}

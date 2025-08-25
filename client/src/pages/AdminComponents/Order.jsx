@@ -1,14 +1,16 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
 import { useAdmin } from '../../context/AdminContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import Pagination from '../HomeComponents/Pagination';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const localToken = localStorage.getItem('token');
 const token = JSON.parse(localToken);
+
 
 
 export default function Order() {
@@ -59,6 +61,7 @@ export default function Order() {
     }
   };
 
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -80,7 +83,7 @@ export default function Order() {
       </div>
 
       {/* Orders Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-[70vh] overflow-y-auto">
         <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-gray-700 text-left text-sm uppercase">

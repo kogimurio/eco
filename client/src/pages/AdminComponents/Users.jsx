@@ -33,7 +33,7 @@ export default function Users() {
       </div>
 
       {/* Users Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-[70vh] overflow-y-auto">
         <table className="min-w-full bg-gray-800 text-white rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-gray-700 text-left text-sm uppercase">
