@@ -41,6 +41,7 @@ const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'))
 const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
 const ClientOrders = lazy(() => import('./pages/ClientComponents/ClientOrder'));
 const ClientOrderView = lazy(() => import('./pages/ClientComponents/ClientOrderView'));
+// const CreateReview = lazy(() => import('./pages/ReviewComponents/CreateReview'));
 
 
 export default function App() {
@@ -67,6 +68,7 @@ export default function App() {
               <Route path="wishlist" element={<WishList />} />
               <Route path="client_order" element={<ClientOrders />} />
               <Route path="client_order_view/:id" element={<ClientOrderView />} />
+              {/* <Route path="create-review/:slug" element={<CreateReview />} /> */}
             </Route>
 
             {/* Admin Routes in Suspense */}

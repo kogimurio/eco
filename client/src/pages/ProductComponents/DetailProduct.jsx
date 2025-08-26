@@ -13,6 +13,9 @@ import LoadingSpinner from "../LoadingSpinner";
 import { toast } from 'react-toastify';
 import { useCart } from '../../context/CartContext';
 import useResponsiveTextLength from "../../hooks/useResponsiveTextLength";
+import ReviewList from '../ReviewComponents/ReviewsList';
+
+import Modal from '../ReviewComponents/Modal';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -33,6 +36,8 @@ export default function DetailProduct() {
     const { slug } = useParams()
     const { addToCart, cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();
     const [loadingItem, setLoadingItem] = useState(null)
+    const [isModalopen, setIsModalOpen] = useState(false);
+     const [reviews, setReviews] = useState([]);
     const maxChars = useResponsiveTextLength();
     const navigate = useNavigate();
     
@@ -72,6 +77,45 @@ export default function DetailProduct() {
         fetchProduct();
         
     }, [slug])
+
+    useEffect(() => {
+            try {
+                const fetchReviews = async () => {
+                const response = await axios.get(`${BASE_URL}/review/${slug}`)
+                setReviews(response.data.reviews);
+                console.log("Fetched reviews:", response.data);
+            } 
+            
+            fetchReviews();
+        } catch (error) {
+            const msg =
+            error.response?.data ||
+            error.message ||
+            "something went wrong"
+            console.log(msg);
+            toast.error(msg);
+        }
+    }, [slug]);
+
+    const totalRatings = reviews.reduce((sum, r) => sum + r.rating, 0);
+    const averageRating = reviews.length > 0 ? (totalRatings / reviews.length).toFixed(1) : 0;
+
+    function StarRating({ averageRating }) {
+        return (
+            <div className="flex text-orange-400">
+                {[1, 2, 3, 4, 5].map((i) => {
+                    if (averageRating >= i) {
+                        return <FontAwesomeIcon key={i} icon={solidStar} />; 
+                    } else if (averageRating >= i - 0.5) {
+                        return <FontAwesomeIcon key={i} icon={faStarHalfStroke} />;
+                    } else {
+                        return <FontAwesomeIcon key={i} icon={regularStar} />;
+                    }
+                })}
+            </div>
+        )
+    }
+
 
     const truncate = (text) => {
         return text.length > maxChars ? text.slice(0, maxChars) + "…" : text
@@ -132,6 +176,14 @@ export default function DetailProduct() {
         navigate(`/productdetail/${slug}`);
     }
 
+    const handleCreateReview = () => {
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    }
+
     if (loading || !product) {
         <div className="flex justify-center">
             return <LoadingSpinner />;
@@ -142,6 +194,9 @@ export default function DetailProduct() {
         <>
         <MinProductBar />
         <div className="bg-gray-800 py-4 min-h-screen">
+            {isModalopen && (
+                <Modal slug={slug} onClose={handleCloseModal} />
+            )}
             <div className="grid grid-cols-1 max-w-7xl mx-auto overflow-x-hidden px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 w-[90%] mx-auto py-4">
                     <div className="border border-gray-700 px-3 rounded-lg shadow h-auto">
@@ -158,19 +213,15 @@ export default function DetailProduct() {
 
                         <p className="py-3 text-white">${product?.price}</p>
                         <div className="flex text-yellow-400 pb-2">
-                            <FontAwesomeIcon icon={solidStar} />
-                            <FontAwesomeIcon icon={solidStar} />
-                            <FontAwesomeIcon icon={solidStar} />
-                            <FontAwesomeIcon icon={faStarHalfStroke} />
-                            <FontAwesomeIcon icon={regularStar} />
+                            <StarRating averageRating={averageRating} />
 
                             <div className="w-px h-4 bg-stone-400 ml-2"></div>
                             <p className="text-stone-400 pl-2 text-xs">
-                                No reviews yet 
+                                {averageRating}
                             </p>
                             <div className="w-px h-4 bg-stone-400 ml-2"></div>
                             <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
-                                <FaPen />
+                                <FaPen onClick={handleCreateReview} />
                                 <span>Write a Review</span>
                             </div>
                             <div className="w-px h-4 bg-stone-400 ml-2"></div>
@@ -367,9 +418,11 @@ export default function DetailProduct() {
                     ))}
                 </div>
             )}
+            
         </div>
         )}
         
+        <ReviewList />
         </>
         
     );
