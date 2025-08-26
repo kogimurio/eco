@@ -41,6 +41,7 @@ const address = require('./routes/addressRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
@@ -52,6 +53,7 @@ app.use('/api/address', address);
 app.use('/api/mpesa', paymentRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/review', reviewRoutes);
 
 // ✅ Global error handler (place this **after** all routes!)
 app.use((err, req, res, next) => {

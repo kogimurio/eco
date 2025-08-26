@@ -24,6 +24,7 @@ const reviewSchema = new mongoose.Schema({
     },
 }, { timestamps: true })
 
+// Prevent multiple reviews per product by same user
 reviewSchema.index({ user: 1, product: 1 }, { unique: true });
 
 module.exports = mongoose.model('Review', reviewSchema)
