@@ -296,9 +296,9 @@ export default function DetailProduct() {
 
                                 {/* Add to Cart Button */}
                                 <button 
-                                    onClick={() => handleAddToCart(product._id)}
-                                    className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition duration-200">
-                                    Add to Cart
+                                    onClick={product?.stock === 0 ? null : () => handleAddToCart(product._id)}
+                                    className={`${product?.stock === 0 ? 'bg-gray-600' : 'bg-orange-600 hover:bg-orange-700'} text-white px-4 py-2 rounded-lg  transition duration-200`}>
+                                     {product?.stock === 0 ? "Out of stock" : "Add to Cart"}
                                 </button>
                             </div>
                         </div>

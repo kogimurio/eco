@@ -99,7 +99,7 @@ export default function ReviewList() {
                             ))}
                         </div>
                         {/* Pagination */}
-                        {reviews.length > 0 && (
+                        {reviews.length >= 3 && (
                             <div className="flex items-center gap-2 mt-4 justify-center">
                                 <Pagination 
                                     currentPage={currentPage}
