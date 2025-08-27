@@ -220,14 +220,20 @@ export default function DetailProduct() {
                             <p className="text-stone-400 pl-2 text-xs">
                                 {averageRating}
                             </p>
-                            <div className="w-px h-4 bg-stone-400 ml-2"></div>
-                            <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
-                                <FaPen onClick={handleCreateReview} />
-                                <span>Write a Review</span>
-                            </div>
-                            <div className="w-px h-4 bg-stone-400 ml-2"></div>
+                            
+                            {user?.role !== 'admin' && (
+                                <>
+                                    <div className="w-px h-4 bg-stone-400 ml-2"></div>
+                                    <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
+                                        <FaPen onClick={handleCreateReview} />
+                                        <span>a review</span>
+                                    </div>
+                                </>
+                            )}
+                            
                             {user?.role === 'admin' && (
                                 <>
+                                    <div className="w-px h-4 bg-stone-400 ml-2"></div>
                                     <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
                                         <FaPen />
                                         <span>Edit</span>
@@ -235,7 +241,6 @@ export default function DetailProduct() {
                                     <div className="w-px h-4 bg-stone-400 ml-2"></div>
                                     <div className="flex items-center text-stone-400 pl-2 text-xs gap-1 cursor-pointer hover:text-blue-400">
                                         <FontAwesomeIcon icon={faTrash} className="text-red-500 hover:text-red-700 cursor-pointer" />
-                                        <span>Delete</span>
                                     </div>
                                 </>
                             )}
