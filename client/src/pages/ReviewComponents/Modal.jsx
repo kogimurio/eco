@@ -31,7 +31,8 @@ export default function Modal ({ slug, onClose }) {
                 rating: '',
                 comment: ''
             })
-            console.log("Data sent to backend:", response.data);
+            toast.success("Review added");
+            onClose();
 
         } catch (error) {
 

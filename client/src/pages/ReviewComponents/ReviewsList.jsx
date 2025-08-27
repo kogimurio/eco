@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { faStar as solidStar, faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
+import Pagination from '../HomeComponents/Pagination';
 
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -13,6 +14,17 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function ReviewList() {
     const [reviews, setReviews] = useState([]);
     const { slug } = useParams()
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(3);
+
+    const indexOfLast = currentPage * itemsPerPage;
+    const indexOfFirst = indexOfLast - itemsPerPage;
+    const currentFeaturedReviews = reviews.slice(indexOfFirst, indexOfLast);
+
+    const totalPages = Math.ceil(reviews.length / itemsPerPage);
+
+    const handlePageChange = (pageNum) => setCurrentPage(pageNum);
 
     useEffect(() => {
         try {
@@ -75,10 +87,10 @@ export default function ReviewList() {
                     </div>
                     <div className="text-gray-300">
                         <h5 className="my-3 uppercase text-white">Product Reviews ({totalComments})</h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                            {reviews.map((review, idx) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {currentFeaturedReviews.map((review, idx) => (
                                 <ul key={idx} className=" bg-gray-800 rounded-lg p-4 text-sm">
-                                    <StarRating averageRating={averageRating} />
+                                    <StarRating averageRating={review.rating} />
                                     <div className=" space-y-1">
                                         <li className="pt-2">{review.comment}</li>
                                         <li className="py-1">{formatDate(review.createdAt)} by {review.user.firstName}</li>
@@ -86,7 +98,16 @@ export default function ReviewList() {
                                 </ul>
                             ))}
                         </div>
-                        
+                        {/* Pagination */}
+                        {reviews.length > 0 && (
+                            <div className="flex items-center gap-2 mt-4 justify-center">
+                                <Pagination 
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
+                            </div>
+                        )}  
                     </div>
                 </div>
             </div>

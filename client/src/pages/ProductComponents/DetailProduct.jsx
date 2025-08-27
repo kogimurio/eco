@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 import { useCart } from '../../context/CartContext';
 import useResponsiveTextLength from "../../hooks/useResponsiveTextLength";
 import ReviewList from '../ReviewComponents/ReviewsList';
+import RelatedProducts from './RelatedProducts';
 
 import Modal from '../ReviewComponents/Modal';
 
@@ -37,7 +38,7 @@ export default function DetailProduct() {
     const { addToCart, cartItems, loadingCart, updateCartItem, removeFromCart } = useCart();
     const [loadingItem, setLoadingItem] = useState(null)
     const [isModalopen, setIsModalOpen] = useState(false);
-     const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const maxChars = useResponsiveTextLength();
     const navigate = useNavigate();
     
@@ -79,14 +80,14 @@ export default function DetailProduct() {
     }, [slug])
 
     useEffect(() => {
-            try {
-                const fetchReviews = async () => {
-                const response = await axios.get(`${BASE_URL}/review/${slug}`)
-                setReviews(response.data.reviews);
-                console.log("Fetched reviews:", response.data);
-            } 
-            
-            fetchReviews();
+        try {
+            const fetchReviews = async () => {
+            const response = await axios.get(`${BASE_URL}/review/${slug}`)
+            setReviews(response.data.reviews);
+            console.log("Fetched reviews:", response.data);
+        } 
+        
+        fetchReviews();
         } catch (error) {
             const msg =
             error.response?.data ||
@@ -332,97 +333,8 @@ export default function DetailProduct() {
             </div>
             
         </div>
-        {relatedProducts.length > 0 && (
-            <div className="bg-gray-700 py-4 overflow-x-hidden">
-            <div className="w-[80%] mx-auto my-4">
-                <h2 className="text-white text-lg font-semibold text-left">Customers who viewed this also viewed</h2>
-            </div>
-            
-            {loading ? (
-                <div className="flex justify-center">
-                    <LoadingSpinner size="40" />
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[80%] mx-auto">
-                    {relatedProducts.map((product, index) => (
-                        <div 
-                            key={index} 
-                            className="relative w-full group cursor-pointer"
-                            >
-                                <div className="md:left-2 md:top-2 pl-2">
-                                    <h3 className="text-stone-400 text-brandLabel">{product.brand}</h3>
-                                    <p className="text-body text-white py-1">
-                                        {truncate(product.name)}
-                                    </p>
-                                </div>
-                                <div className="flex text-yellow-400 pl-2 pb-2">
-                                    <FontAwesomeIcon icon={solidStar} />
-                                    <FontAwesomeIcon icon={solidStar} />
-                                    <FontAwesomeIcon icon={solidStar} />
-                                    <FontAwesomeIcon icon={faStarHalfStroke} />
-                                    <FontAwesomeIcon icon={regularStar} />
-                                </div>
-
-                                <img
-                                    src={`${BASE_IMAGE_URL}/${product.thumbnail}`}
-                                    alt={product.name}
-                                    className="w-64 h-72 rounded object-contain hover:scale-105 cursor-pointer transition-transform duration 300"
-                                />
-                                <div className="md:left-2 md:top-2">
-                                    <p className="text-white py-1 pl-2 text-price">${product.price}</p>
-                                </div>
-
-                                {/* Plus icon - always visible */}
-                                <div className="absolute bottom-3 right-2 w-28  group/icon lg:bg-gray-900  lg:w-8 lg:hover:w-36 bg-orange-600 hover:bg-orange-600 p-2 rounded-full flex items-center overflow-hidden transition-all duration-500">
-                                    <FontAwesomeIcon
-                                        icon={faPlus}
-                                        className="hidden lg:flex text-white text-iconMedium"
-                                    />
-                                    <span 
-                                        onClick={() => handleAddToCart(product._id)}
-                                        className="text-white font-bold text-button ml-2 whitespace-nowrap 
-                                        opacity-100 lg:opacity-0 lg:group-hover/icon:opacity-100 
-                                        transition-opacity duration-500">
-                                        Add to Cart
-                                    </span>
-                                </div>
-
-                                {/* Icons and animated line divider */}
-                                <div className="absolute bottom-14 right-2 flex flex-col items-center gap-2 animate-slide-down lg:group-hover:flex">
-                                    <button
-                                        onClick={(e) =>{
-                                            e.stopPropagation();
-                                            handleAddToWishlist(product._id)
-                                        }}
-                                        className="bg-gray-900 p-2 z-1000 rounded-full text-white hover:text-red-500"
-                                        title="Wish list"
-                                    >
-                                    <FontAwesomeIcon icon={faHeart} className="text-iconMedium" />
-                                    </button>
-
-                                    {/* Line divider with animation */}
-                                    <div className="w-8 border-t border-gray-700 transition-all duration-500 transform scale-x-0 lg:group-hover:scale-x-100"></div>
-
-                                    <button
-                                        onClick={(e) =>{
-                                            e.stopPropagation()
-                                            productDetail(product.slug)
-                                        }}
-                                        className="bg-gray-900 p-2 rounded-full text-white hover:text-orange-500"
-                                        title="View"
-                                    >
-                                    <FontAwesomeIcon icon={faEye} className="text-iconMedium" />
-                                    </button>
-                                </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-            
-        </div>
-        )}
-        
         <ReviewList />
+        <RelatedProducts />
         </>
         
     );
