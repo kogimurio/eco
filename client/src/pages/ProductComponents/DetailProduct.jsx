@@ -39,9 +39,15 @@ export default function DetailProduct() {
     const [loadingItem, setLoadingItem] = useState(null)
     const [isModalopen, setIsModalOpen] = useState(false);
     const [reviews, setReviews] = useState([]);
+    const [mainImage, setMainImage] = useState(product?.thumbnail)
     const maxChars = useResponsiveTextLength();
     const navigate = useNavigate();
-    
+
+    useEffect(() => {
+        if (product) {
+            setMainImage(product.thumbnail);
+        }
+    }, [product]);
 
     useEffect(() => {
         const fetchProduct = async() => {
@@ -202,7 +208,7 @@ export default function DetailProduct() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 w-[90%] mx-auto py-4">
                     <div className="border border-gray-700 px-3 rounded-lg shadow h-auto">
                         <img
-                            src={`${BASE_IMAGE_URL}/${product?.thumbnail}`}
+                            src={`${BASE_IMAGE_URL}/${mainImage}`}
                             alt={product?.name}
                             className="w-full h-fit object-cover rounded-lg shadow-lg"
                         />
@@ -326,6 +332,7 @@ export default function DetailProduct() {
                                     src={`${BASE_IMAGE_URL}/${img}`}
                                     alt={`${product.name} image ${i + 1}`}
                                     className="w-20 h-auto object-contain rounded cursor-pointer hover:scale-110 transition-transform duration-300"
+                                    onClick={()=> setMainImage(img)}
                                 />
                             ))}
                         </div>
