@@ -59,7 +59,7 @@ export default function RelatedProductCard({ product, truncate, handleAddToCart,
 
       {/* Add to Cart */}
       <div className={`absolute bottom-3 right-2 w-28 group/icon
-        ${product.stock === 0 ? "lg:bg-gray-700" : "bg-orange-600 hover:bg-orange-600"}
+        ${product.stock === 0 ? "bg-gray-700" : "bg-orange-600 hover:bg-orange-600"}
          lg:w-8 lg:hover:w-36  p-2 rounded-full flex items-center overflow-hidden transition-all duration-500`}>
           {product.stock === 0 ? null : <FontAwesomeIcon icon={faPlus} className="hidden lg:flex text-white text-iconMedium" />}
         <span

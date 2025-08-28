@@ -2,6 +2,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Categories = () => {
     const categoryData = [
@@ -9,40 +10,48 @@ const Categories = () => {
             img: '/category-img-01__92702.original.jpg',
             title: 'Clearance',
             items: 13,
+            link: '/category',
         },
         {
             img: '/category__47215.original.jpg',
             title: "Women's Fashion",
             items: 53,
+            link: '/category',
         },
         {
             img: '/category-img-03__99914.original.jpg',
             title: 'Fashion Jewellery',
             items: 8,
+            link: '/category',
         },
         {
             img: '/category-img-04__51045.original.jpg',
             title: 'Footwear',
             items: 20,
+            link: '/category',
         },
         {
             img: '/category-img-05__29041.original.jpg',
             title: "Kid's Fashions",
             items: 1,
+            link: '/category',
         },
         {
             img: '/category-img-07__56875.original.jpg',
             title: "Men's Fashion",
             items: 15,
+            link: '/category',
         },
         {
             img: '/category-img-06__05690.original.jpg',
             title: "Shop All",
             items: 19,
+            link: '/category',
         },
     ];
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
+    const navigate = useNavigate();
 
     const indexOfLast = currentPage * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
@@ -78,6 +87,10 @@ const Categories = () => {
 
         return () => window.removeEventListener("resize", updatedItemsPerPage);
     }, []);
+
+    const handleCategory = ()=> {
+        navigate('/category')
+    }
 
     
     return (
@@ -115,6 +128,7 @@ const Categories = () => {
                             src={currentCategory.img}
                             alt={currentCategory.title}
                             className="rounded-full w-full object-cover cursor-pointer"
+                            onClick={handleCategory}
                         />
                         {/* Text Overlay */}
                         <div className="flex items-center bg-gray-700 py-4">
