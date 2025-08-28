@@ -151,8 +151,12 @@ export default function Cart() {
                   </button>
                   <span className="px-4">{item.quantity}</span>
                   <button 
-                    disabled={loadingItem === item.product._id}
-                    onClick={() => handleUpdateCart(item.product._id, item.quantity + 1)}
+                    disabled={loadingItem === item.product._id || item.quantity >= item?.product?.stock}
+                    onClick={() => {
+                      if (item.product.stock > 0) {
+                        handleUpdateCart(item.product._id, item.quantity + 1)
+                      }
+                    }}
                     className="px-3 py-1 hover:bg-gray-700"
                   >
                     {loadingItem === item.product._id ? <LoadingSpinner size='12' /> : '+'}

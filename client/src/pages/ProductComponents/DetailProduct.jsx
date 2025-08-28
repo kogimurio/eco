@@ -278,14 +278,18 @@ export default function DetailProduct() {
                                     </div>
                                     <div className="flex flex-col justify-center gap-1">
                                     <FaChevronUp 
-                                        disabled={loadingItem === product?._id}
-                                        onClick={() => handleUpdateCart(product?._id, currentQty + 1)}
+                                        disabled={loadingItem === product?._id || currentQty >= product?.stock}
+                                        onClick={() =>{
+                                            if (currentQty < product?.stock) {
+                                                 handleUpdateCart(product?._id, currentQty + 1)
+                                            }}
+                                        }
                                         className="cursor-pointer text-white hover:text-blue-400" 
                                     />
                                     <FaChevronDown 
                                         disabled={loadingItem === product?._id}
                                         onClick={() =>{
-                                            if (currentQty > 1) {
+                                            if (product.stock > 0 && currentQty > 1) {
                                                 handleUpdateCart(product?._id, currentQty - 1);
                                             }
                                         }}
