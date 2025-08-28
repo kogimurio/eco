@@ -206,13 +206,30 @@ export default function DetailProduct() {
             )}
             <div className="grid grid-cols-1 max-w-7xl mx-auto overflow-x-hidden px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 w-[90%] mx-auto py-4">
-                    <div className="border border-gray-700 px-3 rounded-lg shadow h-auto">
+                    <div className="flex flex-col items-center justify-center">
+                        {/* Additional images */}
+                        <div className="order-2 lg:order-2 px-3 mt-4 flex w-full mx-auto gap-2">
+                        {product?.images?.map((img, i) => (
+                            <img
+                            key={i}
+                            src={`${BASE_IMAGE_URL}/${img}`}
+                            alt={`${product.name} image ${i + 1}`}
+                            className="w-20 h-auto object-contain rounded cursor-pointer hover:scale-110 transition-transform duration-300"
+                            onClick={() => setMainImage(img)}
+                            />
+                        ))}
+                        </div>
+
+                        {/* Main thumbnail */}
+                        <div className="order-1 lg:order-1 px-3 rounded-lg shadow h-auto">
                         <img
                             src={`${BASE_IMAGE_URL}/${mainImage}`}
                             alt={product?.name}
                             className="w-full h-fit object-cover rounded-lg shadow-lg"
                         />
+                        </div>
                     </div>
+
                     <div className="ml-4 lg:h-96">
                         <p className="text-white mt-2">{product?.name}</p>
                         <hr className="flex my-4 border border-gray-400"/>
@@ -324,27 +341,14 @@ export default function DetailProduct() {
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
                         </div>
-                        {/* Product images */}
-                        <div className="mt-4 overflow-x-auto flex gap-2">
-                            {product?.images?.map((img, i) => (
-                                <img
-                                    key={i}
-                                    src={`${BASE_IMAGE_URL}/${img}`}
-                                    alt={`${product.name} image ${i + 1}`}
-                                    className="w-20 h-auto object-contain rounded cursor-pointer hover:scale-110 transition-transform duration-300"
-                                    onClick={()=> setMainImage(img)}
-                                />
-                            ))}
+                        <div className="flex flex-col w-[90%] my-10 border border-gray-700 rounded-lg shadow p-3">
+                            <h2 className="text-white text-lg font-semibold">Product Description</h2>
+                            <hr className="flex my-6 border border-gray-400"/>
+                            <p className="text-stone-400 text-sm">
+                                {product?.description}
+                            </p>
                         </div>
-                        
                     </div>
-                </div>
-                <div className="flex flex-col w-[90%] mx-auto py-4 border border-gray-700 rounded-lg shadow p-8">
-                    <h2 className="text-white text-lg font-semibold">Product Description</h2>
-                    <hr className="flex my-6 border border-gray-400"/>
-                    <p className="text-stone-400 text-sm">
-                        {product?.description}
-                    </p>
                 </div>
             </div>
             
