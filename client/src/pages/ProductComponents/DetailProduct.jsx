@@ -123,6 +123,57 @@ export default function DetailProduct() {
         )
     }
 
+    function ZoomImage({ src, alt }) {
+        const [isZooming, setIsZooming] = useState(false);
+        const [backgroundPos, setBackgroundPos] = useState("50% 50%");
+
+        
+
+        // Track the mouse movememnt
+        const handleMouseMove = (e) => {
+            const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+            const x = ((e.clientX - left) / width) * 100;
+            const y = ((e.clientY - top) / height) * 100;
+            setBackgroundPos(`${x}% ${y}%`);
+        };
+
+        const cleanSrc = encodeURI(src.replace(/\\/g, "/"));
+        console.log("Zoom src:", src);
+        console.log("Clean Zoom src:", cleanSrc);
+
+        return (
+            <div className="flex justify-start items-start gap-4">
+                {/* Thumbnail */}
+                <div
+                    className="w-[400px] h-[400px] overflow-hidden border rounded"
+                    onMouseEnter={() => setIsZooming(true)}
+                    onMouseLeave={() => setIsZooming(false)}
+                    onMouseMove={handleMouseMove}
+                >
+                    <img
+                        src={cleanSrc}
+                        alt={alt}
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+
+                {/* Zoom window */}
+                {isZooming && (
+                    <div
+                        className="w-[400px] h-[400px] border rounded hidden md:block z-50"
+                        style={{
+                            backgroundImage: `url(${cleanSrc})`,
+                            backgroundSize: "200%",
+                            backgroundPosition: backgroundPos,
+                            backgroundRepeat: "no-repeat",
+                        }}
+                    />
+                )}
+                
+            </div>
+        )
+    }
+
 
     const truncate = (text) => {
         return text.length > maxChars ? text.slice(0, maxChars) + "…" : text
@@ -205,10 +256,10 @@ export default function DetailProduct() {
                 <Modal slug={slug} onClose={handleCloseModal} />
             )}
             <div className="grid grid-cols-1 max-w-7xl mx-auto overflow-x-hidden px-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 w-[90%] mx-auto py-4">
-                    <div className="flex flex-col items-center justify-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 w-[90%] mx-auto py-4 overflow-y-auto">
+                    <div className="flex flex-col items-start justify-start">
                         {/* Additional images */}
-                        <div className="order-2 lg:order-2 px-3 mt-4 flex w-full mx-auto gap-2">
+                        <div className="order-2 lg:order-2 px-3 mt-4 flex justify-start items-start w-full mx-auto gap-2">
                         {product?.images?.map((img, i) => (
                             <img
                             key={i}
@@ -221,12 +272,11 @@ export default function DetailProduct() {
                         </div>
 
                         {/* Main thumbnail */}
-                        <div className="order-1 lg:order-1 px-3 rounded-lg shadow h-auto">
-                        <img
-                            src={`${BASE_IMAGE_URL}/${mainImage}`}
-                            alt={product?.name}
-                            className="w-full h-fit object-cover rounded-lg shadow-lg"
-                        />
+                        <div className="order-1 lg:order-1 px-3 flex rounded-lg shadow h-auto overflow-hidden">
+                            <ZoomImage
+                                src={`${BASE_IMAGE_URL}/${mainImage}`.replace(/\\/g, "/")}
+                                alt={product?.name}
+                            />
                         </div>
                     </div>
 
@@ -341,7 +391,7 @@ export default function DetailProduct() {
                                 <FontAwesomeIcon icon={faHeart} />
                             </button>
                         </div>
-                        <div className="flex flex-col w-[90%] my-10 border border-gray-700 rounded-lg shadow p-3">
+                        <div className="flex flex-col my-10">
                             <h2 className="text-white text-lg font-semibold">Product Description</h2>
                             <hr className="flex my-6 border border-gray-400"/>
                             <p className="text-stone-400 text-sm">
