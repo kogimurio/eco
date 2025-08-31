@@ -138,14 +138,13 @@ export default function DetailProduct() {
         };
 
         const cleanSrc = encodeURI(src.replace(/\\/g, "/"));
-        console.log("Zoom src:", src);
-        console.log("Clean Zoom src:", cleanSrc);
+        
 
         return (
             <div className="flex justify-start items-start gap-4">
                 {/* Thumbnail */}
                 <div
-                    className="w-[400px] h-[400px] overflow-hidden border rounded"
+                    className="flex w-full lg:w-[400px] lg:h-[400px] overflow-hidden border rounded"
                     onMouseEnter={() => setIsZooming(true)}
                     onMouseLeave={() => setIsZooming(false)}
                     onMouseMove={handleMouseMove}
@@ -265,7 +264,7 @@ export default function DetailProduct() {
                             key={i}
                             src={`${BASE_IMAGE_URL}/${img}`}
                             alt={`${product.name} image ${i + 1}`}
-                            className="w-20 h-auto object-contain rounded cursor-pointer hover:scale-110 transition-transform duration-300"
+                            className="w-16 h-auto object-contain rounded cursor-pointer hover:scale-110 transition-transform duration-300"
                             onClick={() => setMainImage(img)}
                             />
                         ))}
