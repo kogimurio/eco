@@ -41,7 +41,7 @@ const OrderConfirmation = lazy(() => import('./pages/OrderComponents/ThankYou'))
 const WishList = lazy(() => import('./pages/OrderComponents/WishList'));
 const ClientOrders = lazy(() => import('./pages/ClientComponents/ClientOrder'));
 const ClientOrderView = lazy(() => import('./pages/ClientComponents/ClientOrderView'));
-const Category = lazy(() => import('./pages/HomeComponents/CategoryDetail'));
+const Category = lazy(() => import('./pages/CategoryComponents/CategoryDetail'));
 // const CreateReview = lazy(() => import('./pages/ReviewComponents/CreateReview'));
 
 
