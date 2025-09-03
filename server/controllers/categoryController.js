@@ -1,16 +1,23 @@
 const Category = require('../models/Category');
+const Product = require('../models/Product');
 
 exports.createCategory = async (req, res) => {
     try {
         const { name } = req.body;
 
-        if (!name) return res.status(400).json({ message: 'Category name is required'})
+        if (!name || !req.files?.image) return res.status(400).json({ message: 'Name and image fields are required'})
+
+
 
             const existing = await Category.findOne({ name});
             if (existing) res.status(400).json({ message: 'Category already exist' });
 
+            const imageFile = req.files.image[0].relativePath;
+
+
             const newCategory = new Category({
                 name,
+                image: imageFile,
             });
             await newCategory.save();
 
@@ -43,8 +50,10 @@ exports.getCategory = async (req, res) => {
     try {
         const { slug } = req.params;
         const category = await Category.findOne({slug});
+        const products = await Product.find({ category })
         return res.status(200).json({
-            category
+            category,
+            products
         })
     } catch (error) {
         console.error('❌ Error in Category:', error)

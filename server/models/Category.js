@@ -3,6 +3,7 @@ const slugify = require('slugify')
 
 const categorySchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
+    image: { type: String, required: true },
     code: { type: String, unique: true, uppercase: true, minlength: 2, maxlength: 5 },
     defaultWeight: { type: Number, default: 0.5 },
     description: { type: String },

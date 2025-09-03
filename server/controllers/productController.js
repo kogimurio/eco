@@ -35,8 +35,8 @@ exports.createProduct = async (req, res, next) => {
       });
     }
 
-    const thumbnailPath = req.files?.thumbnail?.[0]?.path.replace(/\\/g, "/");
-    const imagePaths = req.files?.images?.map(file => file.path);
+    const thumbnailPath = req.files?.thumbnail?.[0]?.relativePath.replace(/\\/g, "/");
+    const imagePaths = req.files?.images?.map(file => file.relativePath);
 
     const thumbnail = imagePaths[0];
     const otherImages = imagePaths.slice(1);
@@ -158,12 +158,12 @@ exports.updateProduct = async (req, res, next) => {
 
     if (req.files) {
       if (req.files.thumbnail && req.files.thumbnail.length > 0 ) {
-        const thumbnailPath = req.files.thumbnail[0].path || req.files.thumbnail[0].secure_url;
+        const thumbnailPath = req.files.thumbnail[0].relativePath || req.files.thumbnail[0].secure_url;
         product.thumbnail = thumbnailPath;
       }
 
       if (req.files.images && req.files.length > 0 ) {
-        const imagePaths = req.files.images.map(file => file.path || file.secure_url);
+        const imagePaths = req.files.images.map(file => file.relativePath || file.secure_url);
         product.images = imagePaths;
       }
     }
