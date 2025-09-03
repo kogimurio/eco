@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function FilterSidebar() {
   return (
-    <div className="hidden lg:grid grid-cols-1 p-4 ">
+    <div className="hidden md:grid grid-cols-1 p-4 ">
       {/* Categories */}
       <div className="border border-gray-100 rounded p-2">
         <h4 className="bg-gray-950 p-4 text-sm mb-3 rounded">FOOTWEAR</h4>
