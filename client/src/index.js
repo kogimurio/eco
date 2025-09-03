@@ -61,7 +61,7 @@ export default function App() {
               <Route path="register" element={<Register />} />
               <Route path="profile" element={<Profile />} />
               <Route path="productdetail/:slug" element={<DetailProduct />} />
-              <Route path="category/:slug" element={<MenCategory />} />
+              {/* <Route path="category/:slug" element={<MenCategory />} /> */}
               <Route path="cart" element={<Cart />} />
               <Route path="checkout" element={<Checkout />} />
               <Route path="payments" element={<Payments />} />
@@ -69,7 +69,7 @@ export default function App() {
               <Route path="wishlist" element={<WishList />} />
               <Route path="client_order" element={<ClientOrders />} />
               <Route path="client_order_view/:id" element={<ClientOrderView />} />
-              <Route path="category" element={<Category />} />
+              <Route path="category/:slug" element={<Category />} />
               {/* <Route path="create-review/:slug" element={<CreateReview />} /> */}
             </Route>
 

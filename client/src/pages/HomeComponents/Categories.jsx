@@ -3,55 +3,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+import LoadingSpinner from '../LoadingSpinner';
+
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+const BASE_IMAGE_URL = process.env.REACT_APP_BASE_URL_IMAGE;
 
 const Categories = () => {
-    const categoryData = [
-        {
-            img: '/category-img-01__92702.original.jpg',
-            title: 'Clearance',
-            items: 13,
-            link: '/category',
-        },
-        {
-            img: '/category__47215.original.jpg',
-            title: "Women's Fashion",
-            items: 53,
-            link: '/category',
-        },
-        {
-            img: '/category-img-03__99914.original.jpg',
-            title: 'Fashion Jewellery',
-            items: 8,
-            link: '/category',
-        },
-        {
-            img: '/category-img-04__51045.original.jpg',
-            title: 'Footwear',
-            items: 20,
-            link: '/category',
-        },
-        {
-            img: '/category-img-05__29041.original.jpg',
-            title: "Kid's Fashions",
-            items: 1,
-            link: '/category',
-        },
-        {
-            img: '/category-img-07__56875.original.jpg',
-            title: "Men's Fashion",
-            items: 15,
-            link: '/category',
-        },
-        {
-            img: '/category-img-06__05690.original.jpg',
-            title: "Shop All",
-            items: 19,
-            link: '/category',
-        },
-    ];
+    const [categoryData, setCategoryData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCategories = async() => {
+            try {
+                const response = await axios.get(`${BASE_URL}/category`)
+                setCategoryData(response.data.category);
+                console.log("Fetched categories:", response.data.category)
+            } catch (error) {
+                const errorMessage =
+                error.response?.data?.message || error.message || "An error occurred";
+                console.error("Error fetching categories:", errorMessage)
+                toast.error(errorMessage);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchCategories();
+    }, []);
 
     const indexOfLast = currentPage * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
@@ -88,8 +73,8 @@ const Categories = () => {
         return () => window.removeEventListener("resize", updatedItemsPerPage);
     }, []);
 
-    const handleCategory = ()=> {
-        navigate('/category')
+    const handleCategory = (slug)=> {
+        navigate(`/category/${slug}`)
     }
 
     
@@ -121,30 +106,39 @@ const Categories = () => {
                     </button>
                 </div>
             </div>
-            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
-                {currentCategories.map((currentCategory, index) => (
-                    <div className="grid grid-cols-1 p-4">
-                        <img
-                            src={currentCategory.img}
-                            alt={currentCategory.title}
-                            className="rounded-full w-full object-cover cursor-pointer"
-                            onClick={handleCategory}
-                        />
-                        {/* Text Overlay */}
-                        <div className="flex items-center bg-gray-700 py-4">
-                            <div className="relative max-w-md w-[80%] mx-auto text-center">
-                                <p className="font-semibold text-productTitle text-white">{currentCategory.title}</p>
-                                <p className="text-sprice text-white mt-1 flex items-center justify-center gap-2">
-                                    {currentCategory.items} <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-white bg-gray-600 rounded-full p-2 text-iconMedium" />
-                                </p>
+            {loading ? (
+                <div className="flex justify-center">
+                    <LoadingSpinner size="40" />
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2 w-[90%] mx-auto">
+                    {currentCategories.map((currentCategory, index) => (
+                        <div className="grid grid-cols-1 p-4">
+                            <img
+                                src={`${BASE_IMAGE_URL}/${currentCategory.image}`}
+                                alt={currentCategory.name}
+                                className="rounded-full w-full object-cover cursor-pointer"
+                                onClick={() => handleCategory(currentCategory.slug)}
+                                // onLoad={() => console.log("Image loaded:", `${BASE_IMAGE_URL}/${currentCategory.image}`)}
+                                // onError={() => console.error("Image failed:", `${BASE_IMAGE_URL}/${currentCategory.image}`)}
+                            />
+                            {/* Text Overlay */}
+                            <div className="flex items-center bg-gray-700 py-4">
+                                <div className="relative max-w-md w-[80%] mx-auto text-center">
+                                    <p className="font-semibold text-productTitle text-white">{currentCategory.name}</p>
+                                    <p className="text-sprice text-white mt-1 flex items-center justify-center gap-2">
+                                        {currentCategory.productCount} <FontAwesomeIcon icon={faChevronRight} className="w-3 h-3 text-white bg-gray-600 rounded-full p-2 text-iconMedium" />
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
-                
-            </div>
+                    ))}
+                    
+                </div>
+            )}
+            
         </div>
-    )
+    );
 }
 
 export default Categories;

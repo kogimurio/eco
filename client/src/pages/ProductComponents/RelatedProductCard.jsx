@@ -51,6 +51,8 @@ export default function RelatedProductCard({ product, truncate, handleAddToCart,
         src={`${BASE_IMAGE_URL}/${product.thumbnail}`}
         alt={product.name}
         className="w-64 h-72 rounded object-contain hover:scale-105 cursor-pointer transition-transform duration 300"
+        onLoad={() => console.log("Image loaded:", `${BASE_IMAGE_URL}/${product.image}`)}
+        onError={() => console.error("Image failed:", `${BASE_IMAGE_URL}/${product.image}`)}
       />
 
       <div className="md:left-2 md:top-2">

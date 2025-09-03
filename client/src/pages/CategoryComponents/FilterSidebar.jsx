@@ -37,12 +37,12 @@ export default function FilterSidebar() {
         ))}
 
         {/* Price Range */}
-        <h3 className="font-bold text-sm">Price</h3>
+        <h3 className="flex font-bold text-sm">Price</h3>
         <ul className="text-sm">
-          <li className="grid grid-cols-3">
+          <li className="grid grid-cols-3 text-xs">
             <input type="number" className="mx-2 rounded p-2" placeholder="Min." />
             <input type="number" className="mx-2 rounded p-2" placeholder="Max." />
-            <button className="bg-gray-400 hover:bg-orange-600 rounded-full">
+            <button className="flex w-full items-center justify-center p-1 bg-gray-400 hover:bg-orange-600 rounded-full">
               Update
             </button>
           </li>

@@ -43,7 +43,7 @@ module.exports = {
         hero: ['clamp(2rem, 4vw, 2.25rem)', { lineHeight: '1.1' }],    
         brand: ['clamp(2rem, 4vw, 2rem)', { lineHeight: '1.1' }],
         sectionHeading: ['clamp(1.5rem, 1.5vw, 1.5rem)', { lineHeight: '1.2' }], 
-        productTitle: ['clamp(1rem, 2vw, 1.5rem)', { lineHeight: '1.3' }],  
+        productTitle: ['clamp(1rem, 1.25vw, 1.25rem)', { lineHeight: '1.3' }],  
         price: ['clamp(0.875rem, 2vw, 1.25rem)', { lineHeight: '1.3' }],  
         button: ['clamp(0.875rem, 1vw, 1rem)', { lineHeight: '1.3' }],    
         body: ['clamp(0.875rem, 1vw, 1rem)', { lineHeight: '1.5' }],   

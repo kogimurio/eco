@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import MinProductBar from "../ProductComponents/MinProductBar";
 import LoadingSpinner from "../LoadingSpinner";
@@ -17,6 +17,7 @@ export default function CategoryDetail() {
   const [products, setProducts] = useState([]);
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const maxChars = useResponsiveTextLength();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const token = JSON.parse(localStorage.getItem("token"));
@@ -26,8 +27,9 @@ export default function CategoryDetail() {
     const fetchProduct = async () => {
       await new Promise((res) => setTimeout(res, 2000));
       try {
-        const res = await axios.get(`${BASE_URL}/products/footer`);
+        const res = await axios.get(`${BASE_URL}/category/${slug}`);
         setProducts(res.data.products);
+        console.log("Fetched related products:", res.data.products)
       } catch (error) {
         console.error(error?.res?.data || error.message);
       } finally {
@@ -36,10 +38,13 @@ export default function CategoryDetail() {
     };
 
     fetchProduct();
-  }, []);
+  }, [slug]);
 
-  const truncate = (text) =>
-    text.length > maxChars ? text.slice(0, maxChars) + "…" : text;
+  const truncate = (text) => {
+    if (!text) return "";
+    return text.length > maxChars ? text.slice(0, maxChars) + "…" : text;
+  }
+    
 
   const productDetail = (slug) => navigate(`/productdetail/${slug}`);
 
@@ -93,7 +98,7 @@ export default function CategoryDetail() {
                   No products found in this category.
                 </p>
               ) : (
-                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 w-full mx-auto">
+                <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mx-auto">
                   {products.map((product, index) => (
                     <RelatedProductCard
                       key={index}
