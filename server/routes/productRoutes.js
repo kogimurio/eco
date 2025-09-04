@@ -11,7 +11,8 @@ const {
     getBestSellers,
     getFeaturedProducts,
     getClearanceProducts,
-    getNewProducts
+    getNewProducts,
+    getFilterSidebarProducts
 } = require('../controllers/productController');
 
 
@@ -28,12 +29,14 @@ router.get('/best-sellers', getBestSellers);
 router.get('/featured', getFeaturedProducts);
 router.get('/clearance', getClearanceProducts);
 router.get('/new', getNewProducts);
+router.get('/filterby', getFilterSidebarProducts);
 router.get('/:slug', getProduct);
 router.put('/:id', 
   uploadProductImages,
   updateProduct);
 router.delete('/:id', deleteProduct);
 router.get('/related_products/:slug', getRelatedProducts);
+
 
 
 module.exports = router;

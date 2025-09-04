@@ -23,6 +23,8 @@ const productSchema = new mongoose.Schema({
         ref: 'Category',
         required: true
     },
+    colour: [{ type: String }],
+    size: [{ type: String }],
     stock: { type: Number, required: true },
     thumbnail: { type: String, required: true },
     images: [{ type: String }],

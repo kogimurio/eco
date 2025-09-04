@@ -2,34 +2,16 @@ const Product = require('../models/Product');
 const Category = require('../models/Category');
 const cloudinary = require('../config/cloudinary');
 
-// Get products by filter
-const getFilteredProducts = async (filter, res) => {
-  try {
-    const products = await Product.find(filter)
-    .sort({ createdAt: -1 })
-    .populate('category');
-    return res.json({
-      products,
-      total: products.length
-    });
-  } catch (error) {
-    console.log('Error:', error);
-    return res.status(500).json({
-      message: 'Internal server error'
-    })
-  }
-}
-
 //  Create a new product
 exports.createProduct = async (req, res, next) => {
   try {
-    const { name, price, description, brand, category, stock } = req.body;
+    const { name, price, description, brand, category, stock, colour, size } = req.body;
 
     console.log('Received required');
     console.log('Files:', req.files);
     console.log('Body:', req.body);
 
-    if (!name || !price || !description || !brand || !category || !stock || !req.files || req.files.length === 0) {
+    if (!name || !price || !description || !brand || !category || !stock || !colour || !size || !req.files || req.files.length === 0) {
       return res.status(400).json({
         message: 'All fields and at least one image are required',
       });
@@ -38,7 +20,7 @@ exports.createProduct = async (req, res, next) => {
     const thumbnailPath = req.files?.thumbnail?.[0]?.relativePath.replace(/\\/g, "/");
     const imagePaths = req.files?.images?.map(file => file.relativePath);
 
-    const thumbnail = imagePaths[0];
+    const thumbnail = thumbnailPath[0];
     const otherImages = imagePaths.slice(1);
 
     const newProduct = new Product({
@@ -48,8 +30,10 @@ exports.createProduct = async (req, res, next) => {
       brand,
       category,
       stock,
+      size,
+      colour,
       giftWrapping: req.body.giftWrapping === 'true' || req.body.giftWrapping === true,
-      vintage: '',
+      vintage: req.body.vintage || null,
       isClearance: req.body.isClearance === 'true' || req.body.isClearance === true,
       isBestSeller: req.body.isBestSeller === 'true' || req.body.isBestSeller === true,
       isFeatured: req.body.isFeatured === 'true' || req.body.isFeatured === true,
@@ -70,11 +54,50 @@ exports.createProduct = async (req, res, next) => {
   }
 };
 
+// Get products by filter
+const getFilteredProducts = async (filter, res) => {
+  try {
+    const products = await Product.find(filter)
+    .sort({ createdAt: -1 })
+    .populate('category');
+    return res.json({
+      products,
+      total: products.length
+    });
+  } catch (error) {
+    console.log('Error:', error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    })
+  }
+}
+
+
+// Filter products by brand, colour, size, vintage, price
+exports.getFilterSidebarProducts = async (req, res) => {
+  
+  try {
+    const { brand, colour, size, minPrice, maxPrice, vintage } = req.query;
+    const filter = {};
+
+    if (brand) filter.brand = brand;
+    if (size) filter.size = size;
+    if (colour) filter.colour = colour;
+    if (vintage) filter.vintage = vintage;
+    if (minPrice && maxPrice) {
+      filter.price = { $gte: Number(minPrice), $lte: Number(maxPrice)}
+    };
+    await getFilteredProducts(filter, res);
+  } catch {
+    console.error("Error in getFilterSidebarProducts:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 
 // Get all Products
 exports.getAllProducts = async (req, res) => {
-  await getFilteredProducts({}, res);
-    
+  await getFilteredProducts({}, res);  
 };
 
 // Best sellers Products
@@ -127,6 +150,8 @@ exports.updateProduct = async (req, res, next) => {
       brand,
       category,
       stock,
+      colour,
+      size,
       giftWrapping,
       vintage,
       isClearance,
@@ -150,6 +175,8 @@ exports.updateProduct = async (req, res, next) => {
     if (brand) product.brand = brand;
     if (category) product.category = category;
     if (stock) product.stock = stock;
+    if (size) product.stock = size;
+    if (colour) product.stock = colour;
     if (giftWrapping) product.giftWrapping = req.body.giftWrapping === 'true' || req.body.giftWrapping === true;
     if (vintage) product.vintage = vintage;
     if (isClearance) product.isClearance = req.body.isClearance === 'true' || req.body.isClearance === true;
