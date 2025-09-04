@@ -324,6 +324,8 @@ export default function DetailProduct() {
                                 <p className="text-white text-sm">SKU: </p>
                                 <p className="text-white text-sm">Condition: </p>
                                 <p className="text-white text-sm">Weight: </p>
+                                <p className="text-white text-sm">Size: </p>
+                                <p className="text-white text-sm">Colour: </p>
                                 <p className="text-white text-sm">Gift wrapping: </p>
                                 <p className="text-white text-sm">Shipping: </p>
                                 <p className="text-white text-sm">Wine Vintage: </p>
@@ -332,6 +334,8 @@ export default function DetailProduct() {
                                 <p className="pl-6 text-stone-400 text-sm">{product?.sku || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.condition || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.weight || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.size || "N/A"}</p>
+                                <p className="pl-6 text-stone-400 text-sm">{product?.colour || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.giftWrapping || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.shipping || "N/A"}</p>
                                 <p className="pl-6 text-stone-400 text-sm">{product?.vintage || "N/A"}</p>

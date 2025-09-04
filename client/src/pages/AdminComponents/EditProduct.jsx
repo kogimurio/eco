@@ -17,6 +17,8 @@ export default function UpdateProduct() {
         brand: '',
         category: '',
         stock: '',
+        size: '',
+        colour: '',
         vintage: '',
         giftWrapping: false,
         isClearance: false,
@@ -54,6 +56,8 @@ export default function UpdateProduct() {
                     brand: fetchedProduct.brand,
                     category: fetchedProduct.category,
                     stock: fetchedProduct.stock,
+                    size: fetchedProduct.size,
+                    colour: fetchedProduct.colour,
                     vintage: fetchedProduct.vintage,
                     giftWrapping: fetchedProduct.giftWrapping,
                     isClearance: fetchedProduct.isClearance,
@@ -121,6 +125,8 @@ export default function UpdateProduct() {
         data.append('brand', formData.brand);
         data.append('category', formData.category);
         data.append('stock', formData.stock);
+        data.append('size', formData.size);
+        data.append('colour', formData.colour);
         data.append('vintage', formData.vintage);
         data.append('giftWrapping', formData.giftWrapping);
         data.append('isClearance', formData.isClearance);
@@ -144,6 +150,8 @@ export default function UpdateProduct() {
                 brand: '',
                 category: '',
                 stock: '',
+                size: '',
+                colour: '',
                 vintage: '',
                 giftWrapping: false,
                 isClearance: false,
@@ -263,6 +271,24 @@ export default function UpdateProduct() {
                     value={formData.brand}
                     onChange={handleChange}
                     placeholder="Product Brand"
+                    required
+                    className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <input
+                    type="text"
+                    name="size"
+                    value={formData.size}
+                    onChange={handleChange}
+                    placeholder="Product Size"
+                    required
+                    className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <input
+                    type="text"
+                    name="colour"
+                    value={formData.colour}
+                    onChange={handleChange}
+                    placeholder="Product Colour"
                     required
                     className="w-full p-3 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
