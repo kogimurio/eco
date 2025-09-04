@@ -77,14 +77,14 @@ export default function CategoryDetail() {
 
   return (
     <>
-      <div className="bg-gray-800 text-white">
+      <div className="bg-gray-800 text-white p-4">
         {loading ? (
             <div className="flex justify-center">
               <LoadingSpinner size="40" />
             </div>
         ) : products.length === 0 ? (
           <p className="text-center text-gray-400">
-            No products found in this category.
+            No products found in {slug} category.
           </p>
         ) : (
           <>

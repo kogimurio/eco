@@ -18,12 +18,31 @@ const localToken = localStorage.getItem('token');
 const token = JSON.parse(localToken);
 
 const Layout = () => {
+    const [category, setCategory] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { cartItems } = useCart();
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const user = JSON.parse(localStorage.getItem("user"));
+
+    useEffect(() => {
+        const fetchCategories = async() => {
+            try {
+                const response = await axios.get(`${BASE_URL}/category`)
+                setCategory(response.data.category);
+                console.log("Fetched categories:", response.data.category)
+            } catch (error) {
+                const errorMessage =
+                error.response?.data?.message || error.message || "An error occurred";
+                console.error("Error fetching categories:", errorMessage)
+                toast.error(errorMessage);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchCategories();
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(prev => !prev);
@@ -250,37 +269,14 @@ const Layout = () => {
                                 &times;
                             </button>
                             <ul className="flex flex-col space-y-4 p-4">
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/womens-fashion" onClick={() => setIsMenuOpen(false)}>Women's Fashion</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/mens-fashion" onClick={() => setIsMenuOpen(false)}>Men's Fashion</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/kids-fashion" onClick={() => setIsMenuOpen(false)}>Kid's Fashion</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/footware" onClick={() => setIsMenuOpen(false)}>Footware</Link>
-                                </li>
-
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/fashion-jewellery" onClick={() => setIsMenuOpen(false)}>Fashion Jewellery</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/maternity-fashion" onClick={() => setIsMenuOpen(false)}>Maternity Fashion</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/bags-and-accessories" onClick={() => setIsMenuOpen(false)}>Bags & Accessories</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/beauty-and-personal-care" onClick={() => setIsMenuOpen(false)}>Beauty & Personal Care</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/lingerie-and-sleepwear" onClick={() => setIsMenuOpen(false)}>Lingerie & Sleepwear</Link>
-                                </li>
-                                <li className="text-white hover:text-gray-400">
-                                    <Link to="/category/activewear-sportswear" onClick={() => setIsMenuOpen(false)}>Activewear Sportswear</Link>
-                                </li>
+                                {category.map((c, idx) => (
+                                    <li 
+                                        key={idx}
+                                        className="text-white hover:text-gray-400">
+                                        <Link to={`/category/${c.name}`} onClick={() => setIsMenuOpen(false)}>{c.name}</Link>
+                                    </li>
+                                ))}
+                                
                             </ul>
                         </div>
                     )}

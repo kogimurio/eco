@@ -25,7 +25,6 @@ const Categories = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/category`)
                 setCategoryData(response.data.category);
-                console.log("Fetched categories:", response.data.category)
             } catch (error) {
                 const errorMessage =
                 error.response?.data?.message || error.message || "An error occurred";

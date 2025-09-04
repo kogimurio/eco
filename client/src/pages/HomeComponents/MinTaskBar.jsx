@@ -1,13 +1,37 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { faChevronDown, faGift, faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import useClickAway from "../../utilis/useClickAway";
+import { toast } from "react-toastify";
+import axios from 'axios';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 
 const MinTaskBar = () => {
+  const [category, setCategory] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const menuRef = useRef();
+
+  useEffect(() => {
+      const fetchCategories = async() => {
+          try {
+              const response = await axios.get(`${BASE_URL}/category`)
+              setCategory(response.data.category);
+              console.log("Fetched categories:", response.data.category)
+          } catch (error) {
+              const errorMessage =
+              error.response?.data?.message || error.message || "An error occurred";
+              console.error("Error fetching categories:", errorMessage)
+              toast.error(errorMessage);
+          } finally {
+              setLoading(false);
+          }
+      }
+      fetchCategories();
+  }, []);
 
   useClickAway(menuRef, () => setIsMenuOpen(false));
 
@@ -31,30 +55,17 @@ const MinTaskBar = () => {
 
             {isMenuOpen && (
               <ul ref={menuRef} className="absolute -left-2 -top-40 z-10 rounded-md shadow-lg mt-60 w-full bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                {[
-                  ['womens-fashion', "Women's Fashion"],
-                  ['mens-fashion', "Men's Fashion"],
-                  ['kids-fashion', "Kid's Fashion"],
-                  ['footware', 'Footware'],
-                  ['fashion-jewellery', 'Fashion Jewellery'],
-                  ['maternity-fashion', 'Maternity Fashion'],
-                  ['bags-and-accessories', 'Bags & Accessories'],
-                  ['beauty-and-personal-care', 'Beauty & Personal Care'],
-                  ['lingerie-and-sleepwear', 'Lingerie & Sleepwear'],
-                  ['activewear-sportswear', 'Activewear Sportswear']
-                ].map(([path, label]) => (
-                  <li 
-                    key={path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm">
-                    <FontAwesomeIcon icon={faChevronRight} className="mx-2" />
-                    <Link to={`/category/${path}`}>{label}</Link>
-                  </li>
+                {category.map((c, idx) => (
+                    <li 
+                        key={idx}
+                        className="px-4 py-2 hover:bg-gray-100 hover:text-orange-700 cursor-pointer text-sm">
+                          <FontAwesomeIcon icon={faChevronRight} className="mx-2" />
+                        <Link to={`/category/${c.slug}`} onClick={() => setIsMenuOpen(false)}>{c.name}</Link>
+                    </li>
                 ))}
               </ul>
             )}
           </div>
-
           {/* About, Affiliate, Contact */}
           <ul className="flex space-x-4">
             <li className="text-white hover:text-gray-400 font-bold mx-4"><a href="/aboutus">About Us</a></li>
