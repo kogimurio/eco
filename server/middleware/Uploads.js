@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 
+// File filter (only allowed images)
 const fileFilter = (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
     const allowedExts = ['.jpg', '.jpeg', '.png', '.webp'];
@@ -26,7 +27,7 @@ const makeUploader = (dest, fields) => {
         },
         filename: function (req, file, cb) {
             const uniqueName = `${Date.now()}-${file.originalname}`;
-            const relativePath = path.join(`uploads/${dest}`, uniqueName).replace(/\\/g, '/');
+            const relativePath = path.join(`../uploads/${dest}`, uniqueName).replace(/\\/g, '/');
             file.relativePath = relativePath;
             cb(null, uniqueName);
         }

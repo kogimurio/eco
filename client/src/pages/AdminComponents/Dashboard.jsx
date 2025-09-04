@@ -146,7 +146,7 @@ const Dashboard = () => {
               <SidebarLinks  />
               <button 
                 onClick={handleLogout}
-                className="hidden sm:flex items-center gap-2 text-red-400 hover:text-red-600 transition"
+                className="items-center gap-2 text-red-400 hover:text-red-600 transition"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 Logout
