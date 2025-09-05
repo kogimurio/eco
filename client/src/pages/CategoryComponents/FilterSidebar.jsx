@@ -1,9 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import LoadingSpinner from "../LoadingSpinner";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function FilterSidebar({ selectedFilters, setSelectedFilters, products }) {
   const { slug } = useParams()
@@ -26,9 +22,9 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters, pro
   const toggleBrand = (brand) => {
     setSelectedFilters(prev => {
       const newBrands = prev.brand.includes(brand)
-        ? prev.brand.filter(b => b !== brand)
-        : [...prev.brand, brand];
-      return { ...prev, brand: newBrands };
+        ? prev.brand.filter(b => b !== brand) // remove if already checked
+        : [...prev.brand, brand];             // otherwise add
+      return { ...prev, brand: newBrands };   // update state
     });
   };
 
