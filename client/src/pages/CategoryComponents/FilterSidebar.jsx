@@ -5,32 +5,8 @@ import LoadingSpinner from "../LoadingSpinner";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-export default function FilterSidebar() {
-  const [products, setProducts] = useState([]);
-  const [selectedFilters, setSelectedFilters] = useState({
-    colour: [],
-    size: [],
-    brand: [],
-    minPrice: '',
-    maxPrice: ''
-  });
-  const [load, setLoading] = useState(true);
+export default function FilterSidebar({ selectedFilters, setSelectedFilters, products }) {
   const { slug } = useParams()
-
-  useEffect(() => {
-    const fetchProducts = async(filter)=> {
-      try {
-        const response = await axios.get(`${BASE_URL}/products/filterby?${filter}`)
-        setProducts(response.data.products);
-        console.log("Fetched products:", response.data.products)
-      } catch (error) {
-        const errorMessage =
-                error.response?.data?.message || error.message || "An error occurred";
-                console.error(errorMessage);
-      }
-    }
-    fetchProducts();
-  }, []);
 
   const brands = [...new Set(products.map(p => p.brand))];
   const sizes = [...new Set(products.map(p => p.size))];
@@ -46,6 +22,35 @@ export default function FilterSidebar() {
     return acc;
   }, {})
 
+  // update brand filter
+  const toggleBrand = (brand) => {
+    setSelectedFilters(prev => {
+      const newBrands = prev.brand.includes(brand)
+        ? prev.brand.filter(b => b !== brand)
+        : [...prev.brand, brand];
+      return { ...prev, brand: newBrands };
+    });
+  };
+
+  // update size filter
+  const toggleSize = (size) => {
+    setSelectedFilters(prev => {
+      const newSizes = prev.size.includes(size)
+        ? prev.size.filter(s => s !== size)
+        : [...prev.size, size];
+      return { ...prev, size: newSizes };
+    });
+  };
+
+  // update colour filter
+  const toggleColour = (colour) => {
+    setSelectedFilters(prev => {
+      const newColours = prev.colour.includes(colour)
+        ? prev.colour.filter(c => c !== colour)
+        : [...prev.colour, colour];
+      return { ...prev, colour: newColours };
+    });
+  };
 
   return (
     <div className="hidden md:grid grid-cols-1 p-4 ">
@@ -64,7 +69,41 @@ export default function FilterSidebar() {
       {/* Filters */}
       <div className="border border-gray-100 rounded p-2 mt-8">
         <h4 className="bg-gray-950 p-4 text-sm rounded">REFINE BY</h4>
-        <p className="p-2 text-sm">No filters applied</p>
+
+        {/* Active filters */}
+        <div className="p-2 text-sm">
+          {selectedFilters.brand.length === 0 &&
+          selectedFilters.size.length === 0 &&
+          selectedFilters.colour.length === 0 &&
+          !selectedFilters.minPrice &&
+          !selectedFilters.maxPrice ? (
+            <p>No filters applied</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {selectedFilters.brand.map((b, i) => (
+                <span key={`brand-${i}`} className="px-2 py-1 bg-gray-200 text-gray-800 rounded">
+                  {b}
+                </span>
+              ))}
+              {selectedFilters.size.map((s, i) => (
+                <span key={`size-${i}`} className="px-2 py-1 bg-gray-200 text-gray-800 rounded">
+                  Size {s}
+                </span>
+              ))}
+              {selectedFilters.colour.map((c, i) => (
+                <span key={`colour-${i}`} className="px-2 py-1 bg-gray-200 text-gray-800 rounded">
+                  {c}
+                </span>
+              ))}
+              {(selectedFilters.minPrice || selectedFilters.maxPrice) && (
+                <span className="px-2 py-1 bg-gray-200 text-gray-800 rounded">
+                  {selectedFilters.minPrice || "0"} – {selectedFilters.maxPrice || "∞"}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
 
         <hr className="my-2" />
         <h3 className="font-bold text-sm">Brand</h3>
@@ -75,15 +114,8 @@ export default function FilterSidebar() {
                 <input 
                   type="checkbox" 
                   className="mx-4" 
-                  onChange={(e) => {
-                    const checked = e.target.checked;
-                    setSelectedFilters(prev => ({
-                      ...prev,
-                      brand: checked
-                        ? [...prev.brand, brand]
-                        : prev.brand.filter(b => b !== brand)
-                    }));
-                  }}
+                  onChange={() => toggleBrand(brand)}
+                  checked={selectedFilters.brand.includes(brand)}
                 /> {brand} ({brandCounts[brand]})
               </li>
             </ul>
@@ -99,7 +131,8 @@ export default function FilterSidebar() {
                 <input 
                   type="checkbox" 
                   className="mx-4" 
-                  
+                  onChange={() => toggleSize(size)}
+                  checked={selectedFilters.size.includes(size)}
                 /> {size} ({sizeCounts[size]})
               </li>
             </ul>
@@ -115,7 +148,8 @@ export default function FilterSidebar() {
                 <input 
                   type="checkbox" 
                   className="mx-4" 
-                  
+                  onChange={() => toggleColour(colour)}
+                  checked={selectedFilters.colour.includes(colour)}
                 /> {colour}
               </li>
             </ul>
@@ -126,11 +160,27 @@ export default function FilterSidebar() {
         <h3 className="flex font-bold text-sm">Price</h3>
         <ul className="text-sm">
           <li className="grid grid-cols-3 text-xs">
-            <input type="number" className="mx-2 rounded p-2" placeholder="Min." />
-            <input type="number" className="mx-2 rounded p-2" placeholder="Max." />
-            <button className="flex w-full items-center justify-center p-1 bg-gray-400 hover:bg-orange-600 rounded-full">
+            <input 
+              type="number" 
+              className="mx-2 rounded p-2 bg-gray-700" 
+              placeholder="Min" 
+              value={selectedFilters.minPrice}
+              onChange={(e) => 
+                setSelectedFilters(prev => ({ ...prev, minPrice: e.target.value }))
+              }
+            />
+            <input 
+              type="number" 
+              className="mx-2 rounded p-2 bg-gray-700" 
+              placeholder="Max" 
+              value={selectedFilters.maxPrice}
+              onChange={(e) => 
+                setSelectedFilters(prev => ({ ...prev, maxPrice: e.target.value}))
+              }
+            />
+            {/* <button className="flex w-full items-center justify-center p-1 bg-gray-400 hover:bg-orange-600 rounded-full">
               Update
-            </button>
+            </button> */}
           </li>
         </ul>
       </div>

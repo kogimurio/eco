@@ -15,6 +15,13 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export default function CategoryDetail() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({
+    brand: [],
+    size: [],
+    colour: [],
+    minPrice: "",
+    maxPrice: ""
+  });
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const maxChars = useResponsiveTextLength();
   const { slug } = useParams();
@@ -22,12 +29,30 @@ export default function CategoryDetail() {
   const { addToCart } = useCart();
   const token = JSON.parse(localStorage.getItem("token"));
 
-  // Fetch products
+
+  // Fetched filtered products
   useEffect(() => {
     const fetchProduct = async () => {
-      await new Promise((res) => setTimeout(res, 2000));
       try {
-        const res = await axios.get(`${BASE_URL}/category/${slug}`);
+        const query = new URLSearchParams();
+
+        if (selectedFilters.brand.length)
+          query.append("brand", selectedFilters.brand.join(","));
+
+        if (selectedFilters.size.length)
+          query.append("size", selectedFilters.size.join(","));
+
+        if (selectedFilters.colour.length)
+          query.append("colour", selectedFilters.colour.join(","));
+
+        if (selectedFilters.minPrice.length)
+          query.append("minPrice", selectedFilters.minPrice);
+
+        if (selectedFilters.maxPrice.length)
+          query.append("maxPrice", selectedFilters.maxPrice);
+
+
+        const res = await axios.get(`${BASE_URL}/category/${slug}?${query.toString()}`);
         setProducts(res.data.products);
         console.log("Fetched related products:", res.data.products)
       } catch (error) {
@@ -38,7 +63,7 @@ export default function CategoryDetail() {
     };
 
     fetchProduct();
-  }, [slug]);
+  }, [slug, selectedFilters]);
 
   const truncate = (text) => {
     if (!text) return "";
@@ -91,7 +116,11 @@ export default function CategoryDetail() {
             <MinProductBar />
             <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] w-[90%] mx-auto py-8">
               {/* Sidebar */}
-              <FilterSidebar />
+              <FilterSidebar
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+                products={products} // pass for counts
+              />
 
               {/* Main Content */}
               <div className="grid grid-cols-1">

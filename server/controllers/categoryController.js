@@ -49,8 +49,20 @@ exports.getCategories = async (req, res) => {
 exports.getCategory = async (req, res) => {
     try {
         const { slug } = req.params;
+        const { brand, colour, size, minPrice, maxPrice, vintage } = req.query;
+
+        const filter = {};
+
+        if (brand) filter.brand = brand;
+        if (size) filter.size = size;
+        if (colour) filter.colour = colour;
+        if (vintage) filter.vintage = vintage;
+        if (minPrice && maxPrice) {
+        filter.price = { $gte: Number(minPrice), $lte: Number(maxPrice)}
+        };
+
         const category = await Category.findOne({slug});
-        const products = await Product.find({ category })
+        const products = await Product.find({ category, ...filter })
         return res.status(200).json({
             category,
             products
