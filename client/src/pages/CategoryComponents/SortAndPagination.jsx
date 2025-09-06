@@ -101,7 +101,7 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters,
         {/* Colour */}
         <select
           name="colour"
-          onChange={(e) => toggleSize(e.target.value)}
+          onChange={(e) => toggleColour(e.target.value)}
           value={selectedFilters.colour[0] || ""}
           className="rounded bg-gray-700 p-2 text-white"
         >
