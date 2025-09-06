@@ -1,11 +1,51 @@
 export default function SortAndPagination({ selectedFilters, setSelectedFilters, products, allProducts }) {
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
+  const brands = [...new Set(allProducts.map(p => p.brand))];
+  const sizes = [...new Set(allProducts.map(p => p.size))];
+  const colours = [...new Set(allProducts.map(p => p.colour))];
 
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [name]: value ? [value] : [] // keep consistent with arrays
-    }));
+  const brandCounts = products.reduce((acc, p) => {
+    acc[p.brand] = (acc[p.brand] || 0) + 1;
+    return acc;
+  }, {});
+
+  const sizeCounts = products.reduce((acc, p) => {
+    acc[p.size] = (acc[p.size] || 0) + 1;
+    return acc;
+  }, {});
+
+  const colourCounts = products.reduce((acc, p) => {
+    acc[p.colour] = (acc[p.colour] || 0) + 1;
+    return acc;
+  }, {});
+
+  // update brand filter
+  const toggleBrand = (brand) => {
+    setSelectedFilters(prev => {
+      const newBrands = prev.brand.includes(brand)
+      ? prev.brand.filter(b => b !== brand)
+      : [...prev.brand, brand];
+      return { ...prev, brand: newBrands}
+    });
+  };
+
+  // update brand size
+  const toggleSize = (size) => {
+    setSelectedFilters(prev => {
+      const newSizes = prev.size.includes(size)
+      ? prev.size.filter(s => s !== size)
+      : [...prev.size, size];
+      return { ...prev, size: newSizes}
+    });
+  };
+
+  // update brand colour
+  const toggleColour = (colour) => {
+    setSelectedFilters(prev => {
+      const newColours = prev.colour.includes(colour)
+      ? prev.colour.filter(c => c !== colour)
+      : [...prev.colour, colour];
+      return { ...prev, colour: newColours}
+    });
   };
 
   return (
@@ -25,42 +65,55 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters,
         {/* Brand */}
         <select
           name="brand"
-          onChange={handleFilterChange}
+          onChange={(e) => toggleBrand(e.target.value)}
           value={selectedFilters.brand[0] || ""}
           className="rounded bg-gray-700 p-2 text-white"
         >
           <option value="">Brand</option>
-          <option value="Nike">Nike</option>
-          <option value="Adidas">Adidas</option>
-          <option value="Puma">Puma</option>
+          {brands.map((b, index) => (
+            <option 
+              key={index}
+              value={b}
+            >
+              {b} ({brandCounts[b] || 0})
+          </option>
+          ))}
         </select>
 
         {/* Size */}
         <select
           name="size"
-          onChange={handleFilterChange}
+          onChange={(e) => toggleSize(e.target.value)}
           value={selectedFilters.size[0] || ""}
           className="rounded bg-gray-700 p-2 text-white"
         >
           <option value="">Size</option>
-          <option value="S">S</option>
-          <option value="M">M</option>
-          <option value="L">L</option>
-          <option value="XL">XL</option>
+          {sizes.map((s, index) => (
+            <option 
+              key={index}
+              value={s}
+            >
+              {s} ({sizeCounts[s] || 0})
+          </option>
+          ))}
         </select>
 
         {/* Colour */}
         <select
           name="colour"
-          onChange={handleFilterChange}
+          onChange={(e) => toggleSize(e.target.value)}
           value={selectedFilters.colour[0] || ""}
           className="rounded bg-gray-700 p-2 text-white"
         >
           <option value="">Colour</option>
-          <option value="Red">Red</option>
-          <option value="Black">Black</option>
-          <option value="White">White</option>
-          <option value="Blue">Blue</option>
+          {colours.map((c, index) => (
+            <option 
+              key={index}
+              value={c}
+            >
+              {c} ({colourCounts[c] || 0})
+          </option>
+          ))}
         </select>
       </div>
     </div>
