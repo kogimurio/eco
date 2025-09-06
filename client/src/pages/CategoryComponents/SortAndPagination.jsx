@@ -49,7 +49,7 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters,
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 border lg:h-20 border-gray-100 m-4 p-4 rounded-lg w-full">
+    <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-4 my-4 border lg:h-20 border-gray-100 m-4 p-4 rounded-lg w-full">
       {/* Sort Dropdown */}
       <div>
         <select className="rounded bg-gray-500 p-2 text-white w-full">
@@ -61,60 +61,67 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters,
       </div>
 
       {/* Mobile Filters */}
-      <div className="flex md:hidden space-x-2 justify-end">
+      <div className="grid grid-cols-[2fr_1fr_1fr] md:hidden">
         {/* Brand */}
-        <select
-          name="brand"
-          onChange={(e) => toggleBrand(e.target.value)}
-          value={selectedFilters.brand[0] || ""}
-          className="rounded bg-gray-700 p-2 text-white"
-        >
-          <option value="">Brand</option>
-          {brands.map((b, index) => (
-            <option 
-              key={index}
-              value={b}
-            >
-              {b} ({brandCounts[b] || 0})
-          </option>
-          ))}
-        </select>
+        <div className="flex justify-center items-center">
+          <select
+            name="brand"
+            onChange={(e) => toggleBrand(e.target.value)}
+            value={selectedFilters.brand[0] || ""}
+            className="rounded bg-gray-700 p-2 text-white"
+          >
+            <option value="">Brand</option>
+            {brands.map((b, index) => (
+              <option 
+                key={index}
+                value={b}
+              >
+                {b} ({brandCounts[b] || 0})
+            </option>
+            ))}
+          </select>
+        </div>
+        
 
         {/* Size */}
-        <select
-          name="size"
-          onChange={(e) => toggleSize(e.target.value)}
-          value={selectedFilters.size[0] || ""}
-          className="rounded bg-gray-700 p-2 text-white"
-        >
-          <option value="">Size</option>
-          {sizes.map((s, index) => (
-            <option 
-              key={index}
-              value={s}
-            >
-              {s} ({sizeCounts[s] || 0})
-          </option>
-          ))}
-        </select>
+        <div className="flex">
+          <select
+            name="size"
+            onChange={(e) => toggleSize(e.target.value)}
+            value={selectedFilters.size[0] || ""}
+            className="rounded bg-gray-700 p-2 text-white"
+          >
+            <option value="">Size</option>
+            {sizes.map((s, index) => (
+              <option 
+                key={index}
+                value={s}
+              >
+                {s} ({sizeCounts[s] || 0})
+            </option>
+            ))}
+          </select>
+        </div>
 
         {/* Colour */}
-        <select
-          name="colour"
-          onChange={(e) => toggleColour(e.target.value)}
-          value={selectedFilters.colour[0] || ""}
-          className="rounded bg-gray-700 p-2 text-white"
-        >
-          <option value="">Colour</option>
-          {colours.map((c, index) => (
-            <option 
-              key={index}
-              value={c}
-            >
-              {c} ({colourCounts[c] || 0})
-          </option>
-          ))}
-        </select>
+        <div className="flex">
+          <select
+            name="colour"
+            onChange={(e) => toggleColour(e.target.value)}
+            value={selectedFilters.colour[0] || ""}
+            className="rounded bg-gray-700 p-2 text-white"
+          >
+            <option value="">Colour</option>
+            {colours.map((c, index) => (
+              <option 
+                key={index}
+                value={c}
+              >
+                {c} ({colourCounts[c] || 0})
+            </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
