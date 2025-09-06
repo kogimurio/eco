@@ -1,12 +1,12 @@
 import { Link, useParams } from "react-router-dom";
 
 
-export default function FilterSidebar({ selectedFilters, setSelectedFilters, products }) {
+export default function FilterSidebar({ selectedFilters, setSelectedFilters, products, allProducts }) {
   const { slug } = useParams()
 
-  const brands = [...new Set(products.map(p => p.brand))];
-  const sizes = [...new Set(products.map(p => p.size))];
-  const colours = [...new Set(products.map(p => p.colour))];
+  const brands = [...new Set(allProducts.map(p => p.brand))];
+  const sizes = [...new Set(allProducts.map(p => p.size))];
+  const colours = [...new Set(allProducts.map(p => p.colour))];
 
   const brandCounts = products.reduce((acc, p) => {
     acc[p.brand] = (acc[p.brand] || 0) + 1;
@@ -53,13 +53,13 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters, pro
       {/* Categories */}
       <div className="border border-gray-100 rounded p-2">
         <h4 className="bg-gray-950 p-4 text-sm mb-3 rounded">{slug.toUpperCase()}</h4>
-        <ul className="text-sm space-y-1">
+        {/* <ul className="text-sm space-y-1">
           <li><Link to="*">Boots</Link></li>
           <li><Link to="*">Cassette player</Link></li>
           <li><Link to="*">Casual</Link></li>
           <li><Link to="*">Ethnic</Link></li>
           <li><Link to="*">Sneakers</Link></li>
-        </ul>
+        </ul> */}
       </div>
 
       {/* Filters */}

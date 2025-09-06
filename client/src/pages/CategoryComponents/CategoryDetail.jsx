@@ -111,15 +111,7 @@ export default function CategoryDetail() {
   return (
     <>
       <div className="bg-gray-800 text-white p-4">
-        {loading ? (
-            <div className="flex justify-center">
-              <LoadingSpinner size="40" />
-            </div>
-        ) : products.length === 0 ? (
-          <p className="text-center text-gray-400">
-            No products found in {slug} category.
-          </p>
-        ) : (
+        
           <>
             <MinProductBar />
             <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] w-[90%] mx-auto py-8">
@@ -127,7 +119,8 @@ export default function CategoryDetail() {
               <FilterSidebar
                 selectedFilters={selectedFilters}
                 setSelectedFilters={setSelectedFilters}
-                products={allProducts} // pass for counts
+                products={products} // pass for counts
+                allProducts={allProducts}
               />
 
               {/* Main Content */}
@@ -135,26 +128,36 @@ export default function CategoryDetail() {
                 <SortAndPagination 
                   selectedFilters={selectedFilters}
                   setSelectedFilters={setSelectedFilters}
+                  products={products} // pass for counts
+                  allProducts={allProducts}
                 />
-
-                <div className="bg-gray-800 py-4 overflow-x-hidden">
-                  <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mx-auto">
-                    {products.map((product, index) => (
-                      <RelatedProductCard
-                        key={index}
-                        product={product}
-                        truncate={truncate}
-                        handleAddToCart={handleAddToCart}
-                        handleAddToWishlist={handleAddToWishlist}
-                        productDetail={productDetail}
-                      />
-                    ))}
+                {loading ? (
+                    <div className="flex justify-center">
+                      <LoadingSpinner size="40" />
+                    </div>
+                ) : products.length === 0 ? (
+                  <p className="text-center text-gray-400">
+                    No products found in {slug} category.
+                  </p>
+                ) : (
+                  <div className="bg-gray-800 py-4 overflow-x-hidden">
+                    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mx-auto">
+                      {products.map((product, index) => (
+                        <RelatedProductCard
+                          key={index}
+                          product={product}
+                          truncate={truncate}
+                          handleAddToCart={handleAddToCart}
+                          handleAddToWishlist={handleAddToWishlist}
+                          productDetail={productDetail}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div> 
             </div>
           </>
-        )}
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-export default function SortAndPagination({ selectedFilters, setSelectedFilters }) {
+export default function SortAndPagination({ selectedFilters, setSelectedFilters, products, allProducts }) {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
 
@@ -21,7 +21,7 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters 
       </div>
 
       {/* Mobile Filters */}
-      <div className="flex space-x-2 justify-end">
+      <div className="flex md:hidden space-x-2 justify-end">
         {/* Brand */}
         <select
           name="brand"
