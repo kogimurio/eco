@@ -52,11 +52,30 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters,
     <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-4 my-4 border lg:h-20 border-gray-100 m-4 p-4 rounded-lg w-full">
       {/* Sort Dropdown */}
       <div>
-        <select className="rounded bg-gray-500 p-2 text-white w-full">
-          <option>Sort By:</option>
-          <option value="Best Seller">Best Seller</option>
-          <option value="New">New Arrival</option>
-          <option value="Featured">Featured</option>
+        <select 
+            className="rounded bg-gray-500 p-2 text-white w-full"
+            onChange={(e) => {
+              const value = e.target.value;
+
+              setSelectedFilters(prev => ({
+                ...prev,
+                isClearance: value === "isClearance",
+                isBestSeller: value === "isBestSeller",
+                isFeatured: value === "isFeatured",
+              }));
+            }}
+            value={
+              selectedFilters.isClearance ? "isClearance" :
+              selectedFilters.isBestSeller ? "isBestSeller" :
+              selectedFilters.isFeatured ? "isFeatured" :
+              ""
+            }
+          >
+            <option>Sort By:</option>
+            <option value="isBestSeller">Best Seller</option>
+            {/* <option value="New">New Arrival</option> */}
+            <option value="isFeatured">Featured</option>
+            <option value="isClearance">Clearance</option>
         </select>
       </div>
 

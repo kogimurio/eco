@@ -49,9 +49,13 @@ exports.getCategories = async (req, res) => {
 exports.getCategory = async (req, res) => {
     try {
         const { slug } = req.params;
-        const { brand, colour, size, minPrice, maxPrice, vintage } = req.query;
+        const { brand, colour, size, minPrice, maxPrice, vintage, newArrival, isFeatured, isBestSeller, isClearance } = req.query;
 
         const filter = {};
+
+        if (isFeatured) filter.isFeatured = true;
+        if (isBestSeller) filter.isBestSeller = true;
+        if (isClearance) filter.isClearance = true;
 
         if (brand) filter.brand = brand;
         if (size) filter.size = size;

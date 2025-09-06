@@ -21,7 +21,10 @@ export default function CategoryDetail() {
     size: [],
     colour: [],
     minPrice: "",
-    maxPrice: ""
+    maxPrice: "",
+    isClearance: false,
+    isBestSeller: false,
+    isFeatured: false
   });
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const maxChars = useResponsiveTextLength();
@@ -44,6 +47,15 @@ export default function CategoryDetail() {
       try {
         const query = new URLSearchParams();
 
+        if (selectedFilters.isFeatured)
+          query.append("isFeatured", true);
+
+        if (selectedFilters.isBestSeller)
+          query.append("isBestSeller", true);
+
+        if (selectedFilters.isClearance)
+          query.append("isClearance", true);
+
         if (selectedFilters.brand.length)
           query.append("brand", selectedFilters.brand.join(","));
 
@@ -62,7 +74,7 @@ export default function CategoryDetail() {
 
         const res = await axios.get(`${BASE_URL}/category/${slug}?${query.toString()}`);
         setProducts(res.data.products);
-        console.log("Fetched related products:", res.data.products)
+        console.log("Query sent to backend:", (`${BASE_URL}/category/${slug}?${query.toString()}`))
       } catch (error) {
         console.error(error?.res?.data || error.message);
       } finally {
