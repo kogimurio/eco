@@ -18,6 +18,11 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters, pro
     return acc;
   }, {})
 
+  const colourCounts = products.reduce((acc, p) => {
+    acc[p.colour] = (acc[p.colour] || 0) + 1;
+    return acc;
+  }, {})
+
   // update brand filter
   const toggleBrand = (brand) => {
     setSelectedFilters(prev => {
@@ -146,13 +151,14 @@ export default function FilterSidebar({ selectedFilters, setSelectedFilters, pro
                   className="mx-4" 
                   onChange={() => toggleColour(colour)}
                   checked={selectedFilters.colour.includes(colour)}
-                /> {colour}
+                /> {colour} ({colourCounts[colour]})
               </li>
             </ul>
           </div>
         ))}
 
         {/* Price Range */}
+        <hr className="my-2" />
         <h3 className="flex font-bold text-sm">Price</h3>
         <ul className="text-sm">
           <li className="grid grid-cols-3 text-xs">

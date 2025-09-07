@@ -18,6 +18,11 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters,
     return acc;
   }, {});
 
+  const bestSellerCounts = products.filter(p => p.isBestSeller).length;
+  const featuredCounts = products.filter(p => p.isFeatured).length;
+  const clearanceCounts = products.filter(p => p.isClearance).length;
+  
+
   // update brand filter
   const toggleBrand = (brand) => {
     setSelectedFilters(prev => {
@@ -72,10 +77,10 @@ export default function SortAndPagination({ selectedFilters, setSelectedFilters,
             }
           >
             <option>Sort By:</option>
-            <option value="isBestSeller">Best Seller</option>
+            <option value="isBestSeller">Best Seller ({bestSellerCounts || 0})</option> 
             {/* <option value="New">New Arrival</option> */}
-            <option value="isFeatured">Featured</option>
-            <option value="isClearance">Clearance</option>
+            <option value="isFeatured">Featured ({featuredCounts || 0})</option>
+            <option value="isClearance">Clearance ({clearanceCounts || 0})</option>
         </select>
       </div>
 

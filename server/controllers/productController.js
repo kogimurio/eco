@@ -175,8 +175,8 @@ exports.updateProduct = async (req, res, next) => {
     if (brand) product.brand = brand;
     if (category) product.category = category;
     if (stock) product.stock = stock;
-    if (size) product.stock = size;
-    if (colour) product.stock = colour;
+    if (size) product.size = size;
+    if (colour) product.colour = colour;
     if (giftWrapping) product.giftWrapping = req.body.giftWrapping === 'true' || req.body.giftWrapping === true;
     if (vintage) product.vintage = vintage;
     if (isClearance) product.isClearance = req.body.isClearance === 'true' || req.body.isClearance === true;
