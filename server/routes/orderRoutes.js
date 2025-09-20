@@ -8,7 +8,8 @@ const {
     getAllOrder,
     getOrderItems,
     statusChange,
-    getPaidOrder
+    getPaidOrder,
+    searchOrder
 } = require('../controllers/orderController');
 
 router.post('/',
@@ -35,6 +36,10 @@ router.put('/:id/status',
 
 router.get('/paid/:id',
     getPaidOrder
+)
+
+router.get('/search_product',
+    searchOrder
 )
 
 module.exports = router;

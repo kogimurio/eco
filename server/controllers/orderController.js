@@ -1,5 +1,6 @@
 const Order = require('../models/Order');
 const User = require('../models/User');
+const mongoose = require('mongoose');
 const OrderItem = require('../models/OrderItem');
 const Cart = require('../models/Cart');
 const Address = require('../models/Address');
@@ -305,6 +306,49 @@ exports.statusChange = async (req, res) => {
         res.status(500).json({
             message: "Internal Server Error"
         });
+    }
+}
+
+exports.searchOrder = async (req, res) => {
+    try {
+        const query = req.query.q;
+        if(!query) {
+            return res.status(400).json({
+                message: "No search query provided"
+            })
+        }
+
+        const users = await User.find({
+            $or: [
+                { email: { $regex: query, $options: 'i'} },
+                { first_name: { $regex: query, $options: 'i'} },
+            ]
+        }).select("_id");
+        
+        console.log("Users found:", users)
+        const userIds = users.map(u => u._id)
+        console.log("User Id found:", userIds)
+
+        let orConditions = [
+            { status: { $regex: query, $options: 'i'} },
+        ]
+
+        if (mongoose.Types.ObjectId.isValid(query)) {
+            orConditions.push({ _id: query })
+        }
+
+        if (userIds.length > 0) {
+            orConditions.push({ user: { $in: userIds} })
+        }
+        const results = await Order.find({$or: orConditions})
+            .populate("user", "email first_name")
+
+        return res.json(results)
+    } catch (error) {
+        console.error("Error in searching order by order number:", error)
+        return res.status(500).json({
+            message: "Server error"
+        })
     }
 }
 

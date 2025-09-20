@@ -12,7 +12,8 @@ const {
     getFeaturedProducts,
     getClearanceProducts,
     getNewProducts,
-    getFilterSidebarProducts
+    getFilterSidebarProducts,
+    searchProducts
 } = require('../controllers/productController');
 
 
@@ -25,6 +26,7 @@ router.post(
 
 // router.get('/by-query', getProductByQuery);
 router.get('/', getAllProducts); 
+router.get('/search', searchProducts);
 router.get('/best-sellers', getBestSellers);
 router.get('/featured', getFeaturedProducts);
 router.get('/clearance', getClearanceProducts);
@@ -36,6 +38,7 @@ router.put('/:id',
   updateProduct);
 router.delete('/:id', deleteProduct);
 router.get('/related_products/:slug', getRelatedProducts);
+
 
 
 

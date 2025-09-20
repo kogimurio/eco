@@ -253,4 +253,29 @@ exports.getRelatedProducts = async (req, res) => {
 }
 
 
+exports.searchProducts = async (req, res) => {
+  try {
+    const query = req.query.q;
+    if (!query) {
+      return res.status(400).json({
+        message: "No search query provided"
+      });
+    }
+
+    // Mongo regex search
+    const results = await Product.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { brand: { $regex: query, $options: 'i' } }
+      ]
+    });
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+}
 
