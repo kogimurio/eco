@@ -321,13 +321,11 @@ exports.searchOrder = async (req, res) => {
         const users = await User.find({
             $or: [
                 { email: { $regex: query, $options: 'i'} },
-                { first_name: { $regex: query, $options: 'i'} },
+                { firstName: { $regex: query, $options: 'i'} },
             ]
         }).select("_id");
         
-        console.log("Users found:", users)
         const userIds = users.map(u => u._id)
-        console.log("User Id found:", userIds)
 
         let orConditions = [
             { status: { $regex: query, $options: 'i'} },
@@ -341,7 +339,7 @@ exports.searchOrder = async (req, res) => {
             orConditions.push({ user: { $in: userIds} })
         }
         const results = await Order.find({$or: orConditions})
-            .populate("user", "email first_name")
+            .populate("user", "email firstName")
 
         return res.json(results)
     } catch (error) {
