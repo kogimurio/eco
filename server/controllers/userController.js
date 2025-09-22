@@ -130,5 +130,36 @@ exports.getAllUsers =async (req, res) => {
     }
 }
 
+exports.searchUsers = async (req, res) => {
+    try {
+        const query = req.query.q;
+        if (!query) {
+            return res.status(400).json({
+                message: "no search query has been provided"
+            })
+        }
+
+        const results = await User.find({
+            $or: [
+                { firstName: { $regex: query, $options: 'i' }},
+                { lastName: { $regex: query, $options: 'i' }},
+                { email: { $regex: query, $options: 'i' }},
+                { role: { $regex: query, $options: 'i' }},
+                { status: { $regex: query, $options: 'i' }},
+            ]
+        })
+        return res.json({
+            results
+        })
+
+
+    } catch (error) {
+        console.error("Error in searching user:", error)
+        return res.status(500).json({
+            message: "Server Error"
+        })
+    }
+}
+
 
 

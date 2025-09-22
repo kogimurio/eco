@@ -1,16 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import { useAdmin } from '../../context/AdminContext';
 
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function Users() {
-  const { users, loading, fetchUsers } = useAdmin();
+  const { users, setUsers, loading, fetchUsers } = useAdmin();
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const handleSearch = async (e) => {
+    e.preventDefault()
+    if (!searchTerm) {
+        fetchUsers()
+    }
+
+    try {
+      const response = await axios.get(`${BASE_URL}/users/search_user?q=${searchTerm}`)
+      setUsers(response.data.results)
+    } catch (error) {
+      toast.error("Error:", error)
+      console.error("Error searching users:", error)
+    }
+  }
 
   if (loading) {
     return (
@@ -25,11 +43,16 @@ export default function Users() {
       {/* Header */}
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2">
         <h2 className="text-2xl font-semibold text-white">Users Manager</h2>
-        <input
-          type="text"
-          placeholder="Search users..."
-          className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
-        />
+        <form onSubmit={handleSearch} className="flex flex-row justify-between items-center">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e)=> setSearchTerm(e.target.value)}
+            placeholder="Search user by first or last name, email, role, status"
+            className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <button type='submit' className='ml-2 bg-gray-800 py-2 px-6 rounded-lg hover:bg-orange-500 border border-orange-500'>Search</button>
+        </form>
       </div>
 
       {/* Users Table */}

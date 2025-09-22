@@ -5,7 +5,8 @@ const {
     registerUser,
     LoginUser,
     getUserProfile,
-    getAllUsers
+    getAllUsers,
+    searchUsers
 } = require('../controllers/userController')
 
 // Register user route
@@ -14,6 +15,9 @@ router.post('/login', LoginUser);
 router.post('/profile', authMiddleware, getUserProfile);
 router.get('/get_all_users',
     getAllUsers
+);
+router.get('/search_user',
+    searchUsers
 );
 
 module.exports = router;

@@ -76,6 +76,7 @@ export const AdminProvider = ({ children }) => {
             orders,
             products,
             users,
+            setUsers,
             transactions,
             loading,
             fetchOrders,

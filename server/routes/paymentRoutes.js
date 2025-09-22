@@ -6,7 +6,8 @@ const {
     initiateStkPush,
     mpesaCallback,
     getPaymentStatus,
-    getAllPayments
+    getAllPayments,
+    searchPayments
 } = require('../controllers/paymentController')
 
 router.post('/',
@@ -25,6 +26,10 @@ router.get('/payment-status/:checkoutRequestID',
 
 router.get('/all_payments',
     getAllPayments
+)
+
+router.get('/search_payment',
+    searchPayments
 )
 
 

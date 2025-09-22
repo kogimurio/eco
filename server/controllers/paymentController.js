@@ -3,6 +3,7 @@ const moment = require('moment');
 const Payment = require('../models/Payment')
 const Order = require('../models/Order')
 const Cart = require('../models/Cart')
+const User = require('../models/User')
 const { getAccessToken } = require('../utils/mpesa')
 const { createOrderForUser } = require('./orderController');
 
@@ -197,3 +198,46 @@ exports.getAllPayments =async (req, res) => {
         })
     }
 }
+
+
+exports.searchPayments = async (req, res) => {
+    try {
+            const query = req.query.q;
+        if (!query) {
+            return res.status.json({
+                message: "Search query not provided"
+            })
+        }
+
+        const users = await User.find({
+            $or: [
+                {email: { $regex: query, $options: 'i' }},
+                {firstName: { $regex: query, $options: 'i' }}
+            ]
+        }).select("_id");
+
+        const userIds = users.map(u => u._id)
+
+        let orConditions = [
+                {phone: { $regex: query, $options: 'i' }},
+                {receipt: { $regex: query, $options: 'i' }}
+        ]
+
+        if (userIds.length > 0) {
+            orConditions.push({ user: { $in: userIds} })
+        }
+
+        const results = await Payment.find({
+            $or: orConditions
+        }).populate("user", 'firstName email')
+
+        return res.json(results)
+    } catch (error) {
+        console.error("Error in searching payments:", error)
+        return res.status(500).json({
+            message: "Server Error"
+        })
+    }
+}
+
+
