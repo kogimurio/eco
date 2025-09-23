@@ -65,7 +65,7 @@ export default function Users() {
             type="text"
             value={searchTerm}
             onChange={(e)=> setSearchTerm(e.target.value)}
-            placeholder="Search user by first or last name, email, role, status"
+            placeholder="Search by first or last name, email, role, status"
             className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
       </div>

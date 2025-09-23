@@ -231,7 +231,7 @@ exports.searchPayments = async (req, res) => {
             $or: orConditions
         }).populate("user", 'firstName email')
 
-        return res.json(results)
+        return res.json({results})
     } catch (error) {
         console.error("Error in searching payments:", error)
         return res.status(500).json({
