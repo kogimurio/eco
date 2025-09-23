@@ -34,6 +34,20 @@ export default function Users() {
     return () => clearTimeout(delayDebounce);
   }, [searchTerm])
 
+  const highlightMatch = (text, query) => {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, "gi");
+    return text.split(regex).map((part, idx) => 
+      regex.test(part) ? (
+        <span key={idx} className='bg-yellow-500/30 font-bold text-yellow-300' >
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center mt-4">
@@ -71,14 +85,22 @@ export default function Users() {
           <tbody className="text-sm">
             {users.map((user, idx) => (
               <tr key={idx} className="border-b border-gray-700 hover:bg-gray-700/50">
-                <td className="py-3 px-4">{user.firstName} {user.lastName}</td>
-                <td className="py-3 px-4">{user.email}</td>
-                <td className="py-3 px-4">{user.role}</td>
+                <td className="py-3 px-4">
+                  {highlightMatch(`${user.firstName} ${user.lastName}`, searchTerm)}
+                </td>
+                <td className="py-3 px-4">
+                  {highlightMatch(user.email, searchTerm)}
+                </td>
+                <td className="py-3 px-4">
+                  {highlightMatch(user.role, searchTerm)}
+                </td>
                 <td className="py-3 px-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    user.status === "Active" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+                    user.status === "Active"
+                     ? "bg-green-500/20 text-green-400"
+                      : "bg-red-500/20 text-red-400"
                   }`}>
-                    {user.status}
+                    {highlightMatch(user.status, searchTerm)}
                   </span>
                 </td>
                 <td className="py-3 px-4 text-right">
