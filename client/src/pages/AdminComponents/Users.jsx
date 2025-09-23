@@ -15,20 +15,24 @@ export default function Users() {
     fetchUsers();
   }, []);
 
-  const handleSearch = async (e) => {
-    e.preventDefault()
-    if (!searchTerm) {
-        fetchUsers()
-    }
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+        if (!searchTerm) {
+          fetchUsers()
+          return;
+      }
 
-    try {
-      const response = await axios.get(`${BASE_URL}/users/search_user?q=${searchTerm}`)
-      setUsers(response.data.results)
-    } catch (error) {
-      toast.error("Error:", error)
-      console.error("Error searching users:", error)
-    }
-  }
+      try {
+        const response = await axios.get(`${BASE_URL}/users/search_user?q=${searchTerm}`)
+        setUsers(response.data.results)
+      } catch (error) {
+        toast.error("Error searching users")
+        console.error("Error searching users:", error)
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm])
 
   if (loading) {
     return (
@@ -43,7 +47,6 @@ export default function Users() {
       {/* Header */}
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2">
         <h2 className="text-2xl font-semibold text-white">Users Manager</h2>
-        <form onSubmit={handleSearch} className="flex flex-row justify-between items-center">
           <input
             type="text"
             value={searchTerm}
@@ -51,8 +54,6 @@ export default function Users() {
             placeholder="Search user by first or last name, email, role, status"
             className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
-          <button type='submit' className='ml-2 bg-gray-800 py-2 px-6 rounded-lg hover:bg-orange-500 border border-orange-500'>Search</button>
-        </form>
       </div>
 
       {/* Users Table */}
