@@ -14,7 +14,8 @@ const token = JSON.parse(localToken);
 
 
 export default function Order() {
-  const { orders, loading, fetchOrders } = useAdmin();
+  const { orders, setOrders, loading, fetchOrders } = useAdmin();
+  const [searchTerm, setSearchTerm] = useState('')
 
   const navigate = useNavigate();
 
@@ -61,6 +62,40 @@ export default function Order() {
     }
   };
 
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      if (!searchTerm){
+        fetchOrders();
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${BASE_URL}/orders/search_product?q=${searchTerm}`)
+        setOrders(response.data.results)
+      } catch(error) {
+        console.error("Error in searching order:", error)
+        toast.error("Error in searching order")
+      }
+    }, 500)
+
+    return () => clearTimeout(delayDebounce)
+  }, [searchTerm])
+
+  const hightlightMatch = (text, query) => {
+    if (!query) return text
+
+    const regex = new RegExp(`(${query})`, "gi")
+    return text.split(regex).map((part, idx) =>
+      regex.test(part) ? (
+        <span key={idx} className="bg-orange-500/30 text-yellow-300 font-bold">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    )
+  }
+
 
   return (
     <div className="p-6">
@@ -70,7 +105,9 @@ export default function Order() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <input
             type="text"
-            placeholder="Search order number..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search name, first name or order number"
             className="flex px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
           <select className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500">
@@ -112,8 +149,8 @@ export default function Order() {
             ) : (
               orders.map((order, idx) => (
                 <tr key={idx} className="border-b border-gray-700 hover:bg-gray-700/50">
-                  <td className="py-3 px-4">{`#${order._id?.slice(-6).toUpperCase()}`}</td>
-                  <td className="py-3 px-4">{order.user?.firstName || "N/A"}</td>
+                  <td className="py-3 px-4">{`#${hightlightMatch(order._id?.slice(-6).toUpperCase(), searchTerm)}`}</td>
+                  <td className="py-3 px-4">{hightlightMatch(order.user?.firstName || "N/A", searchTerm)}</td>
                   <td className="py-3 px-4">
                     {order.items?.map((item, i) => (
                       <div key={i}>{item.product?.name || "Product"} ×{item.quantity}</div>

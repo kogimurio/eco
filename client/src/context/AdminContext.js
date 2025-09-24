@@ -74,6 +74,7 @@ export const AdminProvider = ({ children }) => {
         <AdminContext.Provider
         value={{
             orders,
+            setOrders,
             products,
             setProducts,
             users,

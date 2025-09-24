@@ -92,6 +92,24 @@ export default function ProductList() {
     return () => clearTimeout(delayDebounce)
   }, [searchTerm])
 
+  const hightlightMatch = (text, query) => {
+    if (!query) {
+      return text;
+    }
+
+    const regex = new RegExp(`(${query})`, "gi")
+    return text.split(regex).map((part, idx) =>
+      regex.test(part) ? (
+        <span key={idx} className="bg-orange-500/30 text-yellow-300 font-bold">
+          {part}
+      </span>
+      ): (
+      part
+    )
+      
+    ) 
+  }
+
   return (
     <div className="p-6 space-y-6">
       {/* Top Bar: Add + Search + Filter */}
@@ -114,7 +132,7 @@ export default function ProductList() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search product..."
+            placeholder="Search name, brand, description"
             className="px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring focus:ring-orange-500"
           />
 
@@ -143,7 +161,7 @@ export default function ProductList() {
               className="bg-gray-800 rounded-xl p-6 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center"
             >
               <div className="text-white space-y-1">
-                <h3 className="text-lg font-semibold">{product.name}</h3>
+                <h3 className="text-lg font-semibold">{hightlightMatch(product.name, searchTerm)}</h3>
                 <p className="text-sm text-gray-400">
                   <span className="font-medium text-gray-300">Stock:</span> {product.stock} pcs
                 </p>
@@ -171,11 +189,13 @@ export default function ProductList() {
       </div>
       {/* Pagination */}
       <div className="flex items-center gap-2 mt-4 justify-center">
-          <Pagination 
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-          />
+          {products.length > 3 && (
+              <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
+          )}
       </div>
     </div>
   );
