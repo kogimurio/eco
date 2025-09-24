@@ -271,7 +271,7 @@ exports.searchProducts = async (req, res) => {
       ]
     });
 
-    res.json(results);
+    res.json({results});
   } catch (error) {
     res.status(500).json({
       message: error.message

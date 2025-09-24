@@ -5,13 +5,14 @@ import axios from 'axios';
 import { useAdmin } from '../../context/AdminContext';
 import Swal from 'sweetalert2';
 import Pagination from './Pagination';
+import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function ProductList() {
-  const [search, setSearch] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
-  const { products, loading, fetchProducts } = useAdmin();
+  const { products, setProducts, loading, fetchProducts } = useAdmin();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3);
@@ -19,9 +20,9 @@ export default function ProductList() {
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
 
-  const currentProducts = products.slice(indexOfFirst, indexOfLast);
+  const currentProducts = (products || []).slice(indexOfFirst, indexOfLast);
 
-  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const totalPages = products ? Math.ceil(products.length / itemsPerPage) : 0;
 
   const handlePageChange = (pageNum) => setCurrentPage(pageNum);
   
@@ -71,6 +72,26 @@ export default function ProductList() {
     }
   };
 
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      if (!searchTerm) {
+        fetchProducts()
+        return;
+      }
+
+      try {
+        const response = await axios.get(`${BASE_URL}/products/search?q=${searchTerm}`)
+        setProducts(response.data.results)
+        console.log("Searched product:", response.data.results)
+      } catch (error) {
+        console.error("Error in searching product:", error)
+        toast.error("Error in searching product")
+      }
+    }, 500)
+
+    return () => clearTimeout(delayDebounce)
+  }, [searchTerm])
+
   return (
     <div className="p-6 space-y-6">
       {/* Top Bar: Add + Search + Filter */}
@@ -91,8 +112,8 @@ export default function ProductList() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input
             type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search product..."
             className="px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring focus:ring-orange-500"
           />

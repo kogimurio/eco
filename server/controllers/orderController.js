@@ -341,7 +341,7 @@ exports.searchOrder = async (req, res) => {
         const results = await Order.find({$or: orConditions})
             .populate("user", "email firstName")
 
-        return res.json(results)
+        return res.json({results})
     } catch (error) {
         console.error("Error in searching order by order number:", error)
         return res.status(500).json({
